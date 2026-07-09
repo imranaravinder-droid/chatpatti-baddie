@@ -13,7 +13,7 @@ export default function Navbar() {
         <Link href="/" className="flex items-center gap-2">
           <Sparkles className="w-6 h-6 text-pink-500" />
           <span className="font-bold text-lg text-gray-900">
-            Chatpatti <span className="text-pink-500">Baddie</span>
+            CHATPATTIE <span className="text-pink-500">BADDIE</span>
           </span>
         </Link>
 

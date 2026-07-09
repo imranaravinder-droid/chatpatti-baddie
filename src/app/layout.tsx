@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Chatpatti Baddie - Your Emotional AI Companion",
+  title: "CHATPATTIE BADDIE - Your Emotional AI Companion",
   description: "Vent, process, and transform your emotions with the ultimate AI Baddie.",
 };
 
