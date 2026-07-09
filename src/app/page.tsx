@@ -60,6 +60,9 @@ export default function Home() {
       </div>
 
       <VentInput onSubmit={handleVent} disabled={isStreaming} />
+      <p className="text-xs text-gray-400 text-center px-2">
+        Keep it real but keep it safe — no credit cards, passwords, or personal IDs. Your vents are stored so the Baddie remembers your journey.
+      </p>
 
       {isStreaming && (
         <div className="flex items-center justify-center gap-2 py-8">

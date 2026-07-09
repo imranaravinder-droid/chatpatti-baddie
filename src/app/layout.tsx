@@ -135,6 +135,12 @@ export default function RootLayout({
         <main className="flex-1 w-full max-w-3xl mx-auto px-4 py-6">
           {children}
         </main>
+        <footer className="text-center py-4 px-4 border-t border-gray-100">
+          <p className="text-xs text-gray-400">
+            CHATPATTIE BADDIE &middot; Your emotional AI companion &middot;{" "}
+            No credit cards, passwords, or personal info please &mdash; stay safe, bestie.
+          </p>
+        </footer>
       </body>
     </html>
   );
