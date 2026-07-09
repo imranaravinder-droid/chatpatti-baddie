@@ -2,7 +2,6 @@
 
 import { useState, useCallback } from "react";
 import { Mode, BaddieResponse as BaddieResponseType } from "@/types";
-import { sampleVents } from "@/lib/mockData";
 import VentInput from "@/components/VentInput";
 import BaddieResponse from "@/components/BaddieResponse";
 import ModalitySwitcher from "@/components/ModalitySwitcher";
@@ -13,41 +12,40 @@ export default function Home() {
   const [currentResponse, setCurrentResponse] = useState<BaddieResponseType | null>(null);
   const [isStreaming, setIsStreaming] = useState(false);
   const [hasVented, setHasVented] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleVent = useCallback(
-    (text: string) => {
+    async (text: string) => {
       setIsStreaming(true);
       setHasVented(true);
       setCurrentResponse(null);
+      setError(null);
 
-      // Simulate streaming delay, then pick a mock response
-      setTimeout(() => {
-        const randomVent = sampleVents[Math.floor(Math.random() * sampleVents.length)];
-        const response = { ...randomVent.response };
+      try {
+        const res = await fetch("/api/vent", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content: text, mode }),
+        });
 
-        // Adjust response slightly based on selected mode
-        if (mode === "debate") {
-          response.prompts = [
-            "Oh really? And what's YOUR evidence for that logic?",
-            "If your best friend told you this, what would YOU say to them?",
-          ];
-        } else if (mode === "comedy") {
-          response.prompts = [
-            "On a scale from 'it's fine' to 'I'm feral', where are we right now?",
-            "If this was a reality TV show, what would the confessional say?",
-          ];
+        if (!res.ok) {
+          throw new Error("Failed to get response");
         }
 
-        setCurrentResponse(response);
+        const data = await res.json();
+        setCurrentResponse(data.vent.response);
+      } catch (err) {
+        setError("Something went wrong. The Baddie needs a moment.");
+        console.error(err);
+      } finally {
         setIsStreaming(false);
-      }, 1500);
+      }
     },
     [mode],
   );
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="text-center space-y-2">
         <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">
           CHATPATTIE <span className="text-pink-500">BADDIE</span>
@@ -57,15 +55,12 @@ export default function Home() {
         </p>
       </div>
 
-      {/* Mode Switcher */}
       <div className="flex justify-center">
         <ModalitySwitcher selected={mode} onSelect={setMode} />
       </div>
 
-      {/* Vent Input */}
       <VentInput onSubmit={handleVent} disabled={isStreaming} />
 
-      {/* Streaming State */}
       {isStreaming && (
         <div className="flex items-center justify-center gap-2 py-8">
           <Sparkles className="w-5 h-5 text-pink-400 animate-pulse" />
@@ -75,10 +70,14 @@ export default function Home() {
         </div>
       )}
 
-      {/* Response */}
+      {error && (
+        <div className="bg-red-50 rounded-xl p-4 text-sm text-red-600 text-center border border-red-100">
+          {error}
+        </div>
+      )}
+
       {currentResponse && <BaddieResponse response={currentResponse} isStreaming={false} />}
 
-      {/* Empty State */}
       {!hasVented && !isStreaming && (
         <div className="text-center py-16">
           <Sparkles className="w-12 h-12 text-pink-200 mx-auto mb-4" />

@@ -1,18 +1,32 @@
 "use client";
 
-import { useState } from "react";
-import { sampleVents } from "@/lib/mockData";
+import { useState, useEffect } from "react";
 import { Vent } from "@/types";
 import DramaLog from "@/components/DramaLog";
 import VibeTracker from "@/components/VibeTracker";
 import DeepDiveModal from "@/components/DeepDiveModal";
-import { Clock, Activity } from "lucide-react";
+import { Clock, Activity, Loader2 } from "lucide-react";
 
 export default function Dashboard() {
+  const [vents, setVents] = useState<Vent[]>([]);
   const [selectedVent, setSelectedVent] = useState<Vent | null>(null);
-  const sorted = [...sampleVents].sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-  );
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/history")
+      .then((res) => res.json())
+      .then((data) => setVents(data.vents))
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-16">
+        <Loader2 className="w-6 h-6 text-pink-400 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -25,21 +39,18 @@ export default function Dashboard() {
         </p>
       </div>
 
-      {/* Vibe Tracker */}
       <div className="flex items-center gap-2 mb-2">
         <Activity className="w-4 h-4 text-pink-400" />
         <span className="text-sm font-medium text-gray-500">Mood Trend</span>
       </div>
-      <VibeTracker vents={sorted} />
+      <VibeTracker vents={vents} />
 
-      {/* Drama Log */}
       <div className="flex items-center gap-2 mb-2 mt-6">
         <Clock className="w-4 h-4 text-pink-400" />
         <span className="text-sm font-medium text-gray-500">History</span>
       </div>
-      <DramaLog vents={sorted} onSelect={setSelectedVent} />
+      <DramaLog vents={vents} onSelect={setSelectedVent} />
 
-      {/* Deep Dive Modal */}
       {selectedVent && (
         <DeepDiveModal vent={selectedVent} onClose={() => setSelectedVent(null)} />
       )}

@@ -68,7 +68,7 @@ export const metadata: Metadata = {
     images: ["/og-image.png"],
   },
   category: "wellness",
-  metadataBase: new URL("https://chatpattiebaddie.vercel.app"),
+  metadataBase: new URL("https://chatpatti-baddie.vercel.app"),
   alternates: {
     canonical: "/",
   },
@@ -94,7 +94,7 @@ export default function RootLayout({
               name: "CHATPATTIE BADDIE",
               description:
                 "An AI-powered emotional companion that helps users process their feelings through venting, mood analysis, songs, dance tutorials, book recommendations, and cooking therapy.",
-              url: "https://chatpattiebaddie.vercel.app",
+              url: "https://chatpatti-baddie.vercel.app",
               applicationCategory: "WellnessApplication",
               operatingSystem: "Web",
               author: {
