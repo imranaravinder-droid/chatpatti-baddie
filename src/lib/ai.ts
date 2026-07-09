@@ -7,7 +7,7 @@ let model: ReturnType<GoogleGenerativeAI["getGenerativeModel"]> | null = null;
 
 if (apiKey) {
   genAI = new GoogleGenerativeAI(apiKey);
-  model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+  model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 }
 
 export async function analyzeVent(

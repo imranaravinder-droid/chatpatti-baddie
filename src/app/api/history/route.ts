@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ vents: formatted });
   } catch (error) {
-    console.error("History API error:", error);
+    console.error("History API error:", JSON.stringify(error, Object.getOwnPropertyNames(error)));
     return NextResponse.json({ error: "Failed to fetch history" }, { status: 500 });
   }
 }
