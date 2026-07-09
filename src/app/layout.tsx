@@ -67,6 +67,26 @@ export const metadata: Metadata = {
       "Spill your drama. The Baddie listens. AI-powered venting with mood analysis, songs, dance, books & recipes.",
     images: ["/og-image.png"],
   },
+  manifest: "/manifest.json",
+  icons: {
+    apple: "/icons/icon-192.png",
+    icon: [
+      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    other: [
+      {
+        rel: "apple-touch-icon-precomposed",
+        url: "/icons/icon-192.png",
+      },
+    ],
+  },
+  other: {
+    "mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-status-bar-style": "default",
+    "apple-mobile-web-app-title": "Baddie",
+  },
   category: "wellness",
   metadataBase: new URL("https://chatpatti-baddie.vercel.app"),
   alternates: {
