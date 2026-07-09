@@ -1,4 +1,4 @@
-import { Vent, MoodTagColor } from "@/types";
+import { Vent, MoodTagColor, BookRec, RecipeRec } from "@/types";
 
 export const moodTagColors: MoodTagColor[] = [
   { tag: "Stressed", color: "#FF6B6B" },
@@ -62,6 +62,68 @@ export const danceSteps: string[] = [
   "Step 8: Final pose - one hand on hip, other hand waving goodbye to all the negativity. Werk!",
 ];
 
+export const booksByMood: Record<string, BookRec[]> = {
+  Stressed: [
+    { title: "The Subtle Art of Not Giving a F*ck", author: "Mark Manson", reason: "Because you care too much about things that don't matter", emoji: "😤" },
+    { title: "Burnout: The Secret to Unlocking the Stress Cycle", author: "Emily & Amelia Nagoski", reason: "Science-backed way to actually chill out", emoji: "🧠" },
+  ],
+  "Down-Bad": [
+    { title: "It's Not You", author: "Ramani Durvasula", reason: "For when you need to hear it really wasn't your fault", emoji: "💔" },
+    { title: "Untamed", author: "Glennon Doyle", reason: "A wild, freeing read for your comeback era", emoji: "🦁" },
+  ],
+  Glowing: [
+    { title: "You Are a Badass", author: "Jen Sincero", reason: "Fuel for your already-blazing fire", emoji: "🔥" },
+    { title: "The Mountain Is You", author: "Brianna Wiest", reason: "Level up even higher, bestie", emoji: "🏔️" },
+  ],
+  Feral: [
+    { title: "Why Does He Do That?", author: "Lundy Bancroft", reason: "Spoiler: because he chooses to", emoji: "📖" },
+    { title: "The Gift of Fear", author: "Gavin de Becker", reason: "Trust that gut that's screaming at you", emoji: "⚡" },
+  ],
+  "In My Feels": [
+    { title: "The Sun and Her Flowers", author: "Rupi Kaur", reason: "Poetry that gets what you're going through", emoji: "🌻" },
+    { title: "All About Love", author: "bell hooks", reason: "A warm hug in book form", emoji: "🤗" },
+  ],
+  Chaotic: [
+    { title: "Maybe You Should Talk to Someone", author: "Lori Gottlieb", reason: "Therapist-approved chaos management", emoji: "🛋️" },
+    { title: "Year of Yes", author: "Shonda Rhimes", reason: "Say yes to the mess, it's content", emoji: "🎬" },
+  ],
+  Healing: [
+    { title: "The Body Keeps the Score", author: "Bessel van der Kolk", reason: "Understand why your body still remembers", emoji: "🫀" },
+    { title: "Atlas of the Heart", author: "Brené Brown", reason: "Map out your feelings and own them", emoji: "🗺️" },
+  ],
+};
+
+export const recipesByMood: Record<string, RecipeRec[]> = {
+  Stressed: [
+    { name: "5-Minute Mug Brownie", ingredients: ["flour", "cocoa", "sugar", "milk", "microwave"], reason: "Instant comfort in a cup, no baking degree needed", emoji: "🍫" },
+    { name: "Chamomile Latte", ingredients: ["chamomile tea", "honey", "warm milk", "cinnamon"], reason: "A warm hug in a mug for your frazzled nerves", emoji: "☕" },
+  ],
+  "Down-Bad": [
+    { name: "Mac & Cheese (from scratch)", ingredients: ["pasta", "cheddar", "butter", "milk", "breadcrumbs"], reason: "The ultimate heartbreak comfort food", emoji: "🧀" },
+    { name: "Salted Caramel Hot Chocolate", ingredients: ["cocoa", "sugar", "cream", "salt", "vanilla"], reason: "Sweet, salty, and exactly how you feel", emoji: "🍫" },
+  ],
+  Glowing: [
+    { name: "Acai Bowl", ingredients: ["acai", "banana", "granola", "berries", "honey"], reason: "Eat the rainbow, match your vibe", emoji: "🥣" },
+    { name: "Sparkling Lemonade", ingredients: ["lemons", "soda water", "mint", "honey", "ice"], reason: "As refreshing as your new era", emoji: "🍋" },
+  ],
+  Feral: [
+    { name: "Spicy Ramen", ingredients: ["noodles", "gochujang", "egg", "garlic", "chili oil"], reason: "Spicy enough to match your energy", emoji: "🍜" },
+    { name: "Angry Popcorn", ingredients: ["popcorn", "chili flakes", "lime", "butter", "salt"], reason: "Crunch away the frustration", emoji: "🍿" },
+  ],
+  "In My Feels": [
+    { name: "Cinnamon Toast", ingredients: ["bread", "butter", "cinnamon", "sugar", "honey"], reason: "Simple, warm, nostalgic - like a hug from childhood", emoji: "🍞" },
+    { name: "Berry Smoothie Bowl", ingredients: ["frozen berries", "yogurt", "banana", "granola", "coconut"], reason: "Blend your feelings into something beautiful", emoji: "🫐" },
+  ],
+  Chaotic: [
+    { name: "Midnight Quesadilla", ingredients: ["tortilla", "cheese", "beans", "salsa", "avocado"], reason: "Because chaos tastes better with melted cheese", emoji: "🌮" },
+    { name: "Kitchen Sink Cookies", ingredients: ["dough", "chocolate", "pretzels", "chips", "caramel"], reason: "Everything but the kitchen sink - very you right now", emoji: "🍪" },
+  ],
+  Healing: [
+    { name: "Golden Milk Latte", ingredients: ["turmeric", "ginger", "coconut milk", "honey", "pepper"], reason: "Anti-inflammatory for your body and soul", emoji: "🟡" },
+    { name: "Roasted Veggie Bowl", ingredients: ["sweet potato", "kale", "quinoa", "tahini", "chickpeas"], reason: "Nourish yourself back to strength", emoji: "🥗" },
+  ],
+};
+
 export const sampleVents: Vent[] = [
   {
     id: "1",
@@ -79,6 +141,8 @@ export const sampleVents: Vent[] = [
       ],
       songLyrics: songLyricsByMood["Down-Bad"],
       danceSteps: danceSteps.slice(0, 4),
+      books: booksByMood["Down-Bad"],
+      recipes: recipesByMood["Down-Bad"],
     },
     createdAt: "2026-07-08T19:30:00Z",
   },
@@ -98,6 +162,8 @@ export const sampleVents: Vent[] = [
       ],
       songLyrics: songLyricsByMood.Glowing,
       danceSteps: danceSteps.slice(0, 5),
+      books: booksByMood.Glowing,
+      recipes: recipesByMood.Glowing,
     },
     createdAt: "2026-07-08T14:15:00Z",
   },
@@ -117,6 +183,8 @@ export const sampleVents: Vent[] = [
       ],
       songLyrics: songLyricsByMood.Stressed,
       danceSteps: danceSteps.slice(2, 7),
+      books: booksByMood.Stressed,
+      recipes: recipesByMood.Stressed,
     },
     createdAt: "2026-07-07T22:45:00Z",
   },
@@ -136,6 +204,8 @@ export const sampleVents: Vent[] = [
       ],
       songLyrics: songLyricsByMood["Down-Bad"],
       danceSteps: danceSteps.slice(0, 4),
+      books: booksByMood.Feral,
+      recipes: recipesByMood.Feral,
     },
     createdAt: "2026-07-07T11:20:00Z",
   },
@@ -155,6 +225,8 @@ export const sampleVents: Vent[] = [
       ],
       songLyrics: songLyricsByMood.Glowing,
       danceSteps: danceSteps.slice(3, 8),
+      books: booksByMood.Glowing,
+      recipes: recipesByMood.Glowing,
     },
     createdAt: "2026-07-06T16:00:00Z",
   },
@@ -174,6 +246,8 @@ export const sampleVents: Vent[] = [
       ],
       songLyrics: songLyricsByMood["Down-Bad"],
       danceSteps: danceSteps.slice(1, 5),
+      books: booksByMood["In My Feels"],
+      recipes: recipesByMood["In My Feels"],
     },
     createdAt: "2026-07-06T09:30:00Z",
   },
@@ -193,6 +267,8 @@ export const sampleVents: Vent[] = [
       ],
       songLyrics: songLyricsByMood.Glowing,
       danceSteps: danceSteps.slice(0, 6),
+      books: booksByMood.Healing,
+      recipes: recipesByMood.Healing,
     },
     createdAt: "2026-07-05T20:15:00Z",
   },
@@ -212,6 +288,8 @@ export const sampleVents: Vent[] = [
       ],
       songLyrics: songLyricsByMood.Stressed,
       danceSteps: danceSteps.slice(2, 6),
+      books: booksByMood.Chaotic,
+      recipes: recipesByMood.Chaotic,
     },
     createdAt: "2026-07-05T13:45:00Z",
   },

@@ -1,5 +1,19 @@
 export type Mode = "debate" | "comedy" | "romance";
 
+export interface BookRec {
+  title: string;
+  author: string;
+  reason: string;
+  emoji: string;
+}
+
+export interface RecipeRec {
+  name: string;
+  ingredients: string[];
+  reason: string;
+  emoji: string;
+}
+
 export interface BaddieResponse {
   moodTag: string;
   moodColor: string;
@@ -7,6 +21,8 @@ export interface BaddieResponse {
   prompts: string[];
   songLyrics?: string;
   danceSteps?: string[];
+  books?: BookRec[];
+  recipes?: RecipeRec[];
 }
 
 export interface Vent {

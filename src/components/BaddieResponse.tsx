@@ -6,6 +6,8 @@ import MoodTagBadge from "./MoodTagBadge";
 import VoiceOverButton from "./VoiceOverButton";
 import SongCard from "./SongCard";
 import DanceSteps from "./DanceSteps";
+import BookCard from "./BookCard";
+import RecipeCard from "./RecipeCard";
 import { Sparkles, Lightbulb } from "lucide-react";
 
 interface Props {
@@ -38,13 +40,11 @@ export default function BaddieResponse({ response, isStreaming }: Props) {
 
   return (
     <div className="space-y-5 animate-fadeIn">
-      {/* Mood Tag */}
       <div className="flex items-center gap-3">
         <MoodTagBadge tag={response.moodTag} color={response.moodColor} />
         <VoiceOverButton text={fullText} />
       </div>
 
-      {/* Real Talk + Prompts */}
       <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
         <div className="flex items-start gap-3">
           <Sparkles className="w-5 h-5 text-pink-500 mt-0.5 flex-shrink-0" />
@@ -59,7 +59,6 @@ export default function BaddieResponse({ response, isStreaming }: Props) {
         </div>
       </div>
 
-      {/* Prompts */}
       <div className="space-y-2">
         <div className="flex items-center gap-2 text-sm font-medium text-gray-500">
           <Lightbulb className="w-4 h-4" />
@@ -75,12 +74,15 @@ export default function BaddieResponse({ response, isStreaming }: Props) {
         ))}
       </div>
 
-      {/* Song & Dance */}
-      {response.songLyrics && (
-        <SongCard lyrics={response.songLyrics} />
-      )}
+      {response.songLyrics && <SongCard lyrics={response.songLyrics} />}
       {response.danceSteps && response.danceSteps.length > 0 && (
         <DanceSteps steps={response.danceSteps} />
+      )}
+      {response.books && response.books.length > 0 && (
+        <BookCard books={response.books} />
+      )}
+      {response.recipes && response.recipes.length > 0 && (
+        <RecipeCard recipes={response.recipes} />
       )}
     </div>
   );
