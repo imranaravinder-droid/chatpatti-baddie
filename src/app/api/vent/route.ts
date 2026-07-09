@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { vents } from "@/lib/schema";
+import { analyzeVent } from "@/lib/ai";
 import {
   songLyricsByMood,
   danceSteps,
@@ -10,87 +11,22 @@ import {
 
 function detectMood(content: string): { tag: string; color: string } {
   const lower = content.toLowerCase();
-  if (
-    lower.includes("stress") ||
-    lower.includes("panic") ||
-    lower.includes("exam") ||
-    lower.includes("overwhelmed")
-  )
+  if (lower.includes("stress") || lower.includes("panic") || lower.includes("exam") || lower.includes("overwhelmed"))
     return { tag: "Stressed", color: "#FF6B6B" };
-  if (
-    lower.includes("promotion") ||
-    lower.includes("win") ||
-    lower.includes("happy") ||
-    lower.includes("glowing") ||
-    lower.includes("good")
-  )
+  if (lower.includes("promotion") || lower.includes("win") || lower.includes("happy") || lower.includes("glowing"))
     return { tag: "Glowing", color: "#FFD93D" };
-  if (
-    lower.includes("ex") ||
-    lower.includes("breakup") ||
-    lower.includes("heartbreak") ||
-    lower.includes("alone") ||
-    lower.includes("cry")
-  )
+  if (lower.includes("ex") || lower.includes("breakup") || lower.includes("heartbreak") || lower.includes("alone"))
     return { tag: "Down-Bad", color: "#4D96FF" };
-  if (
-    lower.includes("toxic") ||
-    lower.includes("betray") ||
-    lower.includes("backstab") ||
-    lower.includes("anger") ||
-    lower.includes("furious")
-  )
+  if (lower.includes("toxic") || lower.includes("betray") || lower.includes("backstab") || lower.includes("furious"))
     return { tag: "Feral", color: "#FF8E53" };
-  if (
-    lower.includes("heal") ||
-    lower.includes("let go") ||
-    lower.includes("free") ||
-    lower.includes("growth") ||
-    lower.includes("move on")
-  )
+  if (lower.includes("heal") || lower.includes("let go") || lower.includes("growth") || lower.includes("move on"))
     return { tag: "Healing", color: "#69F0AE" };
-  if (
-    lower.includes("embarrass") ||
-    lower.includes("chaos") ||
-    lower.includes("mess") ||
-    lower.includes("accident")
-  )
+  if (lower.includes("embarrass") || lower.includes("chaos") || lower.includes("accident"))
     return { tag: "Chaotic", color: "#FF5252" };
-  if (
-    lower.includes("miss") ||
-    lower.includes("nostalgia") ||
-    lower.includes("feel") ||
-    lower.includes("sad")
-  )
+  if (lower.includes("miss") || lower.includes("nostalgia") || lower.includes("feel") || lower.includes("sad"))
     return { tag: "In My Feels", color: "#7C4DFF" };
   return { tag: "Unbothered", color: "#6BCB77" };
 }
-
-const realTalks: Record<string, string> = {
-  Stressed: "Take a breath. You've survived 100% of your bad days so far. This is just another one you're going to crush.",
-  "Down-Bad": "Heartbreak is just your soul making space for something better. Feel it, then flip it.",
-  Glowing: "You're not just winning — you're making it look easy. Keep that energy, the world is yours.",
-  Feral: "That fire in you? Don't put it out. Aim it. Channel it. Make them remember your name.",
-  "In My Feels": "Feelings aren't weaknesses — they're your superpower. Let yourself feel and then let it go.",
-  Chaotic: "Life's a mess and so are you — and that's exactly what makes you iconic. Embrace the chaos.",
-  Healing: "Healing isn't linear. Some days you're up, some days you're down. Both are progress.",
-  Unbothered: "You're main character energy and everyone else is just an extra. Keep that crown straight.",
-};
-
-const promptSets: Record<string, string[]> = {
-  debate: [
-    "What would you tell your best friend if they were in this exact situation?",
-    "If you had the power to change one thing right now, what would it be?",
-  ],
-  comedy: [
-    "On a scale from 'it's fine' to 'I'm feral', where are we right now?",
-    "If this was a reality TV show, what would your confessional line be?",
-  ],
-  romance: [
-    "What's the one thing you need to hear right now? Be honest.",
-    "If you stepped outside yourself, what would you tell yourself with love?",
-  ],
-};
 
 export async function POST(request: NextRequest) {
   try {
@@ -100,20 +36,56 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Vent content is required" }, { status: 400 });
     }
 
-    const mood = detectMood(content);
-    const realTalk = realTalks[mood.tag] || realTalks.Unbothered;
-    const prompts = promptSets[mode as keyof typeof promptSets] || promptSets.comedy;
+    let moodTag: string;
+    let moodColor: string;
+    let realTalk: string;
+    let prompts: string[];
+
+    const hasGemini = !!process.env.GEMINI_API_KEY;
+
+    if (hasGemini) {
+      try {
+        const ai = await analyzeVent(content, mode);
+        moodTag = ai.moodTag;
+        moodColor = ai.moodColor;
+        realTalk = ai.realTalk;
+        prompts = ai.prompts;
+      } catch {
+        const fallback = detectMood(content);
+        moodTag = fallback.tag;
+        moodColor = fallback.color;
+        realTalk = "The Baddie is thinking... but the vibe is clear.";
+        prompts = ["What would you tell your best friend?", "What's the first step to fix this?"];
+      }
+    } else {
+      const fallback = detectMood(content);
+      moodTag = fallback.tag;
+      moodColor = fallback.color;
+      realTalk = moodTag === "Stressed" ? "Take a breath. You've survived 100% of your bad days so far."
+        : moodTag === "Down-Bad" ? "Heartbreak is just your soul making space for something better."
+        : moodTag === "Glowing" ? "You're not just winning — you're making it look easy."
+        : moodTag === "Feral" ? "That fire in you? Don't put it out. Aim it."
+        : moodTag === "Healing" ? "Healing isn't linear. Some days you're up, some days you're down."
+        : moodTag === "Chaotic" ? "Life's a mess and so are you — iconic."
+        : moodTag === "In My Feels" ? "Feelings aren't weaknesses — they're your superpower."
+        : "You're main character energy. Keep that crown straight.";
+      prompts = mode === "debate"
+        ? ["What would you tell your best friend?", "If you could change one thing, what?"]
+        : mode === "comedy"
+        ? ["On a scale from 'it's fine' to 'I'm feral', where are we?", "What would your confessional say?"]
+        : ["What's the one thing you need to hear?", "What would you tell yourself with love?"];
+    }
 
     const result = await db
       .insert(vents)
       .values({
         content,
         mode,
-        moodTag: mood.tag,
-        moodColor: mood.color,
+        moodTag,
+        moodColor,
         realTalk,
         prompts,
-        songLyrics: songLyricsByMood[mood.tag] || songLyricsByMood.Glowing,
+        songLyrics: songLyricsByMood[moodTag] || songLyricsByMood.Glowing,
         danceSteps: danceSteps.slice(0, 4),
       })
       .returning();
@@ -132,8 +104,8 @@ export async function POST(request: NextRequest) {
           prompts: inserted.prompts as string[],
           songLyrics: inserted.songLyrics,
           danceSteps: inserted.danceSteps as string[],
-          books: booksByMood[mood.tag] || booksByMood.Healing,
-          recipes: recipesByMood[mood.tag] || recipesByMood.Healing,
+          books: booksByMood[moodTag] || booksByMood.Healing,
+          recipes: recipesByMood[moodTag] || recipesByMood.Healing,
         },
         createdAt: inserted.createdAt.toISOString(),
       },
