@@ -14,8 +14,64 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CHATPATTIE BADDIE - Your Emotional AI Companion",
-  description: "Vent, process, and transform your emotions with the ultimate AI Baddie.",
+  title: {
+    default: "CHATPATTIE BADDIE - Your Emotional AI Companion",
+    template: "%s | CHATPATTIE BADDIE",
+  },
+  description:
+    "Vent, process, and transform your emotions with the ultimate AI Baddie. Anonymous emotional processing with AI-powered mood analysis, songs, dance, book recs, and cooking therapy.",
+  keywords: [
+    "AI emotional companion",
+    "mental wellness AI",
+    "vent chat",
+    "mood tracker",
+    "AI therapy alternative",
+    "emotional processing",
+    "Chatpatti Baddie",
+    "AI companion",
+  ],
+  authors: [{ name: "Chatpatti Baddie" }],
+  creator: "Chatpatti Baddie",
+  publisher: "Chatpatti Baddie",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: "CHATPATTIE BADDIE",
+    title: "CHATPATTIE BADDIE - Your Emotional AI Companion",
+    description:
+      "Spill your drama. The Baddie listens. AI-powered venting with mood analysis, songs, dance, books & recipes.",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "CHATPATTIE BADDIE",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "CHATPATTIE BADDIE - Your Emotional AI Companion",
+    description:
+      "Spill your drama. The Baddie listens. AI-powered venting with mood analysis, songs, dance, books & recipes.",
+    images: ["/og-image.png"],
+  },
+  category: "wellness",
+  metadataBase: new URL("https://chatpattiebaddie.vercel.app"),
+  alternates: {
+    canonical: "/",
+  },
 };
 
 export default function RootLayout({
@@ -28,6 +84,32 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebApplication",
+              name: "CHATPATTIE BADDIE",
+              description:
+                "An AI-powered emotional companion that helps users process their feelings through venting, mood analysis, songs, dance tutorials, book recommendations, and cooking therapy.",
+              url: "https://chatpattiebaddie.vercel.app",
+              applicationCategory: "WellnessApplication",
+              operatingSystem: "Web",
+              author: {
+                "@type": "Organization",
+                name: "Chatpatti Baddie",
+              },
+              offers: {
+                "@type": "Offer",
+                price: "0",
+                priceCurrency: "USD",
+              },
+            }),
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col bg-[#fafafa]">
         <Navbar />
         <main className="flex-1 w-full max-w-3xl mx-auto px-4 py-6">
