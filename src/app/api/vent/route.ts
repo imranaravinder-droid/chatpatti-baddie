@@ -28,6 +28,56 @@ function detectMood(content: string): { tag: string; color: string } {
   return { tag: "Unbothered", color: "#6BCB77" };
 }
 
+function getContentForMood(moodTag: string) {
+  const moodLower = moodTag.toLowerCase();
+  if (moodLower === "glowing" || moodLower === "unbothered") {
+    return {
+      songLyrics: songLyricsByMood[moodTag] || songLyricsByMood.Glowing,
+      danceSteps: danceSteps.slice(0, 4),
+      books: null,
+      recipes: null,
+    };
+  }
+  if (moodLower === "down-bad" || moodLower === "in my feels") {
+    return {
+      songLyrics: songLyricsByMood[moodTag] || songLyricsByMood["Down-Bad"],
+      danceSteps: null,
+      books: booksByMood[moodTag] || booksByMood.Healing,
+      recipes: null,
+    };
+  }
+  if (moodLower === "feral") {
+    return {
+      songLyrics: null,
+      danceSteps: danceSteps.slice(2, 6),
+      books: booksByMood[moodTag] || booksByMood.Healing,
+      recipes: recipesByMood[moodTag] || recipesByMood.Healing,
+    };
+  }
+  if (moodLower === "chaotic") {
+    return {
+      songLyrics: null,
+      danceSteps: danceSteps.slice(0, 4),
+      books: null,
+      recipes: recipesByMood[moodTag] || recipesByMood.Healing,
+    };
+  }
+  if (moodLower === "healing") {
+    return {
+      songLyrics: null,
+      danceSteps: null,
+      books: booksByMood[moodTag] || booksByMood.Healing,
+      recipes: recipesByMood[moodTag] || recipesByMood.Healing,
+    };
+  }
+  return {
+    songLyrics: songLyricsByMood[moodTag] || songLyricsByMood.Glowing,
+    danceSteps: null,
+    books: null,
+    recipes: recipesByMood[moodTag] || recipesByMood.Healing,
+  };
+}
+
 export async function POST(request: NextRequest) {
   try {
     const { content, mode = "comedy" } = await request.json();
@@ -61,20 +111,40 @@ export async function POST(request: NextRequest) {
       const fallback = detectMood(content);
       moodTag = fallback.tag;
       moodColor = fallback.color;
-      realTalk = moodTag === "Stressed" ? "Take a breath. You've survived 100% of your bad days so far."
-        : moodTag === "Down-Bad" ? "Heartbreak is just your soul making space for something better."
-        : moodTag === "Glowing" ? "You're not just winning — you're making it look easy."
-        : moodTag === "Feral" ? "That fire in you? Don't put it out. Aim it."
-        : moodTag === "Healing" ? "Healing isn't linear. Some days you're up, some days you're down."
-        : moodTag === "Chaotic" ? "Life's a mess and so are you — iconic."
-        : moodTag === "In My Feels" ? "Feelings aren't weaknesses — they're your superpower."
-        : "You're main character energy. Keep that crown straight.";
-      prompts = mode === "debate"
-        ? ["What would you tell your best friend?", "If you could change one thing, what?"]
-        : mode === "comedy"
-        ? ["On a scale from 'it's fine' to 'I'm feral', where are we?", "What would your confessional say?"]
-        : ["What's the one thing you need to hear?", "What would you tell yourself with love?"];
+      if (mode === "debate") {
+        realTalk = moodTag === "Stressed" ? "You're stressed? Good. Stress means you care. Now channel it before it eats you alive."
+          : moodTag === "Down-Bad" ? "They left. So what? Their loss. Stop giving them free rent in your head."
+          : moodTag === "Glowing" ? "You're winning? Don't get comfortable. Stay hungry. The moment you relax is when they catch up."
+          : moodTag === "Feral" ? "Good. Be angry. Now use it. Anger is fuel — burn something productive."
+          : moodTag === "Healing" ? "Healing isn't soft. It's war. Every day you choose yourself is a battle won."
+          : moodTag === "Chaotic" ? "Chaos is your brand. Own it. But don't let it own you."
+          : moodTag === "In My Feels" ? "Feelings are data, not destiny. Analyze them and move on."
+          : "You're unbothered? Prove it. Actions speak louder than vibes.";
+        prompts = ["What's the real issue you're avoiding?", "If you had 30 seconds to say the truth, what would it be?"];
+      } else if (mode === "comedy") {
+        realTalk = moodTag === "Stressed" ? "Bestie, you're stressed? That's just your brain's dramatic era."
+          : moodTag === "Down-Bad" ? "Heartbreak is just your villain origin story. Every queen needs one."
+          : moodTag === "Glowing" ? "You're glowing so hard I need sunglasses. Save some confidence for the rest of us."
+          : moodTag === "Feral" ? "Feral is just passionate with bad PR. You're iconic."
+          : moodTag === "Healing" ? "Healing looks good on you. It's giving 'main character in their growth era'."
+          : moodTag === "Chaotic" ? "Chaotic? Same. We love a messy legend."
+          : moodTag === "In My Feels" ? "In your feels? That's just your monthly subscription to emotions."
+          : "Unbothered, moisturized, thriving — we love to see it.";
+        prompts = ["On a scale from 'it's fine' to 'I'm feral', where are we?", "What would your reality TV confessional say right now?"];
+      } else {
+        realTalk = moodTag === "Stressed" ? "Take a breath, love. You've carried so much. Let me hold some of it for a moment."
+          : moodTag === "Down-Bad" ? "Your heart is healing. Be gentle with it. You deserve the love you're longing for."
+          : moodTag === "Glowing" ? "You're radiant. Don't dim yourself for anyone. Shine unapologetically."
+          : moodTag === "Feral" ? "I see the fire in you. Let's turn it into warmth instead of ash."
+          : moodTag === "Healing" ? "Healing is a love story between you and yourself. Take all the time you need."
+          : moodTag === "Chaotic" ? "I see the mess. Let's untangle it together, one thread at a time."
+          : moodTag === "In My Feels" ? "Your feelings are valid. Let them flow through you like a gentle wave."
+          : "You are enough. Exactly as you are. Don't let anyone tell you otherwise.";
+        prompts = ["What does your heart need right now?", "If love was the answer, what would you ask?"];
+      }
     }
+
+    const contentForMood = getContentForMood(moodTag);
 
     const result = await db
       .insert(vents)
@@ -85,8 +155,8 @@ export async function POST(request: NextRequest) {
         moodColor,
         realTalk,
         prompts,
-        songLyrics: songLyricsByMood[moodTag] || songLyricsByMood.Glowing,
-        danceSteps: danceSteps.slice(0, 4),
+        songLyrics: contentForMood.songLyrics,
+        danceSteps: contentForMood.danceSteps,
       })
       .returning();
 
@@ -104,8 +174,8 @@ export async function POST(request: NextRequest) {
           prompts: inserted.prompts as string[],
           songLyrics: inserted.songLyrics,
           danceSteps: inserted.danceSteps as string[],
-          books: booksByMood[moodTag] || booksByMood.Healing,
-          recipes: recipesByMood[moodTag] || recipesByMood.Healing,
+          books: contentForMood.books,
+          recipes: contentForMood.recipes,
         },
         createdAt: inserted.createdAt.toISOString(),
       },

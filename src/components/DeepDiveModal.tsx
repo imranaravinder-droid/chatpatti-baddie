@@ -1,6 +1,6 @@
 "use client";
 
-import { Vent } from "@/types";
+import { Vent, Mode } from "@/types";
 import MoodTagBadge from "./MoodTagBadge";
 import VoiceOverButton from "./VoiceOverButton";
 import SongCard from "./SongCard";
@@ -8,13 +8,19 @@ import DanceSteps from "./DanceSteps";
 import BookCard from "./BookCard";
 import RecipeCard from "./RecipeCard";
 import { format } from "date-fns";
-import { X, Sparkles, Lightbulb } from "lucide-react";
+import { X, Sparkles, Lightbulb, Swords, Laugh, Heart } from "lucide-react";
 import { useEffect } from "react";
 
 interface Props {
   vent: Vent;
   onClose: () => void;
 }
+
+const modeConfig: Record<string, { label: string; color: string; bg: string; border: string; icon: typeof Sparkles }> = {
+  debate: { label: "Debate", color: "#e53935", bg: "bg-red-50", border: "border-red-200", icon: Swords },
+  comedy: { label: "Comedy", color: "#f9a825", bg: "bg-yellow-50", border: "border-yellow-200", icon: Laugh },
+  romance: { label: "Romance", color: "#e91e63", bg: "bg-pink-50", border: "border-pink-200", icon: Heart },
+};
 
 export default function DeepDiveModal({ vent, onClose }: Props) {
   useEffect(() => {
@@ -24,6 +30,7 @@ export default function DeepDiveModal({ vent, onClose }: Props) {
 
   const fullText = `${vent.response.realTalk}\n\n${vent.response.prompts.map((p) => `• ${p}`).join("\n")}`;
   const date = new Date(vent.createdAt);
+  const cfg = modeConfig[vent.mode] || null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
@@ -48,6 +55,16 @@ export default function DeepDiveModal({ vent, onClose }: Props) {
             <p className="text-sm text-gray-800 leading-relaxed">{vent.content}</p>
           </div>
 
+          {cfg && (
+            <div
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider w-fit ${cfg.bg} ${cfg.border} border`}
+              style={{ color: cfg.color }}
+            >
+              {cfg.icon && <cfg.icon className="w-3.5 h-3.5" />}
+              {cfg.label}
+            </div>
+          )}
+
           <div className="flex items-center gap-3">
             <MoodTagBadge tag={vent.response.moodTag} color={vent.response.moodColor} />
             <VoiceOverButton text={fullText} />
@@ -67,7 +84,7 @@ export default function DeepDiveModal({ vent, onClose }: Props) {
                 Think About This
               </div>
               {vent.response.prompts.map((prompt, i) => (
-                <div key={i} className="bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl px-4 py-3 text-sm text-gray-700 border border-pink-100">
+                <div key={i} className={`rounded-xl px-4 py-3 text-sm text-gray-700 border ${cfg ? cfg.bg + " " + cfg.border : "bg-gradient-to-r from-pink-50 to-purple-50 border-pink-100"}`}>
                   {prompt}
                 </div>
               ))}

@@ -2,7 +2,57 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { vents } from "@/lib/schema";
 import { eq } from "drizzle-orm";
-import { booksByMood, recipesByMood } from "@/lib/mockData";
+import { booksByMood, recipesByMood, songLyricsByMood, danceSteps } from "@/lib/mockData";
+
+function getContentForMood(moodTag: string) {
+  const moodLower = moodTag.toLowerCase();
+  if (moodLower === "glowing" || moodLower === "unbothered") {
+    return {
+      songLyrics: songLyricsByMood[moodTag] || songLyricsByMood.Glowing,
+      danceSteps: danceSteps.slice(0, 4),
+      books: null,
+      recipes: null,
+    };
+  }
+  if (moodLower === "down-bad" || moodLower === "in my feels") {
+    return {
+      songLyrics: songLyricsByMood[moodTag] || songLyricsByMood["Down-Bad"],
+      danceSteps: null,
+      books: booksByMood[moodTag] || booksByMood.Healing,
+      recipes: null,
+    };
+  }
+  if (moodLower === "feral") {
+    return {
+      songLyrics: songLyricsByMood["Down-Bad"],
+      danceSteps: danceSteps.slice(2, 6),
+      books: booksByMood[moodTag] || booksByMood.Healing,
+      recipes: recipesByMood[moodTag] || recipesByMood.Healing,
+    };
+  }
+  if (moodLower === "chaotic") {
+    return {
+      songLyrics: null,
+      danceSteps: danceSteps.slice(0, 4),
+      books: null,
+      recipes: recipesByMood[moodTag] || recipesByMood.Healing,
+    };
+  }
+  if (moodLower === "healing") {
+    return {
+      songLyrics: null,
+      danceSteps: null,
+      books: booksByMood[moodTag] || booksByMood.Healing,
+      recipes: recipesByMood[moodTag] || recipesByMood.Healing,
+    };
+  }
+  return {
+    songLyrics: songLyricsByMood[moodTag] || songLyricsByMood.Glowing,
+    danceSteps: null,
+    books: null,
+    recipes: recipesByMood[moodTag] || recipesByMood.Healing,
+  };
+}
 
 export async function GET(
   _request: NextRequest,
@@ -23,6 +73,7 @@ export async function GET(
     }
 
     const v = rows[0];
+    const content = getContentForMood(v.moodTag);
     return NextResponse.json({
       vent: {
         id: v.id.toString(),
@@ -33,10 +84,10 @@ export async function GET(
           moodColor: v.moodColor,
           realTalk: v.realTalk,
           prompts: v.prompts as string[],
-          songLyrics: v.songLyrics,
-          danceSteps: v.danceSteps as string[],
-          books: booksByMood[v.moodTag] || booksByMood.Healing,
-          recipes: recipesByMood[v.moodTag] || recipesByMood.Healing,
+          songLyrics: content.songLyrics,
+          danceSteps: content.danceSteps,
+          books: content.books,
+          recipes: content.recipes,
         },
         createdAt: v.createdAt.toISOString(),
       },

@@ -19,10 +19,10 @@ export interface BaddieResponse {
   moodColor: string;
   realTalk: string;
   prompts: string[];
-  songLyrics?: string;
-  danceSteps?: string[];
-  books?: BookRec[];
-  recipes?: RecipeRec[];
+  songLyrics?: string | null;
+  danceSteps?: string[] | null;
+  books?: BookRec[] | null;
+  recipes?: RecipeRec[] | null;
 }
 
 export interface Vent {

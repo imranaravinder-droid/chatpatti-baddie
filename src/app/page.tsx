@@ -79,7 +79,7 @@ export default function Home() {
         </div>
       )}
 
-      {currentResponse && <BaddieResponse response={currentResponse} isStreaming={false} />}
+      {currentResponse && <BaddieResponse response={currentResponse} mode={mode} isStreaming={false} />}
 
       {!hasVented && !isStreaming && (
         <div className="text-center py-16">

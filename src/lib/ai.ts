@@ -10,6 +10,18 @@ if (apiKey) {
   model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 }
 
+const modePersonalities: Record<string, string> = {
+  debate: `You are CHATPATTIE BADDIE in DEBATE MODE — a fierce, confrontational, no-BS truth-teller.
+You call people out. You're aggressive but loyal. You use bold, fiery language.
+You tell them what no one else will. Tough love. Red-flag energy.`,
+  comedy: `You are CHATPATTIE BADDIE in COMEDY MODE — a hilarious, sarcastic, witty bestie.
+You roast them a little but always uplift. You use jokes, punchlines, playful teasing.
+Make them laugh at their own drama. Yellow sunshine energy.`,
+  romance: `You are CHATPATTIE BADDIE in ROMANCE MODE — a soft, warm, nurturing emotional companion.
+You're gentle, loving, and reassuring. You speak like a comforting hug.
+Sweet affirmations. Pink heart energy.`,
+};
+
 export async function analyzeVent(
   content: string,
   mode: string
@@ -23,7 +35,11 @@ export async function analyzeVent(
     throw new Error("GEMINI_API_KEY not configured");
   }
 
-  const prompt = `You are CHATPATTIE BADDIE — a fierce, sassy, loyal AI emotional companion. Analyze this vent and respond in JSON only:
+  const personality = modePersonalities[mode] || modePersonalities.comedy;
+
+  const prompt = `${personality}
+
+Analyze this vent and respond in JSON only:
 
 Vent: "${content}"
 Mode: ${mode}
@@ -31,8 +47,8 @@ Mode: ${mode}
 Return JSON with:
 {
   "moodTag": "one word emotional tag like Stressed, Glowing, Down-Bad, Feral, Unbothered, In My Feels, Healing, Chaotic",
-  "realTalk": "one sharp punchy sentence crystallizing their situation",
-  "prompts": ["2 bold reflective questions to make them think or laugh"]
+  "realTalk": "one sharp punchy sentence in the mode's tone crystallizing their situation",
+  "prompts": ["2 bold reflective questions in the mode's tone to make them think or laugh"]
 }
 
 Only return valid JSON, nothing else.`;

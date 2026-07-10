@@ -1,25 +1,33 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { BaddieResponse as BaddieResponseType } from "@/types";
+import { BaddieResponse as BaddieResponseType, Mode } from "@/types";
 import MoodTagBadge from "./MoodTagBadge";
 import VoiceOverButton from "./VoiceOverButton";
 import SongCard from "./SongCard";
 import DanceSteps from "./DanceSteps";
 import BookCard from "./BookCard";
 import RecipeCard from "./RecipeCard";
-import { Sparkles, Lightbulb } from "lucide-react";
+import { Sparkles, Lightbulb, Swords, Laugh, Heart } from "lucide-react";
 
 interface Props {
   response: BaddieResponseType;
+  mode?: Mode;
   isStreaming?: boolean;
 }
 
-export default function BaddieResponse({ response, isStreaming }: Props) {
+const modeConfig: Record<string, { label: string; color: string; bg: string; border: string; icon: typeof Sparkles }> = {
+  debate: { label: "Debate", color: "#e53935", bg: "bg-red-50", border: "border-red-200", icon: Swords },
+  comedy: { label: "Comedy", color: "#f9a825", bg: "bg-yellow-50", border: "border-yellow-200", icon: Laugh },
+  romance: { label: "Romance", color: "#e91e63", bg: "bg-pink-50", border: "border-pink-200", icon: Heart },
+};
+
+export default function BaddieResponse({ response, mode, isStreaming }: Props) {
   const [visibleText, setVisibleText] = useState("");
   const fullText = `${response.realTalk}\n\n${response.prompts
     .map((p) => `• ${p}`)
     .join("\n")}`;
+  const cfg = mode ? modeConfig[mode] : null;
 
   useEffect(() => {
     if (!isStreaming) {
@@ -40,6 +48,16 @@ export default function BaddieResponse({ response, isStreaming }: Props) {
 
   return (
     <div className="space-y-5 animate-fadeIn">
+      {cfg && (
+        <div
+          className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider w-fit ${cfg.bg} ${cfg.border} border`}
+          style={{ color: cfg.color }}
+        >
+          {cfg.icon && <cfg.icon className="w-3.5 h-3.5" />}
+          {cfg.label}
+        </div>
+      )}
+
       <div className="flex items-center gap-3">
         <MoodTagBadge tag={response.moodTag} color={response.moodColor} />
         <VoiceOverButton text={fullText} />
@@ -67,7 +85,7 @@ export default function BaddieResponse({ response, isStreaming }: Props) {
         {response.prompts.map((prompt, i) => (
           <div
             key={i}
-            className="bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl px-4 py-3 text-sm text-gray-700 border border-pink-100"
+            className={`rounded-xl px-4 py-3 text-sm text-gray-700 border ${cfg ? cfg.bg + " " + cfg.border : "bg-gradient-to-r from-pink-50 to-purple-50 border-pink-100"}`}
           >
             {prompt}
           </div>
