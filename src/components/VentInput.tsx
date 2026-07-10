@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { Send, Mic } from "lucide-react";
+import { useState, useRef } from "react";
+import { Send, Mic, MicOff } from "lucide-react";
 
 interface Props {
   onSubmit: (text: string) => void;
@@ -10,6 +10,13 @@ interface Props {
 
 export default function VentInput({ onSubmit, disabled }: Props) {
   const [text, setText] = useState("");
+  const [isListening, setIsListening] = useState(false);
+  const recognitionRef = useRef<any>(null);
+
+  const SpeechRecognitionAPI =
+    typeof window !== "undefined"
+      ? (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+      : null;
 
   const handleSubmit = () => {
     if (!text.trim() || disabled) return;
@@ -22,6 +29,42 @@ export default function VentInput({ onSubmit, disabled }: Props) {
       e.preventDefault();
       handleSubmit();
     }
+  };
+
+  const toggleVoice = () => {
+    if (!SpeechRecognitionAPI) {
+      alert("Voice input is not supported in your browser. Try Chrome.");
+      return;
+    }
+
+    if (isListening) {
+      recognitionRef.current?.stop();
+      setIsListening(false);
+      return;
+    }
+
+    const recognition = new SpeechRecognitionAPI();
+    recognition.lang = "en-US";
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    recognition.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript;
+      setText((prev) => (prev ? prev + " " + transcript : transcript));
+      setIsListening(false);
+    };
+
+    recognition.onerror = () => {
+      setIsListening(false);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognitionRef.current = recognition;
+    recognition.start();
+    setIsListening(true);
   };
 
   return (
@@ -38,11 +81,17 @@ export default function VentInput({ onSubmit, disabled }: Props) {
       <div className="flex items-center justify-between px-4 py-3 bg-gray-50 border-t border-gray-100">
         <button
           type="button"
-          className="flex items-center gap-2 px-3 py-1.5 rounded-full text-sm text-gray-400 hover:text-gray-600 hover:bg-gray-200 transition-colors"
-          title="Voice input (coming soon)"
+          onClick={toggleVoice}
+          disabled={disabled}
+          className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm transition-colors ${
+            isListening
+              ? "bg-pink-100 text-pink-600 animate-pulse"
+              : "text-gray-400 hover:text-gray-600 hover:bg-gray-200"
+          }`}
+          title={isListening ? "Listening..." : "Voice input"}
         >
-          <Mic className="w-4 h-4" />
-          Voice
+          {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+          {isListening ? "Listening..." : "Voice"}
         </button>
         <button
           onClick={handleSubmit}
