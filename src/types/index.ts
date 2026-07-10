@@ -19,6 +19,7 @@ export interface BaddieResponse {
   moodColor: string;
   realTalk: string;
   prompts: string[];
+  aiText?: string | null;
   songLyrics?: string | null;
   danceSteps?: string[] | null;
   books?: BookRec[] | null;

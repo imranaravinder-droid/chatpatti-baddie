@@ -73,7 +73,10 @@ export async function GET(
     }
 
     const v = rows[0];
-    const content = getContentForMood(v.moodTag);
+    const hasSpecificRequest = v.aiText && v.aiText.length > 0;
+    const content = hasSpecificRequest
+      ? { songLyrics: null, danceSteps: null, books: null, recipes: null }
+      : getContentForMood(v.moodTag);
     return NextResponse.json({
       vent: {
         id: v.id.toString(),
@@ -84,6 +87,7 @@ export async function GET(
           moodColor: v.moodColor,
           realTalk: v.realTalk,
           prompts: v.prompts as string[],
+          aiText: v.aiText,
           songLyrics: content.songLyrics,
           danceSteps: content.danceSteps,
           books: content.books,

@@ -90,6 +90,7 @@ export async function POST(request: NextRequest) {
     let moodColor: string;
     let realTalk: string;
     let prompts: string[];
+    let aiText: string = "";
 
     const hasGemini = !!process.env.GEMINI_API_KEY;
 
@@ -100,6 +101,7 @@ export async function POST(request: NextRequest) {
         moodColor = ai.moodColor;
         realTalk = ai.realTalk;
         prompts = ai.prompts;
+        aiText = ai.aiText;
       } catch {
         const fallback = detectMood(content);
         moodTag = fallback.tag;
@@ -121,6 +123,7 @@ export async function POST(request: NextRequest) {
           : moodTag === "In My Feels" ? "Feelings are data, not destiny. Analyze them and move on."
           : "You're unbothered? Prove it. Actions speak louder than vibes.";
         prompts = ["What's the real issue you're avoiding?", "If you had 30 seconds to say the truth, what would it be?"];
+        aiText = "You wanted the truth? Here it is. You've been playing small, making excuses, and blaming the world. News flash: nobody's coming to save you. That fire you feel? That's not anger — that's your potential begging to be unleashed. So either step up or step aside. The Baddie doesn't do pity parties.";
       } else if (mode === "comedy") {
         realTalk = moodTag === "Stressed" ? "Bestie, you're stressed? That's just your brain's dramatic era."
           : moodTag === "Down-Bad" ? "Heartbreak is just your villain origin story. Every queen needs one."
@@ -131,6 +134,7 @@ export async function POST(request: NextRequest) {
           : moodTag === "In My Feels" ? "In your feels? That's just your monthly subscription to emotions."
           : "Unbothered, moisturized, thriving — we love to see it.";
         prompts = ["On a scale from 'it's fine' to 'I'm feral', where are we?", "What would your reality TV confessional say right now?"];
+        aiText = "Scene: You, walking into the room like you own it. (Because you do.) \n\n*Dramatic reenactment* \nYou: 'I'm fine.' \nEveryone: 'Bestie, we saw the whole thing.' \nYou: '...Okay maybe I'm not fine.' \nEveryone: 'We know. That's why we brought snacks.' \n\nCut to credits. Roll laughter.";
       } else {
         realTalk = moodTag === "Stressed" ? "Take a breath, love. You've carried so much. Let me hold some of it for a moment."
           : moodTag === "Down-Bad" ? "Your heart is healing. Be gentle with it. You deserve the love you're longing for."
@@ -141,10 +145,12 @@ export async function POST(request: NextRequest) {
           : moodTag === "In My Feels" ? "Your feelings are valid. Let them flow through you like a gentle wave."
           : "You are enough. Exactly as you are. Don't let anyone tell you otherwise.";
         prompts = ["What does your heart need right now?", "If love was the answer, what would you ask?"];
+        aiText = "Tumhare chehre ki wo udaasi, \nJaane kyun mujhse dekhi nahi jaati. \nHar baar tum muskuraate ho, \nPar aankhein tumhaari dastaan sunaati hain. \n\nRuk jaao ek pal ke liye, \nYeh dil tumhe ek baat bataye. \nTum tanha nahi ho is duniya mein, \nBaddie hai na jo har baar muskuraye.";
       }
     }
 
     const contentForMood = getContentForMood(moodTag);
+    const hasSpecificRequest = aiText && aiText.length > 0;
 
     const result = await db
       .insert(vents)
@@ -155,8 +161,9 @@ export async function POST(request: NextRequest) {
         moodColor,
         realTalk,
         prompts,
-        songLyrics: contentForMood.songLyrics,
-        danceSteps: contentForMood.danceSteps,
+        aiText,
+        songLyrics: hasSpecificRequest ? null : contentForMood.songLyrics,
+        danceSteps: hasSpecificRequest ? null : contentForMood.danceSteps,
       })
       .returning();
 
@@ -172,10 +179,11 @@ export async function POST(request: NextRequest) {
           moodColor: inserted.moodColor,
           realTalk: inserted.realTalk,
           prompts: inserted.prompts as string[],
-          songLyrics: inserted.songLyrics,
-          danceSteps: inserted.danceSteps as string[],
-          books: contentForMood.books,
-          recipes: contentForMood.recipes,
+          aiText,
+          songLyrics: hasSpecificRequest ? null : inserted.songLyrics,
+          danceSteps: hasSpecificRequest ? null : (inserted.danceSteps as string[]),
+          books: hasSpecificRequest ? null : contentForMood.books,
+          recipes: hasSpecificRequest ? null : contentForMood.recipes,
         },
         createdAt: inserted.createdAt.toISOString(),
       },

@@ -91,15 +91,23 @@ export default function DeepDiveModal({ vent, onClose }: Props) {
             </div>
           )}
 
-          {vent.response.songLyrics && <SongCard lyrics={vent.response.songLyrics} />}
-          {vent.response.danceSteps && vent.response.danceSteps.length > 0 && (
-            <DanceSteps steps={vent.response.danceSteps} />
-          )}
-          {vent.response.books && vent.response.books.length > 0 && (
-            <BookCard books={vent.response.books} />
-          )}
-          {vent.response.recipes && vent.response.recipes.length > 0 && (
-            <RecipeCard recipes={vent.response.recipes} />
+          {vent.response.aiText ? (
+            <div className="bg-white rounded-xl p-4 border border-gray-100">
+              <p className="text-sm text-gray-800 leading-relaxed whitespace-pre-wrap">{vent.response.aiText}</p>
+            </div>
+          ) : (
+            <>
+              {vent.response.songLyrics && <SongCard lyrics={vent.response.songLyrics} />}
+              {vent.response.danceSteps && vent.response.danceSteps.length > 0 && (
+                <DanceSteps steps={vent.response.danceSteps} />
+              )}
+              {vent.response.books && vent.response.books.length > 0 && (
+                <BookCard books={vent.response.books} />
+              )}
+              {vent.response.recipes && vent.response.recipes.length > 0 && (
+                <RecipeCard recipes={vent.response.recipes} />
+              )}
+            </>
           )}
         </div>
       </div>

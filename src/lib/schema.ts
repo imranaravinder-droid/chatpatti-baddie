@@ -8,6 +8,7 @@ export const vents = pgTable("vents", {
   moodColor: text("mood_color").notNull(),
   realTalk: text("real_talk").notNull(),
   prompts: json("prompts").$type<string[]>().notNull().default([]),
+  aiText: text("ai_text"),
   songLyrics: text("song_lyrics"),
   danceSteps: json("dance_steps").$type<string[]>().default([]),
   createdAt: timestamp("created_at").notNull().defaultNow(),

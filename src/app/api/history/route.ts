@@ -66,7 +66,10 @@ export async function GET(request: NextRequest) {
       .limit(limit);
 
     const formatted = rows.map((v) => {
-      const content = getContentForMood(v.moodTag);
+      const hasSpecificRequest = v.aiText && v.aiText.length > 0;
+      const content = hasSpecificRequest
+        ? { songLyrics: null, danceSteps: null, books: null, recipes: null }
+        : getContentForMood(v.moodTag);
       return {
         id: v.id.toString(),
         content: v.content,
@@ -76,6 +79,7 @@ export async function GET(request: NextRequest) {
           moodColor: v.moodColor,
           realTalk: v.realTalk,
           prompts: v.prompts as string[],
+          aiText: v.aiText,
           songLyrics: content.songLyrics,
           danceSteps: content.danceSteps,
           books: content.books,
