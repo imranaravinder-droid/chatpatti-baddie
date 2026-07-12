@@ -14,10 +14,9 @@ export default function VentInput({ onSubmit, disabled }: Props) {
   const [voiceError, setVoiceError] = useState<string | null>(null);
   const recognitionRef = useRef<any>(null);
 
-  const SpeechRecognitionAPI =
-    typeof window !== "undefined"
-      ? (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
-      : null;
+  const canVoice =
+    typeof window !== "undefined" &&
+    !!( (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition );
 
   const handleSubmit = () => {
     if (!text.trim() || disabled) return;
@@ -35,36 +34,56 @@ export default function VentInput({ onSubmit, disabled }: Props) {
   const toggleVoice = () => {
     setVoiceError(null);
 
-    if (!SpeechRecognitionAPI) {
-      setVoiceError("Voice input needs Chrome browser.");
-      return;
-    }
-
     if (isListening) {
-      recognitionRef.current?.stop();
+      recognitionRef.current?.abort();
       setIsListening(false);
       return;
     }
 
-    const recognition = new SpeechRecognitionAPI();
+    if (!canVoice) {
+      setVoiceError("Voice not supported on this browser. Try Chrome on Android.");
+      return;
+    }
+
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
     recognition.lang = "en-US";
     recognition.continuous = false;
     recognition.interimResults = true;
+    recognition.maxAlternatives = 1;
+
+    let speechDetected = false;
+    let timeoutId: any;
+
+    recognition.onspeechstart = () => {
+      speechDetected = true;
+    };
 
     recognition.onresult = (event: any) => {
+      if (timeoutId) clearTimeout(timeoutId);
       let transcript = "";
       for (let i = event.resultIndex; i < event.results.length; i++) {
-        transcript += event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          transcript += event.results[i][0].transcript;
+        }
       }
-      setText((prev) => (prev ? prev + " " + transcript : transcript));
+      if (transcript) {
+        setText((prev) => (prev ? prev + " " + transcript : transcript));
+      }
       setIsListening(false);
     };
 
     recognition.onerror = (event: any) => {
       if (event.error === "not-allowed") {
-        setVoiceError("Microphone blocked. Allow mic access and try again.");
+        setVoiceError("Microphone access denied. Allow mic and try again.");
       } else if (event.error === "no-speech") {
-        setVoiceError("No speech detected. Try again.");
+        if (!speechDetected) {
+          setVoiceError("Tap mic, then speak clearly. Did you allow microphone?");
+        }
+      } else if (event.error === "aborted") {
+        return;
+      } else {
+        setVoiceError(event.error === "audio-capture" ? "No mic found." : "Voice error. Try again.");
       }
       setIsListening(false);
     };
@@ -77,6 +96,13 @@ export default function VentInput({ onSubmit, disabled }: Props) {
     try {
       recognition.start();
       setIsListening(true);
+      timeoutId = setTimeout(() => {
+        if (!speechDetected) {
+          recognition.abort();
+          setVoiceError("No speech heard. Tap mic, speak, then wait.");
+          setIsListening(false);
+        }
+      }, 8000);
     } catch {
       setVoiceError("Could not start microphone.");
       setIsListening(false);

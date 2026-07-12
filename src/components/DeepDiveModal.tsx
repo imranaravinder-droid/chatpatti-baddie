@@ -8,7 +8,7 @@ import DanceSteps from "./DanceSteps";
 import BookCard from "./BookCard";
 import RecipeCard from "./RecipeCard";
 import { format } from "date-fns";
-import { X, Sparkles, Lightbulb, Swords, Laugh, Heart } from "lucide-react";
+import { X, Sparkles, Lightbulb, Swords, Laugh, Heart, MessageCircle } from "lucide-react";
 import { useEffect } from "react";
 
 interface Props {
@@ -17,6 +17,7 @@ interface Props {
 }
 
 const modeConfig: Record<string, { label: string; color: string; bg: string; border: string; icon: typeof Sparkles }> = {
+  casual: { label: "Casual Talk", color: "#6b7280", bg: "bg-gray-100", border: "border-gray-200", icon: MessageCircle },
   debate: { label: "Debate", color: "#e53935", bg: "bg-red-50", border: "border-red-200", icon: Swords },
   comedy: { label: "Comedy", color: "#f9a825", bg: "bg-yellow-50", border: "border-yellow-200", icon: Laugh },
   romance: { label: "Romance", color: "#e91e63", bg: "bg-pink-50", border: "border-pink-200", icon: Heart },

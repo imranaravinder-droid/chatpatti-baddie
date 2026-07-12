@@ -8,7 +8,7 @@ import SongCard from "./SongCard";
 import DanceSteps from "./DanceSteps";
 import BookCard from "./BookCard";
 import RecipeCard from "./RecipeCard";
-import { Sparkles, Lightbulb, Swords, Laugh, Heart } from "lucide-react";
+import { Sparkles, Lightbulb, Swords, Laugh, Heart, MessageCircle } from "lucide-react";
 
 interface Props {
   response: BaddieResponseType;
@@ -16,10 +16,11 @@ interface Props {
   isStreaming?: boolean;
 }
 
-const modeConfig: Record<string, { label: string; color: string; bg: string; border: string; icon: typeof Sparkles }> = {
-  debate: { label: "Debate", color: "#e53935", bg: "bg-red-50", border: "border-red-200", icon: Swords },
-  comedy: { label: "Comedy", color: "#f9a825", bg: "bg-yellow-50", border: "border-yellow-200", icon: Laugh },
-  romance: { label: "Romance", color: "#e91e63", bg: "bg-pink-50", border: "border-pink-200", icon: Heart },
+const modeConfig: Record<string, { label: string; color: string; bg: string; border: string; icon: typeof Sparkles; badge: string }> = {
+  casual: { label: "Casual Talk", color: "#6b7280", bg: "bg-gray-100", border: "border-gray-300", icon: MessageCircle, badge: "bg-gray-500" },
+  debate: { label: "Debate", color: "#c62828", bg: "bg-red-50", border: "border-red-300", icon: Swords, badge: "bg-red-500" },
+  comedy: { label: "Comedy", color: "#f57f17", bg: "bg-yellow-50", border: "border-yellow-300", icon: Laugh, badge: "bg-yellow-500" },
+  romance: { label: "Romance", color: "#c2185b", bg: "bg-pink-50", border: "border-pink-300", icon: Heart, badge: "bg-pink-500" },
 };
 
 export default function BaddieResponse({ response, mode, isStreaming }: Props) {

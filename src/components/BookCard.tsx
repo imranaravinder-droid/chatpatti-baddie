@@ -1,7 +1,7 @@
 "use client";
 
 import { BookRec } from "@/types";
-import { BookOpen } from "lucide-react";
+import { BookOpen, ExternalLink } from "lucide-react";
 
 interface Props {
   books: BookRec[];
@@ -19,7 +19,15 @@ export default function BookCard({ books }: Props) {
           <div key={i} className="flex gap-3">
             <span className="text-2xl flex-shrink-0">{book.emoji}</span>
             <div>
-              <p className="text-sm font-semibold text-gray-800">{book.title}</p>
+              <a
+                href={`https://www.amazon.com/s?k=${encodeURIComponent(book.title + " " + book.author)}&tag=chatpattiebaddie-20`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-semibold text-gray-800 hover:text-blue-600 transition-colors inline-flex items-center gap-1"
+              >
+                {book.title}
+                <ExternalLink className="w-3 h-3" />
+              </a>
               <p className="text-xs text-gray-400">by {book.author}</p>
               <p className="text-xs text-gray-600 mt-0.5 italic">{book.reason}</p>
             </div>

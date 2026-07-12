@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
+import Analytics from "@/components/Analytics";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -106,6 +107,9 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <head>
+        <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta httpEquiv="Pragma" content="no-cache" />
+        <meta httpEquiv="Expires" content="0" />
         <meta name="google-site-verification" content="6toMeSLXAVjgtO3T7U4AvG0J4MqS5aaYYswz1TmvMG4" />
         <script
           type="application/ld+json"
@@ -131,18 +135,41 @@ export default function RootLayout({
             }),
           }}
         />
+        <script src="https://checkout.razorpay.com/v1/checkout.js" />
       </head>
-      <body className="min-h-full flex flex-col bg-[#fafafa]">
+      <body className="min-h-full flex flex-col bg-white">
         <Navbar />
         <ServiceWorkerRegister />
-        <main className="flex-1 w-full max-w-3xl mx-auto px-4 py-6">
+        <Analytics />
+        <main className="flex-1 w-full max-w-3xl mx-auto">
           {children}
         </main>
-        <footer className="text-center py-4 px-4 border-t border-gray-100">
+        <footer className="text-center py-6 px-4 border-t border-gray-100 space-y-3">
           <p className="text-xs text-gray-400">
             CHATPATTIE BADDIE &middot; Your emotional AI companion &middot;{" "}
             No credit cards, passwords, or personal info please &mdash; stay safe, bestie.
           </p>
+          <div className="flex items-center justify-center gap-4 text-xs">
+            <a
+              href="https://ko-fi.com/thechatpattiebaddie"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-pink-500 hover:text-pink-600 transition-colors font-medium"
+            >
+              ☕ Support Baddie
+            </a>
+            <span className="text-gray-300">|</span>
+            <a
+              href="https://ko-fi.com/thechatpattiebaddie"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              Donate
+            </a>
+            <span className="text-gray-300">|</span>
+            <span className="text-gray-400">Affiliate links</span>
+          </div>
         </footer>
       </body>
     </html>
