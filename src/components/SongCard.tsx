@@ -1,34 +1,44 @@
 "use client";
 
-import { Music, ExternalLink, Youtube } from "lucide-react";
+import { Music } from "lucide-react";
+import { useState } from "react";
 
 interface Props {
   lyrics: string;
-  songName?: string;
+  videoId?: string | null;
 }
 
-export default function SongCard({ lyrics, songName }: Props) {
-  const searchQuery = encodeURIComponent(songName || lyrics?.split("\n")[0] || "mood song");
-  const youtubeUrl = `https://music.youtube.com/search?q=${searchQuery}`;
+export default function SongCard({ lyrics, videoId }: Props) {
+  const [showPlayer, setShowPlayer] = useState(false);
 
   return (
-    <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-5 border border-purple-100">
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <Music className="w-5 h-5 text-purple-500" />
-          <span className="font-semibold text-gray-800">🎵 Baddie Anthem</span>
-        </div>
-        <a
-          href={youtubeUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-1.5 text-xs font-medium text-red-500 hover:text-red-600 transition-colors bg-red-50 px-3 py-1.5 rounded-full"
-        >
-          <Youtube className="w-3.5 h-3.5" />
-          Listen on YouTube
-          <ExternalLink className="w-3 h-3" />
-        </a>
+    <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-5 border border-purple-100 space-y-3">
+      <div className="flex items-center gap-2">
+        <Music className="w-5 h-5 text-purple-500" />
+        <span className="font-semibold text-gray-800">🎵 Baddie Anthem</span>
       </div>
+      {videoId && (
+        <>
+          {showPlayer ? (
+            <div className="relative w-full aspect-video rounded-xl overflow-hidden">
+              <iframe
+                src={`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`}
+                allow="autoplay; encrypted-media"
+                allowFullScreen
+                className="absolute inset-0 w-full h-full"
+              />
+            </div>
+          ) : (
+            <button
+              onClick={() => setShowPlayer(true)}
+              className="w-full flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white font-medium py-3 px-4 rounded-xl transition-colors"
+            >
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              Play Song ▶️
+            </button>
+          )}
+        </>
+      )}
       <pre className="text-sm text-gray-700 font-sans whitespace-pre-wrap leading-relaxed">
         {lyrics}
       </pre>

@@ -115,7 +115,7 @@ export default function VentInput({ onSubmit, disabled }: Props) {
         value={text}
         onChange={(e) => setText(e.target.value)}
         onKeyDown={handleKeyDown}
-        placeholder="Spill the tea... what's on your mind?"
+          placeholder="Spill the tea... what's on your mind? ☕💭"
         rows={4}
         disabled={disabled}
         className="w-full resize-none px-5 py-4 text-gray-800 placeholder-gray-400 bg-transparent border-none outline-none text-sm leading-relaxed disabled:opacity-50"
@@ -144,7 +144,7 @@ export default function VentInput({ onSubmit, disabled }: Props) {
           className="flex items-center gap-2 px-5 py-2 rounded-full bg-pink-500 text-white text-sm font-medium hover:bg-pink-600 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-sm shadow-pink-200"
         >
           <Send className="w-4 h-4" />
-          Vent
+          Vent ✨
         </button>
       </div>
     </div>

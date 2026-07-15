@@ -1,5 +1,5 @@
 const CACHE = "chatpatti-baddie-v1";
-const URLS = ["/", "/dashboard", "/manifest.json", "/robots.txt", "/sitemap.xml"];
+const URLS = ["/", "/chat", "/dashboard", "/manifest.json", "/robots.txt", "/sitemap.xml"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(

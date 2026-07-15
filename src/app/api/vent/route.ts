@@ -6,6 +6,7 @@ import { analyzeVent } from "@/lib/ai";
 import { getConversationalResponse, getIntentResponse } from "@/lib/responses";
 import {
   songLyricsByMood,
+  songVideoByMood,
   danceSteps,
   booksByMood,
   recipesByMood,
@@ -31,10 +32,12 @@ function detectMood(content: string): { tag: string; color: string } {
 }
 
 function getContentForMood(moodTag: string) {
+  const videoId = () => songVideoByMood[moodTag] || null;
   const moodLower = moodTag.toLowerCase();
   if (moodLower === "glowing" || moodLower === "unbothered") {
     return {
       songLyrics: songLyricsByMood[moodTag] || songLyricsByMood.Glowing,
+      songVideoId: videoId(),
       danceSteps: danceSteps.slice(0, 4),
       books: null,
       recipes: null,
@@ -43,6 +46,7 @@ function getContentForMood(moodTag: string) {
   if (moodLower === "down-bad" || moodLower === "in my feels") {
     return {
       songLyrics: songLyricsByMood[moodTag] || songLyricsByMood["Down-Bad"],
+      songVideoId: videoId(),
       danceSteps: null,
       books: booksByMood[moodTag] || booksByMood.Healing,
       recipes: null,
@@ -51,6 +55,7 @@ function getContentForMood(moodTag: string) {
   if (moodLower === "feral") {
     return {
       songLyrics: null,
+      songVideoId: null,
       danceSteps: danceSteps.slice(2, 6),
       books: booksByMood[moodTag] || booksByMood.Healing,
       recipes: recipesByMood[moodTag] || recipesByMood.Healing,
@@ -59,6 +64,7 @@ function getContentForMood(moodTag: string) {
   if (moodLower === "chaotic") {
     return {
       songLyrics: null,
+      songVideoId: null,
       danceSteps: danceSteps.slice(0, 4),
       books: null,
       recipes: recipesByMood[moodTag] || recipesByMood.Healing,
@@ -67,6 +73,7 @@ function getContentForMood(moodTag: string) {
   if (moodLower === "healing") {
     return {
       songLyrics: null,
+      songVideoId: null,
       danceSteps: null,
       books: booksByMood[moodTag] || booksByMood.Healing,
       recipes: recipesByMood[moodTag] || recipesByMood.Healing,
@@ -74,6 +81,7 @@ function getContentForMood(moodTag: string) {
   }
   return {
     songLyrics: songLyricsByMood[moodTag] || songLyricsByMood.Glowing,
+    songVideoId: videoId(),
     danceSteps: null,
     books: null,
     recipes: recipesByMood[moodTag] || recipesByMood.Healing,
@@ -234,6 +242,7 @@ export async function POST(request: NextRequest) {
           prompts: inserted.prompts as string[],
           aiText,
           songLyrics: hasSpecificRequest ? null : inserted.songLyrics,
+          songVideoId: hasSpecificRequest ? null : contentForMood.songVideoId,
           danceSteps: hasSpecificRequest ? null : (inserted.danceSteps as string[]),
           books: hasSpecificRequest ? null : contentForMood.books,
           recipes: hasSpecificRequest ? null : contentForMood.recipes,

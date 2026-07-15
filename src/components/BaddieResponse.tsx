@@ -8,7 +8,7 @@ import SongCard from "./SongCard";
 import DanceSteps from "./DanceSteps";
 import BookCard from "./BookCard";
 import RecipeCard from "./RecipeCard";
-import { Sparkles, Lightbulb, Swords, Laugh, Heart, MessageCircle } from "lucide-react";
+import { Sparkles, Swords, Laugh, Heart, MessageCircle } from "lucide-react";
 
 interface Props {
   response: BaddieResponseType;
@@ -79,10 +79,10 @@ export default function BaddieResponse({ response, mode, isStreaming }: Props) {
       </div>
 
       <div className="space-y-2">
-        <div className="flex items-center gap-2 text-sm font-medium text-gray-500">
-          <Lightbulb className="w-4 h-4" />
-          Think About This
-        </div>
+              <div className="flex items-center gap-2 text-sm font-medium text-gray-500">
+                <span>🤔</span>
+                Think About This
+              </div>
         {response.prompts.map((prompt, i) => (
           <div
             key={i}
@@ -101,7 +101,7 @@ export default function BaddieResponse({ response, mode, isStreaming }: Props) {
         </div>
       ) : (
         <>
-          {response.songLyrics && <SongCard lyrics={response.songLyrics} />}
+          {response.songLyrics && <SongCard lyrics={response.songLyrics} videoId={response.songVideoId} />}
           {response.danceSteps && response.danceSteps.length > 0 && (
             <DanceSteps steps={response.danceSteps} />
           )}

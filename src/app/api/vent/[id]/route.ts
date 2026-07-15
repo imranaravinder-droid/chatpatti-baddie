@@ -2,13 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { vents } from "@/lib/schema";
 import { eq } from "drizzle-orm";
-import { booksByMood, recipesByMood, songLyricsByMood, danceSteps } from "@/lib/mockData";
+import { booksByMood, recipesByMood, songLyricsByMood, songVideoByMood, danceSteps } from "@/lib/mockData";
 
 function getContentForMood(moodTag: string) {
+  const videoId = () => songVideoByMood[moodTag] || null;
   const moodLower = moodTag.toLowerCase();
   if (moodLower === "glowing" || moodLower === "unbothered") {
     return {
       songLyrics: songLyricsByMood[moodTag] || songLyricsByMood.Glowing,
+      songVideoId: videoId(),
       danceSteps: danceSteps.slice(0, 4),
       books: null,
       recipes: null,
@@ -17,6 +19,7 @@ function getContentForMood(moodTag: string) {
   if (moodLower === "down-bad" || moodLower === "in my feels") {
     return {
       songLyrics: songLyricsByMood[moodTag] || songLyricsByMood["Down-Bad"],
+      songVideoId: videoId(),
       danceSteps: null,
       books: booksByMood[moodTag] || booksByMood.Healing,
       recipes: null,
@@ -25,6 +28,7 @@ function getContentForMood(moodTag: string) {
   if (moodLower === "feral") {
     return {
       songLyrics: songLyricsByMood["Down-Bad"],
+      songVideoId: null,
       danceSteps: danceSteps.slice(2, 6),
       books: booksByMood[moodTag] || booksByMood.Healing,
       recipes: recipesByMood[moodTag] || recipesByMood.Healing,
@@ -33,6 +37,7 @@ function getContentForMood(moodTag: string) {
   if (moodLower === "chaotic") {
     return {
       songLyrics: null,
+      songVideoId: null,
       danceSteps: danceSteps.slice(0, 4),
       books: null,
       recipes: recipesByMood[moodTag] || recipesByMood.Healing,
@@ -41,6 +46,7 @@ function getContentForMood(moodTag: string) {
   if (moodLower === "healing") {
     return {
       songLyrics: null,
+      songVideoId: null,
       danceSteps: null,
       books: booksByMood[moodTag] || booksByMood.Healing,
       recipes: recipesByMood[moodTag] || recipesByMood.Healing,
@@ -48,6 +54,7 @@ function getContentForMood(moodTag: string) {
   }
   return {
     songLyrics: songLyricsByMood[moodTag] || songLyricsByMood.Glowing,
+    songVideoId: videoId(),
     danceSteps: null,
     books: null,
     recipes: recipesByMood[moodTag] || recipesByMood.Healing,
@@ -75,7 +82,7 @@ export async function GET(
     const v = rows[0];
     const hasSpecificRequest = v.aiText && v.aiText.length > 0;
     const content = hasSpecificRequest
-      ? { songLyrics: null, danceSteps: null, books: null, recipes: null }
+      ? { songLyrics: null, songVideoId: null, danceSteps: null, books: null, recipes: null }
       : getContentForMood(v.moodTag);
     return NextResponse.json({
       vent: {
@@ -89,6 +96,7 @@ export async function GET(
           prompts: v.prompts as string[],
           aiText: v.aiText,
           songLyrics: content.songLyrics,
+          songVideoId: content.songVideoId,
           danceSteps: content.danceSteps,
           books: content.books,
           recipes: content.recipes,

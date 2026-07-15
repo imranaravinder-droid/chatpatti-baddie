@@ -21,6 +21,7 @@ export interface BaddieResponse {
   prompts: string[];
   aiText?: string | null;
   songLyrics?: string | null;
+  songVideoId?: string | null;
   danceSteps?: string[] | null;
   books?: BookRec[] | null;
   recipes?: RecipeRec[] | null;

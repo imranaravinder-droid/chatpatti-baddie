@@ -11,7 +11,7 @@ export default function DanceSteps({ steps }: Props) {
     <div className="bg-gradient-to-br from-orange-50 to-yellow-50 rounded-2xl p-5 border border-orange-100">
       <div className="flex items-center gap-2 mb-4">
         <Footprints className="w-5 h-5 text-orange-500" />
-        <span className="font-semibold text-gray-800">Move That Body</span>
+          <span className="font-semibold text-gray-800">💃 Move That Body</span>
       </div>
       <div className="space-y-3">
         {steps.map((step, i) => (

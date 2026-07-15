@@ -8,7 +8,7 @@ import DanceSteps from "./DanceSteps";
 import BookCard from "./BookCard";
 import RecipeCard from "./RecipeCard";
 import { format } from "date-fns";
-import { X, Sparkles, Lightbulb, Swords, Laugh, Heart, MessageCircle } from "lucide-react";
+import { X, Sparkles, Swords, Laugh, Heart, MessageCircle } from "lucide-react";
 import { useEffect } from "react";
 
 interface Props {
@@ -39,7 +39,7 @@ export default function DeepDiveModal({ vent, onClose }: Props) {
       <div className="relative bg-white w-full sm:max-w-lg max-h-[85vh] rounded-t-2xl sm:rounded-2xl overflow-y-auto shadow-2xl">
         <div className="sticky top-0 bg-white border-b border-gray-100 px-5 py-4 flex items-center justify-between z-10">
           <div>
-            <h2 className="font-semibold text-gray-900">Deep Dive</h2>
+            <h2 className="font-semibold text-gray-900">🔍 Deep Dive</h2>
             <p className="text-xs text-gray-400">{format(date, "MMMM d, yyyy 'at' h:mm a")}</p>
           </div>
           <button
@@ -52,7 +52,7 @@ export default function DeepDiveModal({ vent, onClose }: Props) {
 
         <div className="p-5 space-y-5">
           <div className="bg-gray-50 rounded-xl p-4">
-            <p className="text-sm text-gray-500 font-medium mb-2">Your Vent</p>
+            <p className="text-sm text-gray-500 font-medium mb-2">🗣️ Your Vent</p>
             <p className="text-sm text-gray-800 leading-relaxed">{vent.content}</p>
           </div>
 
@@ -73,7 +73,7 @@ export default function DeepDiveModal({ vent, onClose }: Props) {
 
           <div className="bg-white rounded-xl p-4 border border-gray-100">
             <div className="flex items-start gap-3">
-              <Sparkles className="w-5 h-5 text-pink-500 mt-0.5 flex-shrink-0" />
+              <span className="text-lg mt-0.5">💬</span>
               <p className="text-sm text-gray-800 leading-relaxed">{vent.response.realTalk}</p>
             </div>
           </div>
@@ -81,7 +81,7 @@ export default function DeepDiveModal({ vent, onClose }: Props) {
           {vent.response.prompts.length > 0 && (
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-sm font-medium text-gray-500">
-                <Lightbulb className="w-4 h-4" />
+                <span>🤔</span>
                 Think About This
               </div>
               {vent.response.prompts.map((prompt, i) => (
@@ -98,7 +98,7 @@ export default function DeepDiveModal({ vent, onClose }: Props) {
             </div>
           ) : (
             <>
-              {vent.response.songLyrics && <SongCard lyrics={vent.response.songLyrics} />}
+              {vent.response.songLyrics && <SongCard lyrics={vent.response.songLyrics} videoId={vent.response.songVideoId} />}
               {vent.response.danceSteps && vent.response.danceSteps.length > 0 && (
                 <DanceSteps steps={vent.response.danceSteps} />
               )}

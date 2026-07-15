@@ -100,7 +100,7 @@ export default function VentDetail() {
           </div>
         )}
 
-        {vent.response.songLyrics && <SongCard lyrics={vent.response.songLyrics} />}
+        {vent.response.songLyrics && <SongCard lyrics={vent.response.songLyrics} videoId={vent.response.songVideoId} />}
         {vent.response.danceSteps && vent.response.danceSteps.length > 0 && (
           <DanceSteps steps={vent.response.danceSteps} />
         )}

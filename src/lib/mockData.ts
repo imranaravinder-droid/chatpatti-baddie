@@ -15,6 +15,21 @@ export const moodTagColors: MoodTagColor[] = [
   { tag: "Grateful", color: "#FFD740" },
 ];
 
+export const songVideoByMood: Record<string, string> = {
+  Stressed: "WcIG2YxbF6Q",       // "Kun Faya Kun" - calms nerves
+  "Down-Bad": "kQN7npC-bQo",    // "Tum Hi Ho" - sad heartbreak
+  Glowing: "y2ZOqMhG6dM",       // "Kesariya" - happy romantic
+  Feral: "xrEEjR27lqE",         // "Ghungroo" - energetic
+  "In My Feels": "QcNz8WbhSNk", // "Raabta" - romantic feels
+  Chaotic: "wXU3npqIQl4",       // "Badtameez Dil" - fun chaotic
+  Healing: "b8I5cL7Wp20",       // "Mann Mera" - healing vibe
+  "Main Character": "EWRjLirBqHw", // "Safarnama" - main character energy
+  Unbothered: "H1hL15VdSxQ",    // "Gulabi Aankhen" - unbothered
+  "Villain Arc": "imk4F4UGGvw", // "Symphony of Destruction" - villain
+  Slaying: "4u2O1k3u6kE",       // "Boom Boom" - power
+  Grateful: "LjL6S7WNqJ0",      // "Muskurane" - grateful
+};
+
 export const songLyricsByMood: Record<string, string> = {
   Stressed: `[Verse]
 Clock is ticking on the wall

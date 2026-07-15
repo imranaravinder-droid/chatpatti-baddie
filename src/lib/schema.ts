@@ -27,6 +27,24 @@ export const subscriptions = pgTable("subscriptions", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
+export const referrals = pgTable("referrals", {
+  id: serial("id").primaryKey(),
+  deviceId: text("device_id").notNull(),
+  source: text("source").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const users = pgTable("users", {
+  id: serial("id").primaryKey(),
+  email: text("email"),
+  name: text("name"),
+  age: text("age"),
+  referralSource: text("referral_source"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  lastActive: timestamp("last_active").notNull().defaultNow(),
+  totalVents: integer("total_vents").notNull().default(0),
+});
+
 export const dailyUsage = pgTable("daily_usage", {
   id: serial("id").primaryKey(),
   deviceId: text("device_id").notNull(),

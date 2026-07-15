@@ -14,6 +14,11 @@ export default function DramaEntry({ vent, onClick }: Props) {
   const date = new Date(vent.createdAt);
   const preview = vent.content.length > 100 ? vent.content.slice(0, 100) + "..." : vent.content;
 
+  const moodEmoji: Record<string, string> = {
+    Stressed: "😰", Glowing: "✨", "Down-Bad": "💔", Feral: "🔥",
+    Unbothered: "😎", "In My Feels": "🥺", Healing: "🌱", Chaotic: "🌀",
+  };
+
   return (
     <button
       onClick={onClick}
@@ -22,6 +27,7 @@ export default function DramaEntry({ vent, onClick }: Props) {
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2 mb-1.5">
+            <span className="text-base">{moodEmoji[vent.response.moodTag] || "💬"}</span>
             <MoodTagBadge tag={vent.response.moodTag} color={vent.response.moodColor} size="sm" />
             <span className="text-xs text-gray-400">
               {format(date, "MMM d, h:mm a")}

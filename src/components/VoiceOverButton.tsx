@@ -44,7 +44,7 @@ export default function VoiceOverButton({ text }: Props) {
         </>
       ) : (
         <>
-          <Volume2 className="w-4 h-4" /> Hear Baddie
+          <Volume2 className="w-4 h-4" /> 🔈 Hear Baddie
         </>
       )}
     </button>

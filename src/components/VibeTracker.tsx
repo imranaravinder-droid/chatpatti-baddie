@@ -10,7 +10,6 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { TrendingUp } from "lucide-react";
 import { format } from "date-fns";
 
 interface Props {
@@ -30,6 +29,11 @@ export default function VibeTracker({ vents }: Props) {
     };
   });
 
+  const moodEmoji: Record<string, string> = {
+    Stressed: "😰", Glowing: "✨", "Down-Bad": "💔", Feral: "🔥",
+    Unbothered: "😎", "In My Feels": "🥺", Healing: "🌱", Chaotic: "🌀",
+  };
+
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
@@ -37,7 +41,7 @@ export default function VibeTracker({ vents }: Props) {
         <div className="bg-white rounded-lg shadow-lg border border-gray-100 p-3 text-sm">
           <p className="text-gray-500 text-xs">{data.date}</p>
           <p className="font-semibold mt-0.5" style={{ color: data.color }}>
-            {data.mood}
+            {moodEmoji[data.mood] || "💬"} {data.mood}
           </p>
         </div>
       );
@@ -52,8 +56,8 @@ export default function VibeTracker({ vents }: Props) {
   return (
     <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
       <div className="flex items-center gap-2 mb-4">
-        <TrendingUp className="w-5 h-5 text-pink-500" />
-        <h3 className="font-semibold text-gray-800">Vibe Tracker</h3>
+          <span className="text-lg">📊</span>
+          <h3 className="font-semibold text-gray-800">Vibe Tracker</h3>
         <span className="text-xs text-gray-400">Last {chartData.length} vents</span>
       </div>
 

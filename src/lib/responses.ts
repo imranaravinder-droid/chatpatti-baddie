@@ -7,8 +7,8 @@ const patterns: ResponseEntry[] = [
     conversational: true,
     responses: {
       casual: [
-        "Hey! What's going on? I'm all ears.",
-        "Hi there. How are you doing today?",
+        "Hey! 👋 What's going on? I'm all ears 🎧",
+        "Hi there 💫 How are you doing today?",
       ],
       debate: [
         "You said hi. Okay. You have my full attention. Now here's the real question — what's actually going on? You didn't come here to waste time, and I don't do small talk. Spill it.",
@@ -33,8 +33,8 @@ const patterns: ResponseEntry[] = [
     conversational: true,
     responses: {
       casual: [
-        "I'm good, thanks for asking! How are you doing?",
-        "Doing well! What's on your mind today?",
+        "I'm good, thanks for asking! 😊 How are you doing?",
+        "Doing well! ✨ What's on your mind today?",
       ],
       debate: [
         "I exist. That's enough. But the question is — how are YOU? And don't say 'fine' because I'll know you're lying. Give me the real answer.",
@@ -57,8 +57,8 @@ const patterns: ResponseEntry[] = [
     conversational: true,
     responses: {
       casual: [
-        "I'm Chatpatti Baddie — your friendly AI companion. I'm here to listen, chat, and help you work through whatever's on your mind. No judgment, no drama, just good conversation.",
-        "I'm an AI assistant designed to be your emotional companion. Think of me as a friend who's always here to listen and talk things through.",
+        "I'm Chatpatti Baddie 🤗 — your friendly AI companion. I'm here to listen, chat, and help you work through whatever's on your mind. No judgment, no drama, just good conversation 💫",
+        "I'm an AI assistant designed to be your emotional companion 💕 Think of me as a friend who's always here to listen and talk things through.",
       ],
       debate: [
         "I'm Chatpatti Baddie — the truth you keep running from. I don't sugarcoat, I don't coddle, and I definitely don't lie. I'm here to call you out on your own potential. You want comfort? Get a blanket. You want growth? Stay with me.",
@@ -81,8 +81,8 @@ const patterns: ResponseEntry[] = [
     conversational: true,
     responses: {
       casual: [
-        "You're welcome! Happy to help.",
-        "Anytime! That's what I'm here for.",
+        "You're welcome! 😊 Happy to help.",
+        "Anytime! 🙌 That's what I'm here for.",
       ],
       debate: [
         "You're welcome. But thanks don't count unless you actually do something with what I told you. Words are cheap. What's your next move?",
@@ -106,8 +106,8 @@ const patterns: ResponseEntry[] = [
     conversational: true,
     responses: {
       casual: [
-        "Take care. Come back when you need to talk.",
-        "Bye! Stay safe. I'm here whenever you need me.",
+        "Take care 👋 Come back when you need to talk 💭",
+        "Bye! 👋 Stay safe. I'm here whenever you need me 💕",
       ],
       debate: [
         "Running away? Fine. But you heard what I said. Let it sink in. The door's open when you're ready to actually deal with things.",
@@ -255,8 +255,8 @@ const patterns: ResponseEntry[] = [
     conversational: true,
     responses: {
       casual: [
-        "Nothing much, just here for you. What's going on?",
-        "Not much! Just hanging out. What's new with you?",
+        "Nothing much, just here for you 🤗 What's going on?",
+        "Not much! Just hanging out 💫 What's new with you?",
       ],
       debate: [
         "Nothing new. Just here waiting for you to stop avoiding your own potential. What's up with YOU? That's the real question.",

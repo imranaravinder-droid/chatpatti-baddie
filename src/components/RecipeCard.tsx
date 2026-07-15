@@ -12,7 +12,7 @@ export default function RecipeCard({ recipes }: Props) {
     <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-5 border border-green-100">
       <div className="flex items-center gap-2 mb-4">
         <ChefHat className="w-5 h-5 text-green-500" />
-        <span className="font-semibold text-gray-800">Cook Your Feelings</span>
+          <span className="font-semibold text-gray-800">🍳 Cook Your Feelings</span>
       </div>
       <div className="space-y-4">
         {recipes.map((recipe, i) => (

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Vent } from "@/types";
 import { Language } from "@/lib/lang";
 import DramaLog from "@/components/DramaLog";
@@ -8,7 +9,7 @@ import VibeTracker from "@/components/VibeTracker";
 import DeepDiveModal from "@/components/DeepDiveModal";
 import LanguageSelector from "@/components/LanguageSelector";
 import AdSense from "@/components/AdSense";
-import { Clock, Activity, Loader2, Swords, Laugh, Heart, MessageCircle } from "lucide-react";
+import { Activity, Loader2, Swords, Laugh, Heart, MessageCircle } from "lucide-react";
 
 const modeBg: Record<string, string> = {
   all: "bg-gray-100",
@@ -41,19 +42,28 @@ const langs: Record<string, { title: string; subtitle: string; mood: string; his
 };
 
 const modes: { key: string; label: string; icon: typeof Swords }[] = [
-  { key: "all", label: "All", icon: Activity },
-  { key: "casual", label: "Casual", icon: MessageCircle },
-  { key: "debate", label: "Debate", icon: Swords },
-  { key: "comedy", label: "Comedy", icon: Laugh },
-  { key: "romance", label: "Romance", icon: Heart },
+  { key: "all", label: "📊 All", icon: Activity },
+  { key: "casual", label: "💬 Casual", icon: MessageCircle },
+  { key: "debate", label: "⚔️ Debate", icon: Swords },
+  { key: "comedy", label: "😂 Comedy", icon: Laugh },
+  { key: "romance", label: "❤️ Romance", icon: Heart },
 ];
 
 export default function Dashboard() {
+  const router = useRouter();
   const [vents, setVents] = useState<Vent[]>([]);
   const [selectedVent, setSelectedVent] = useState<Vent | null>(null);
   const [loading, setLoading] = useState(true);
   const [lang, setLang] = useState<Language>("en");
   const [modeFilter, setModeFilter] = useState<string>("all");
+
+  useEffect(() => {
+    const email = localStorage.getItem("baddie_user_email");
+    if (!email) {
+      router.replace("/");
+      return;
+    }
+  }, [router]);
 
   useEffect(() => {
     if (typeof navigator !== "undefined") {
@@ -119,13 +129,13 @@ export default function Dashboard() {
         </div>
 
         <div className={`flex items-center gap-2 mb-2 mt-6`}>
-          <Activity className={`w-4 h-4 ${isDarkBg ? "text-yellow-300" : "text-pink-400"}`} />
+          <span className="text-base">📈</span>
           <span className={`text-sm font-medium ${isDarkBg ? "text-white/80" : "text-gray-500"}`}>{t.mood}</span>
         </div>
         <VibeTracker vents={filteredVents} />
 
         <div className={`flex items-center gap-2 mb-2 mt-6`}>
-          <Clock className={`w-4 h-4 ${isDarkBg ? "text-yellow-300" : "text-pink-400"}`} />
+          <span className="text-base">📜</span>
           <span className={`text-sm font-medium ${isDarkBg ? "text-white/80" : "text-gray-500"}`}>{t.history}</span>
         </div>
         <DramaLog vents={filteredVents} onSelect={setSelectedVent} />
