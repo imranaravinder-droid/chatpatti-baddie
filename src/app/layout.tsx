@@ -110,7 +110,7 @@ export default function RootLayout({
         <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
         <meta httpEquiv="Pragma" content="no-cache" />
         <meta httpEquiv="Expires" content="0" />
-        <meta name="google-site-verification" content="6toMeSLXAVjgtO3T7U4AvG0J4MqS5aaYYswz1TmvMG4" />
+        <meta name="google-site-verification" content="UaKQBG922ubp_DUKHcu0q13BgnaSgUR0Mk1o56e04FQ" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -135,7 +135,6 @@ export default function RootLayout({
             }),
           }}
         />
-        <script src="https://checkout.razorpay.com/v1/checkout.js" />
       </head>
       <body className="min-h-full flex flex-col bg-white">
         <Navbar />
@@ -146,29 +145,12 @@ export default function RootLayout({
         </main>
         <footer className="text-center py-6 px-4 border-t border-gray-100 space-y-3">
           <p className="text-xs text-gray-400">
-            CHATPATTIE BADDIE &middot; Your emotional AI companion &middot;{" "}
-            No credit cards, passwords, or personal info please &mdash; stay safe, bestie.
+            💖 CHATPATTIE BADDIE &middot; Your emotional AI companion
           </p>
           <div className="flex items-center justify-center gap-4 text-xs">
-            <a
-              href="https://ko-fi.com/thechatpattiebaddie"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-pink-500 hover:text-pink-600 transition-colors font-medium"
-            >
-              ☕ Support Baddie
-            </a>
+            <a href="https://chatpatti-baddie.vercel.app" className="text-gray-400 hover:text-pink-500">Home</a>
             <span className="text-gray-300">|</span>
-            <a
-              href="https://ko-fi.com/thechatpattiebaddie"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-400 hover:text-gray-600 transition-colors"
-            >
-              Donate
-            </a>
-            <span className="text-gray-300">|</span>
-            <span className="text-gray-400">Affiliate links</span>
+            <a href="/dashboard" className="text-gray-400 hover:text-pink-500">Drama Log</a>
           </div>
         </footer>
       </body>
