@@ -73,8 +73,7 @@ export async function GET(request: NextRequest) {
       .limit(limit);
 
     const formatted = rows.map((v) => {
-      const hasSpecificRequest = v.aiText && v.aiText.length > 0;
-      const content = hasSpecificRequest
+      const content = v.aiText && v.aiText.length > 50 && !v.aiText.includes("The Baddie is listening")
         ? { songLyrics: null, songVideoId: null, danceSteps: null, books: null, recipes: null }
         : getContentForMood(v.moodTag);
       return {

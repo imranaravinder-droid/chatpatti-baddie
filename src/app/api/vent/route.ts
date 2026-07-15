@@ -197,7 +197,8 @@ export async function POST(request: NextRequest) {
 
     const contentForMood = getContentForMood(moodTag);
 
-    const hasSpecificRequest = !!aiText;
+    const isAiWorking = hasAI && aiText.length > 0 && !aiText.includes("The Baddie is listening");
+    const hideContent = isAiWorking && !!aiText;
 
     const result = await db
       .insert(vents)
@@ -209,8 +210,8 @@ export async function POST(request: NextRequest) {
         realTalk,
         prompts,
         aiText,
-        songLyrics: hasSpecificRequest ? null : contentForMood.songLyrics,
-        danceSteps: hasSpecificRequest ? null : contentForMood.danceSteps,
+        songLyrics: hideContent ? null : contentForMood.songLyrics,
+        danceSteps: hideContent ? null : contentForMood.danceSteps,
       })
       .returning();
 
@@ -241,11 +242,11 @@ export async function POST(request: NextRequest) {
           realTalk: inserted.realTalk,
           prompts: inserted.prompts as string[],
           aiText,
-          songLyrics: hasSpecificRequest ? null : inserted.songLyrics,
-          songVideoId: hasSpecificRequest ? null : contentForMood.songVideoId,
-          danceSteps: hasSpecificRequest ? null : (inserted.danceSteps as string[]),
-          books: hasSpecificRequest ? null : contentForMood.books,
-          recipes: hasSpecificRequest ? null : contentForMood.recipes,
+          songLyrics: hideContent ? null : inserted.songLyrics,
+          songVideoId: hideContent ? null : contentForMood.songVideoId,
+          danceSteps: hideContent ? null : (inserted.danceSteps as string[]),
+          books: hideContent ? null : contentForMood.books,
+          recipes: hideContent ? null : contentForMood.recipes,
         },
         createdAt: inserted.createdAt.toISOString(),
       },

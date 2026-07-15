@@ -80,8 +80,7 @@ export async function GET(
     }
 
     const v = rows[0];
-    const hasSpecificRequest = v.aiText && v.aiText.length > 0;
-    const content = hasSpecificRequest
+    const content = v.aiText && v.aiText.length > 50 && !v.aiText.includes("The Baddie is listening")
       ? { songLyrics: null, songVideoId: null, danceSteps: null, books: null, recipes: null }
       : getContentForMood(v.moodTag);
     return NextResponse.json({
