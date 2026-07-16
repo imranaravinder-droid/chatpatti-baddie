@@ -5,7 +5,7 @@ import { eq } from "drizzle-orm";
 import { booksByMood, recipesByMood, songLyricsByMood, songVideoByMood, danceSteps } from "@/lib/mockData";
 
 function getContentForMood(moodTag: string) {
-  const videoId = () => songVideoByMood[moodTag] || null;
+  const videoId = () => songVideoByMood[moodTag] || "H1hL15VdSxQ";
   const moodLower = moodTag.toLowerCase();
   if (moodLower === "glowing" || moodLower === "unbothered") {
     return {

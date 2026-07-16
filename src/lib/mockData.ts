@@ -16,18 +16,25 @@ export const moodTagColors: MoodTagColor[] = [
 ];
 
 export const songVideoByMood: Record<string, string> = {
-  Stressed: "WcIG2YxbF6Q",       // "Kun Faya Kun" - calms nerves
-  "Down-Bad": "kQN7npC-bQo",    // "Tum Hi Ho" - sad heartbreak
-  Glowing: "y2ZOqMhG6dM",       // "Kesariya" - happy romantic
-  Feral: "xrEEjR27lqE",         // "Ghungroo" - energetic
-  "In My Feels": "QcNz8WbhSNk", // "Raabta" - romantic feels
-  Chaotic: "wXU3npqIQl4",       // "Badtameez Dil" - fun chaotic
-  Healing: "b8I5cL7Wp20",       // "Mann Mera" - healing vibe
-  "Main Character": "EWRjLirBqHw", // "Safarnama" - main character energy
-  Unbothered: "H1hL15VdSxQ",    // "Gulabi Aankhen" - unbothered
-  "Villain Arc": "imk4F4UGGvw", // "Symphony of Destruction" - villain
-  Slaying: "4u2O1k3u6kE",       // "Boom Boom" - power
-  Grateful: "LjL6S7WNqJ0",      // "Muskurane" - grateful
+  Stressed: "WcIG2YxbF6Q",
+  "Down-Bad": "kQN7npC-bQo",
+  Heartbroken: "kQN7npC-bQo",
+  Sad: "kQN7npC-bQo",
+  Glowing: "y2ZOqMhG6dM",
+  Happy: "y2ZOqMhG6dM",
+  Excited: "y2ZOqMhG6dM",
+  Feral: "xrEEjR27lqE",
+  Angry: "xrEEjR27lqE",
+  "In My Feels": "QcNz8WbhSNk",
+  Nostalgic: "QcNz8WbhSNk",
+  Chaotic: "wXU3npqIQl4",
+  Healing: "b8I5cL7Wp20",
+  "Main Character": "EWRjLirBqHw",
+  Unbothered: "H1hL15VdSxQ",
+  Chill: "H1hL15VdSxQ",
+  "Villain Arc": "imk4F4UGGvw",
+  Slaying: "4u2O1k3u6kE",
+  Grateful: "LjL6S7WNqJ0",
 };
 
 export const songLyricsByMood: Record<string, string> = {
@@ -53,6 +60,13 @@ Heartbreak made me who I am
 Stronger now, I give a damn
 Pick myself up off the floor
 I don't need you anymore`,
+  Heartbroken: `[Verse]
+Heart is heavy, tears won't dry
+Wondering why you said goodbye
+
+[Chorus]
+I'll rise again, I'll be okay
+Brighter days are on their way`,
   Glowing: `[Verse]
 Mirror mirror on the wall
 Who's the baddest of them all?
