@@ -93,25 +93,15 @@ export default function BaddieResponse({ response, mode, isStreaming }: Props) {
         ))}
       </div>
 
-      {response.aiText ? (
-        <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
-          <p className="text-gray-800 leading-relaxed whitespace-pre-wrap text-sm">
-            {response.aiText}
-          </p>
-        </div>
-      ) : (
-        <>
-          {response.songLyrics && <SongCard lyrics={response.songLyrics} videoId={response.songVideoId} />}
-          {response.danceSteps && response.danceSteps.length > 0 && (
-            <DanceSteps steps={response.danceSteps} />
-          )}
-          {response.books && response.books.length > 0 && (
-            <BookCard books={response.books} />
-          )}
-          {response.recipes && response.recipes.length > 0 && (
-            <RecipeCard recipes={response.recipes} />
-          )}
-        </>
+      {response.songLyrics && <SongCard lyrics={response.songLyrics} videoId={response.songVideoId} />}
+      {response.danceSteps && response.danceSteps.length > 0 && (
+        <DanceSteps steps={response.danceSteps} />
+      )}
+      {response.books && response.books.length > 0 && (
+        <BookCard books={response.books} />
+      )}
+      {response.recipes && response.recipes.length > 0 && (
+        <RecipeCard recipes={response.recipes} />
       )}
     </div>
   );
