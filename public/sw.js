@@ -1,5 +1,5 @@
-const CACHE = "chatpatti-baddie-v1";
-const URLS = ["/", "/chat", "/dashboard", "/manifest.json", "/robots.txt", "/sitemap.xml"];
+const CACHE = "chatpatti-baddie-v2";
+const URLS = ["/", "/dashboard", "/manifest.json", "/robots.txt", "/sitemap.xml"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -18,6 +18,10 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
+  if (event.request.mode === "navigate") {
+    event.respondWith(fetch(event.request).catch(() => caches.match(event.request)));
+    return;
+  }
   event.respondWith(
     caches.match(event.request).then((cached) => cached || fetch(event.request)),
   );
