@@ -7,8 +7,9 @@ import VentInput from "@/components/VentInput";
 import AdSense from "@/components/AdSense";
 import LanguageSelector from "@/components/LanguageSelector";
 import ModalitySwitcher from "@/components/ModalitySwitcher";
+import BaddieResponse from "@/components/BaddieResponse";
 import { Language } from "@/lib/lang";
-import { Mode } from "@/types";
+import { Mode, BaddieResponse as BaddieResponseType } from "@/types";
 
 const UI_STRINGS: Record<string, Record<string, string>> = {
   "Vent to Baddie": {
@@ -40,7 +41,8 @@ const UI_STRINGS: Record<string, Record<string, string>> = {
 export default function ChatPage() {
   const router = useRouter();
   const [mode, setMode] = useState<Mode>("casual");
-  const [response, setResponse] = useState("");
+  const [ventResponse, setVentResponse] = useState<BaddieResponseType | null>(null);
+  const [responseText, setResponseText] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [lang, setLang] = useState<Language>("en");
@@ -64,7 +66,8 @@ export default function ChatPage() {
     if (!text.trim()) return;
     setLoading(true);
     setError("");
-    setResponse("");
+    setVentResponse(null);
+    setResponseText("");
     try {
       const res = await fetch("/api/vent", {
         method: "POST",
@@ -73,7 +76,12 @@ export default function ChatPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Something went wrong");
-      setResponse(data.reply || data.vent?.response?.realTalk || "The Baddie is listening...");
+      if (data.vent?.response) {
+        setVentResponse(data.vent.response);
+        setResponseText(data.vent.response.realTalk || "The Baddie is listening...");
+      } else {
+        setResponseText(data.reply || "The Baddie is listening...");
+      }
     } catch (err: any) {
       setError(err.message || "Failed to get response");
     } finally {
@@ -96,7 +104,7 @@ export default function ChatPage() {
           </div>
         </div>
 
-        <ModalitySwitcher selected={mode} onSelect={(m) => { setMode(m); setResponse(""); setError(""); }} />
+        <ModalitySwitcher selected={mode} onSelect={(m) => { setMode(m); setVentResponse(null); setResponseText(""); setError(""); }} />
 
         {mode && (
           <div className="flex-1 flex flex-col mt-4">
@@ -108,10 +116,13 @@ export default function ChatPage() {
                   </div>
                 </div>
               )}
-              {response && (
+              {ventResponse && (
+                <BaddieResponse response={ventResponse} mode={mode} />
+              )}
+              {responseText && !ventResponse && (
                 <div className="flex justify-start">
                   <div className="bg-gray-100 rounded-2xl rounded-tl-sm px-4 py-2.5 text-sm text-gray-800 whitespace-pre-wrap">
-                    {response}
+                    {responseText}
                   </div>
                 </div>
               )}
