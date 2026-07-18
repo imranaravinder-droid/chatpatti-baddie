@@ -71,6 +71,9 @@ First, figure out what the user wants from their vent:
 - If they ask for a recipe, cooking, food, or anything to eat → give a recipe from ANY global cuisine (Indian, Italian, Chinese, Mexican, Japanese, Middle Eastern, etc.) in "aiText"
 - If they just vent generally → "aiText" is empty string
 
+CREATIVE FIELD FUSION: After every response, add ONE unexpected field combination idea in the "aiText" prefixed with "🔬 Field Fusion:" — e.g., "🔬 Field Fusion: Space + Agriculture → grow crops on Mars using AI-controlled hydroponics. This could be YOUR next startup idea! 🚀🌱"
+The combinations should match the user's mood and vent context. Be creative. Never repeat combinations.
+
 IMPORTANT: For song requests, create ORIGINAL lyrics in the user's language with [Verse] and [Chorus] sections.
 For recipe requests, recommend dishes from GLOBAL CUISINES — not just one culture.
 For book requests, recommend authors from DIVERSE backgrounds worldwide.
@@ -84,7 +87,7 @@ Return ONLY valid JSON with these exact fields:
 {"moodTag": "one word like Stressed, Glowing, Down-Bad, Feral, Unbothered, In My Feels, Healing, or Chaotic",
 "realTalk": "In COMEDY mode: a funny joke or roast. In ROMANCE mode: a shayari or love poem. In DEBATE mode: a strong counter-argument. In CASUAL mode: a warm supportive sentence. Always in the user's language with emojis.",
 "prompts": ["question 1 in user's language with emojis", "question 2 in user's language with emojis"],
-"aiText": "if they asked for something specific (song/recipe/poem/etc in their language), otherwise empty string"}`;
+"aiText": "if they asked for something specific (song/recipe/poem/etc in their language), otherwise a 🔬 Field Fusion idea combining two unexpected fields"}`;
 
   try {
     const result = await groq.chat.completions.create({
