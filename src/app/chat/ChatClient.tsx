@@ -72,7 +72,7 @@ export default function ChatPage() {
       const res = await fetch("/api/vent", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: text, mode, lang }),
+        body: JSON.stringify({ content: text, mode, lang, email: localStorage.getItem("baddie_user_email") }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Something went wrong");

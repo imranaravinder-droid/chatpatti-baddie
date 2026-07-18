@@ -13,6 +13,7 @@ export const vents = pgTable("vents", {
   danceSteps: json("dance_steps").$type<string[]>().default([]),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   deviceId: text("device_id"),
+  email: text("email"),
 });
 
 export const subscriptions = pgTable("subscriptions", {

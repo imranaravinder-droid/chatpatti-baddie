@@ -75,7 +75,8 @@ export default function Dashboard() {
   }, []);
 
   useEffect(() => {
-    fetch("/api/history")
+    const email = localStorage.getItem("baddie_user_email");
+    fetch(`/api/history?email=${encodeURIComponent(email || "")}`)
       .then((res) => res.json())
       .then((data) => setVents(data.vents))
       .catch(console.error)

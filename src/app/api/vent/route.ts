@@ -140,7 +140,7 @@ const promptsByMode: Record<string, string[]> = {
 
 export async function POST(request: NextRequest) {
   try {
-    const { content, mode = "comedy", lang = "en", deviceId } = await request.json();
+    const { content, mode = "comedy", lang = "en", deviceId, email } = await request.json();
 
     if (!content || typeof content !== "string" || content.trim().length === 0) {
       return NextResponse.json({ error: "Vent content is required" }, { status: 400 });
@@ -209,6 +209,7 @@ export async function POST(request: NextRequest) {
         aiText,
         songLyrics: contentForMood.songLyrics,
         danceSteps: contentForMood.danceSteps,
+        email: email || null,
       })
       .returning();
 

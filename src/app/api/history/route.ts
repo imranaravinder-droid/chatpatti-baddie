@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { vents } from "@/lib/schema";
-import { desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { booksByMood, recipesByMood, songLyricsByMood, songVideoByMood, danceSteps } from "@/lib/mockData";
 
 function getContentForMood(moodTag: string) {
@@ -65,12 +65,11 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const limit = Math.min(Math.max(parseInt(searchParams.get("limit") || "50", 10), 1), 100);
+    const email = searchParams.get("email");
 
-    const rows = await db
-      .select()
-      .from(vents)
-      .orderBy(desc(vents.createdAt))
-      .limit(limit);
+    const rows = email
+      ? await db.select().from(vents).where(eq(vents.email, email)).orderBy(desc(vents.createdAt)).limit(limit)
+      : await db.select().from(vents).orderBy(desc(vents.createdAt)).limit(limit);
 
     const formatted = rows.map((v) => {
       const content = getContentForMood(v.moodTag);

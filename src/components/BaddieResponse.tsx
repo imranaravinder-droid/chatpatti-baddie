@@ -78,20 +78,7 @@ export default function BaddieResponse({ response, mode, isStreaming }: Props) {
         </div>
       </div>
 
-      <div className="space-y-2">
-              <div className="flex items-center gap-2 text-sm font-medium text-gray-500">
-                <span>🤔</span>
-                Think About This
-              </div>
-        {response.prompts.map((prompt, i) => (
-          <div
-            key={i}
-            className={`rounded-xl px-4 py-3 text-sm text-gray-700 border ${cfg ? cfg.bg + " " + cfg.border : "bg-gradient-to-r from-pink-50 to-purple-50 border-pink-100"}`}
-          >
-            {prompt}
-          </div>
-        ))}
-      </div>
+
 
       {response.songLyrics && <SongCard lyrics={response.songLyrics} videoId={response.songVideoId} />}
       {response.danceSteps && response.danceSteps.length > 0 && (
