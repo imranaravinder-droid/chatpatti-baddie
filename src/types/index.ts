@@ -1,4 +1,4 @@
-export type Mode = "debate" | "comedy" | "romance" | "casual";
+export type Mode = "debate" | "comedy" | "romance" | "casual" | "god" | "mind";
 
 export interface BookRec {
   title: string;

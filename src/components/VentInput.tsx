@@ -1,18 +1,42 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { Send, Mic, MicOff } from "lucide-react";
+import { Send, Mic, MicOff, Camera } from "lucide-react";
 
 interface Props {
   onSubmit: (text: string) => void;
   disabled?: boolean;
+  onLensImage?: (imageData: string) => void;
 }
 
-export default function VentInput({ onSubmit, disabled }: Props) {
+export default function VentInput({ onSubmit, disabled, onLensImage }: Props) {
   const [text, setText] = useState("");
   const [isListening, setIsListening] = useState(false);
   const [voiceError, setVoiceError] = useState<string | null>(null);
+  const [lensLoading, setLensLoading] = useState(false);
   const recognitionRef = useRef<any>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleLensClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setLensLoading(true);
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      const dataUrl = event.target?.result as string;
+      if (onLensImage) {
+        onLensImage(dataUrl);
+      }
+      setLensLoading(false);
+    };
+    reader.readAsDataURL(file);
+    e.target.value = "";
+  };
 
   const canVoice =
     typeof window !== "undefined" &&
@@ -124,20 +148,44 @@ export default function VentInput({ onSubmit, disabled }: Props) {
         <p className="text-xs text-red-500 px-5 pb-1">{voiceError}</p>
       )}
       <div className="flex items-center justify-between px-4 py-3 bg-gray-50 border-t border-gray-100">
-        <button
-          type="button"
-          onClick={toggleVoice}
-          disabled={disabled}
-          className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm transition-colors ${
-            isListening
-              ? "bg-pink-100 text-pink-600 animate-pulse"
-              : "text-gray-400 hover:text-gray-600 hover:bg-gray-200"
-          }`}
-          title={isListening ? "Listening..." : "Voice input"}
-        >
-          {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
-          {isListening ? "Listening..." : "Voice"}
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={toggleVoice}
+            disabled={disabled}
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm transition-colors ${
+              isListening
+                ? "bg-pink-100 text-pink-600 animate-pulse"
+                : "text-gray-400 hover:text-gray-600 hover:bg-gray-200"
+            }`}
+            title={isListening ? "Listening..." : "Voice input"}
+          >
+            {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+            {isListening ? "Listening..." : "Voice"}
+          </button>
+          <button
+            type="button"
+            onClick={handleLensClick}
+            disabled={disabled || lensLoading}
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm transition-colors ${
+              lensLoading
+                ? "bg-purple-100 text-purple-500 animate-pulse"
+                : "text-gray-400 hover:text-purple-600 hover:bg-purple-100"
+            }`}
+            title="CB Lens - Scan & Recognize"
+          >
+            <Camera className="w-4 h-4" />
+            {lensLoading ? "Scanning..." : "CB Lens"}
+          </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            capture="environment"
+            className="hidden"
+            onChange={handleFileChange}
+          />
+        </div>
         <button
           onClick={handleSubmit}
           disabled={!text.trim() || disabled}

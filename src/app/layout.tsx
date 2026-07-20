@@ -17,20 +17,20 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "CHATPATTIE BADDIE - Your Emotional AI Companion",
+    default: "CHATPATTIE BADDIE - 22+ AI Agents",
     template: "%s | CHATPATTIE BADDIE",
   },
   description:
-    "Vent, process, and transform your emotions with the ultimate AI Baddie. Anonymous emotional processing with AI-powered mood analysis, songs, dance, book recs, and cooking therapy.",
+    "CHATPATTIE BADDIE — 22+ AI specialists. Chat, study, create images, get advice. Free, private, 24 Indian languages.",
   keywords: [
-    "AI emotional companion",
-    "mental wellness AI",
-    "vent chat",
-    "mood tracker",
-    "AI therapy alternative",
-    "emotional processing",
-    "Chatpatti Baddie",
-    "AI companion",
+    "Chatpattie Baddie",
+    "AI chat free",
+    "AI image generator",
+    "AI study help",
+    "AI Hindi",
+    "AI Indian languages",
+    "free AI assistant",
+    "AI life coach",
   ],
   authors: [{ name: "Chatpatti Baddie" }],
   creator: "Chatpatti Baddie",
@@ -50,9 +50,9 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "CHATPATTIE BADDIE",
-    title: "CHATPATTIE BADDIE - Your Emotional AI Companion",
+    title: "CHATPATTIE BADDIE - 22+ AI Agents, Free",
     description:
-      "Spill your drama. The Baddie listens. AI-powered venting with mood analysis, songs, dance, books & recipes.",
+      "CHATPATTIE BADDIE — 22+ AI agents. Chat, create images, study, get advice. Free, private, 24 languages.",
     images: [
       {
         url: "/og-image.png",
@@ -64,9 +64,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "CHATPATTIE BADDIE - Your Emotional AI Companion",
+    title: "CHATPATTIE BADDIE - 22+ AI Agents",
     description:
-      "Spill your drama. The Baddie listens. AI-powered venting with mood analysis, songs, dance, books & recipes.",
+      "CHATPATTIE BADDIE — 22+ AI agents. Free, private, 24 Indian languages.",
     images: ["/og-image.png"],
   },
   manifest: "/manifest.json",
@@ -119,7 +119,7 @@ export default function RootLayout({
               "@type": "WebApplication",
               name: "CHATPATTIE BADDIE",
               description:
-                "An AI-powered emotional companion that helps users process their feelings through venting, mood analysis, songs, dance tutorials, book recommendations, and cooking therapy.",
+                "CHATPATTIE BADDIE — 22+ AI agents for chat, images, study, and life advice. Free, private, 24 Indian languages.",
               url: "https://chatpatti-baddie.vercel.app",
               applicationCategory: "WellnessApplication",
               operatingSystem: "Web",
@@ -135,6 +135,7 @@ export default function RootLayout({
             }),
           }}
         />
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_PUBLISHER_ID" crossOrigin="anonymous" />
       </head>
       <body className="min-h-full flex flex-col bg-white">
         <Navbar />
@@ -143,12 +144,22 @@ export default function RootLayout({
         <main className="flex-1 w-full max-w-3xl mx-auto">
           {children}
         </main>
+        <div className="w-full max-w-3xl mx-auto px-4 py-2">
+          <ins className="adsbygoogle" style={{ display: "block" }} data-ad-client="ca-pub-YOUR_PUBLISHER_ID" data-ad-slot="YOUR_AD_SLOT_ID" data-ad-format="auto" />
+          <script dangerouslySetInnerHTML={{ __html: "(adsbygoogle = window.adsbygoogle || []).push({});" }} />
+        </div>
         <footer className="text-center py-6 px-4 border-t border-gray-100 space-y-3">
           <p className="text-xs text-gray-400">
-            💖 CHATPATTIE BADDIE &middot; Your emotional AI companion
+            💕 CHATPATTIE BADDIE &middot; 22+ AI agents — free
           </p>
-          <div className="flex items-center justify-center gap-4 text-xs">
+          <div className="flex items-center justify-center gap-4 text-xs flex-wrap">
             <a href="https://chatpatti-baddie.vercel.app" className="text-gray-400 hover:text-pink-500">Home</a>
+            <span className="text-gray-300">|</span>
+            <a href="/chat" className="text-gray-400 hover:text-pink-500">Chat</a>
+            <span className="text-gray-300">|</span>
+            <a href="/askm" className="text-gray-400 hover:text-pink-500">AskM 🎨</a>
+            <span className="text-gray-300">|</span>
+            <a href="/askm" className="text-gray-400 hover:text-pink-500">AskM 🎨</a>
             <span className="text-gray-300">|</span>
             <a href="/dashboard" className="text-gray-400 hover:text-pink-500">Drama Log</a>
           </div>

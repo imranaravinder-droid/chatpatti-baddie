@@ -41,6 +41,8 @@ export const users = pgTable("users", {
   name: text("name"),
   age: text("age"),
   referralSource: text("referral_source"),
+  referralCode: text("referral_code"),
+  referredBy: text("referred_by"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   lastActive: timestamp("last_active").notNull().defaultNow(),
   totalVents: integer("total_vents").notNull().default(0),

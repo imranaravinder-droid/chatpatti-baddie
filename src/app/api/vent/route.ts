@@ -140,23 +140,14 @@ const promptsByMode: Record<string, string[]> = {
 
 export async function POST(request: NextRequest) {
   try {
-    const { content, mode = "comedy", lang = "en", deviceId, email } = await request.json();
+    const { content, mode = "comedy", lang = "en", deviceId, email, history = [] } = await request.json();
 
     if (!content || typeof content !== "string" || content.trim().length === 0) {
       return NextResponse.json({ error: "Vent content is required" }, { status: 400 });
     }
 
     if (deviceId) {
-      const sub = await db.select().from(subscriptions).where(eq(subscriptions.deviceId, deviceId)).limit(1);
-      const isPremium = sub.length > 0 && sub[0].status === "active" && (!sub[0].expiresAt || new Date(sub[0].expiresAt) > new Date());
-      if (!isPremium) {
-        const today = new Date().toISOString().slice(0, 10);
-        const usage = await db.select().from(dailyUsage).where(and(eq(dailyUsage.deviceId, deviceId), eq(dailyUsage.date, today))).limit(1);
-        const count = usage.length > 0 ? usage[0].count : 0;
-        if (count >= 5) {
-          return NextResponse.json({ error: "Daily free limit reached. Upgrade for unlimited vents.", premium: false }, { status: 429 });
-        }
-      }
+      // free — no limit
     }
 
     let moodTag: string;
@@ -169,7 +160,7 @@ export async function POST(request: NextRequest) {
 
     if (hasAI) {
       try {
-        const ai = await analyzeVent(content, mode, lang);
+        const ai = await analyzeVent(content, mode, lang, history);
         moodTag = ai.moodTag;
         moodColor = ai.moodColor;
         realTalk = ai.realTalk;

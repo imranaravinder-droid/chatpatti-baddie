@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Sparkles, Clock, MessageCircle } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
 export default function Navbar() {
   const path = usePathname();
@@ -20,31 +20,16 @@ export default function Navbar() {
 
         <div className="flex items-center gap-1">
           {!isHome && (
-            <Link
-              href="/chat"
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                path === "/chat"
-                  ? "bg-pink-100 text-pink-700"
-                  : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
-              }`}
-            >
-              <MessageCircle className="w-4 h-4 inline mr-1.5" />
-              Chat
+            <Link href="/chat" className={`px-3 py-2 rounded-full text-sm font-medium transition-colors ${path === "/chat" ? "bg-pink-100 text-pink-700" : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"}`}>
+              💬 Chat
             </Link>
           )}
-          {!isHome && (
-            <Link
-              href="/dashboard"
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                path === "/dashboard"
-                  ? "bg-pink-100 text-pink-700"
-                  : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
-              }`}
-            >
-              <Clock className="w-4 h-4 inline mr-1.5" />
-              Drama Log
-            </Link>
-          )}
+          <Link href="/askm" className={`px-3 py-2 rounded-full text-sm font-medium transition-colors ${path === "/askm" ? "bg-blue-100 text-blue-700" : "text-blue-600 hover:text-blue-700 hover:bg-blue-50"}`}>
+            🎨 AskM
+          </Link>
+          <Link href="/dashboard" className={`px-3 py-2 rounded-full text-sm font-medium transition-colors ${path === "/dashboard" ? "bg-pink-100 text-pink-700" : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"}`}>
+            📊 Log
+          </Link>
         </div>
       </div>
     </nav>

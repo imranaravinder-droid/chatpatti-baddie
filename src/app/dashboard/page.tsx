@@ -8,7 +8,6 @@ import DramaLog from "@/components/DramaLog";
 import VibeTracker from "@/components/VibeTracker";
 import DeepDiveModal from "@/components/DeepDiveModal";
 import LanguageSelector from "@/components/LanguageSelector";
-import AdSense from "@/components/AdSense";
 import { Activity, Loader2, Swords, Laugh, Heart, MessageCircle } from "lucide-react";
 
 const modeBg: Record<string, string> = {
@@ -17,6 +16,7 @@ const modeBg: Record<string, string> = {
   debate: "bg-red-600",
   comedy: "bg-yellow-400",
   romance: "bg-pink-500",
+  god: "bg-amber-600",
 };
 
 const modeBtn: Record<string, { bg: string; shadow: string }> = {
@@ -25,6 +25,7 @@ const modeBtn: Record<string, { bg: string; shadow: string }> = {
   debate: { bg: "bg-red-500 text-white", shadow: "shadow-red-500/30" },
   comedy: { bg: "bg-yellow-500 text-white", shadow: "shadow-yellow-500/30" },
   romance: { bg: "bg-pink-500 text-white", shadow: "shadow-pink-500/30" },
+  god: { bg: "bg-amber-500 text-white", shadow: "shadow-amber-500/30" },
 };
 
 const langs: Record<string, { title: string; subtitle: string; mood: string; history: string }> = {
@@ -47,6 +48,7 @@ const modes: { key: string; label: string; icon: typeof Swords }[] = [
   { key: "debate", label: "⚔️ Debate", icon: Swords },
   { key: "comedy", label: "😂 Comedy", icon: Laugh },
   { key: "romance", label: "❤️ Romance", icon: Heart },
+  { key: "god", label: "🕊️ God", icon: Heart },
 ];
 
 export default function Dashboard() {
@@ -145,7 +147,6 @@ export default function Dashboard() {
           <DeepDiveModal vent={selectedVent} onClose={() => setSelectedVent(null)} />
         )}
 
-        <AdSense slot="0987654321" format="horizontal" className="my-6" />
       </div>
     </div>
   );

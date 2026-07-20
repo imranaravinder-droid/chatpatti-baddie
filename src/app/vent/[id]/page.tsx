@@ -6,9 +6,7 @@ import { Vent } from "@/types";
 import MoodTagBadge from "@/components/MoodTagBadge";
 import VoiceOverButton from "@/components/VoiceOverButton";
 import SongCard from "@/components/SongCard";
-import DanceSteps from "@/components/DanceSteps";
 import BookCard from "@/components/BookCard";
-import RecipeCard from "@/components/RecipeCard";
 import { format } from "date-fns";
 import { Sparkles, Lightbulb, ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
@@ -101,14 +99,8 @@ export default function VentDetail() {
         )}
 
         {vent.response.songLyrics && <SongCard lyrics={vent.response.songLyrics} videoId={vent.response.songVideoId} />}
-        {vent.response.danceSteps && vent.response.danceSteps.length > 0 && (
-          <DanceSteps steps={vent.response.danceSteps} />
-        )}
         {vent.response.books && vent.response.books.length > 0 && (
           <BookCard books={vent.response.books} />
-        )}
-        {vent.response.recipes && vent.response.recipes.length > 0 && (
-          <RecipeCard recipes={vent.response.recipes} />
         )}
       </div>
     </div>

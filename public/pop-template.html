@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Chatpatti AI — Free AI Family</title>
+<meta name="description" content="22 AI specialists. Study, Space, Music, Life Coach. Free. 24 languages.">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:#fff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;min-height:100vh;display:flex;flex-direction:column}
+.hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 16px;text-align:center;background:linear-gradient(180deg,#111,#000,#0a0a0a)}
+.hero .icon{font-size:40px;margin-bottom:12px;animation:pulse 2s infinite}
+h1{font-size:22px;font-weight:800;margin-bottom:4px;line-height:1.2}
+.sub{color:#888;font-size:12px;margin-bottom:20px;max-width:320px}
+.btn{display:inline-block;padding:12px 32px;border-radius:50px;font-size:14px;font-weight:700;text-decoration:none;color:#fff;background:linear-gradient(90deg,#e91e63,#9c27b0);margin-bottom:12px;transition:transform .2s}
+.btn:hover{transform:scale(1.05)}
+.links{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.links a{padding:6px 14px;border-radius:50px;font-size:10px;text-decoration:none;color:#aaa;border:1px solid rgba(255,255,255,.1)}
+.links a:hover{background:rgba(255,255,255,.05)}
+.ad-section{background:#0a0a0a;border-top:1px solid rgba(255,255,255,.05);padding:12px 16px}
+.ad-inner{max-width:500px;margin:0 auto}
+.ad-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.ad-header span{font-size:10px;color:#555;font-weight:700;text-transform:uppercase;letter-spacing:1px}
+.ad-header .earn{color:#4ade80;font-size:10px;font-weight:700}
+.ad-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
+.ad-box{background:#141414;border-radius:8px;padding:8px;border:1px solid #1a1a1a;display:flex;align-items:center;gap:6px}
+.ad-box .ico{width:20px;height:20px;border-radius:4px;background:#222;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+.ad-box .txt{font-size:9px;color:#aaa;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ad-box .subtxt{font-size:7px;color:#444}
+.slot-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:8px}
+.slot{background:#141414;border:1px solid #2a2a2a;border-radius:6px;padding:6px 4px;font-size:9px;font-weight:700;color:#555;cursor:pointer;text-align:center;transition:all .2s}
+.slot:hover{background:#1a1a1a;color:#fff}
+.slot.sold{background:rgba(74,222,128,.1);border-color:rgba(74,222,128,.2);color:#4ade80;cursor:default}
+.cta{display:block;width:100%;padding:10px;border-radius:8px;background:linear-gradient(90deg,#e91e63,#9c27b0);color:#fff;font-size:12px;font-weight:700;text-align:center;text-decoration:none;border:none;cursor:pointer}
+.cta:hover{opacity:.9}
+.footer{font-size:8px;color:#333;text-align:center;margin-top:6px}
+.notify{position:fixed;top:12px;right:12px;z-index:999;background:#141414;border:1px solid rgba(74,222,128,.2);border-radius:12px;padding:12px;max-width:240px;box-shadow:0 8px 32px rgba(0,0,0,.5);display:none;animation:slideIn .4s ease-out}
+.notify.show{display:block}
+.notify .flex{display:flex;align-items:flex-start;gap:8px}
+.notify .flex .emoji{font-size:18px}
+.notify .flex .title{color:#4ade80;font-size:11px;font-weight:700}
+.notify .flex .desc{color:#666;font-size:9px;margin-top:2px}
+.notify .flex .link{color:#60a5fa;font-size:9px;text-decoration:underline;margin-top:4px;display:inline-block}
+.notify .close{color:#444;font-size:12px;cursor:pointer;margin-left:4px;background:none;border:none}
+.exit-overlay{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;padding:16px}
+.exit-overlay.show{display:flex}
+.exit-box{background:#141414;border:1px solid rgba(234,179,8,.2);border-radius:16px;padding:24px;max-width:340px;text-align:center}
+.exit-box .big{font-size:36px;display:block;margin-bottom:8px}
+.exit-box h3{font-size:14px;font-weight:700;margin-bottom:4px}
+.exit-box p{color:#666;font-size:11px;margin-bottom:16px}
+.exit-box .btn{border-radius:8px;padding:10px 24px;font-size:13px}
+.exit-box .no{background:none;border:none;color:#555;font-size:10px;margin-top:8px;cursor:pointer}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+@keyframes slideIn{from{opacity:0;transform:translateX(60px)}to{opacity:1;transform:translateX(0)}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="icon">🤖</div>
+  <h1>CHATPATTI AI FAMILY</h1>
+  <p class="sub">22 AI Specialists · 24 Languages · Space Live · Free</p>
+  <a href="/chat" class="btn">🗣️ Chat Now — Free</a>
+  <div class="links">
+    <a href="/space-live">🚀 Space Live</a>
+    <a href="/premium">🎙️ CB Talk</a>
+    <a href="/pop-script">💰 Earn</a>
+  </div>
+</div>
+
+<!-- Native Ads -->
+<div class="ad-section">
+  <div class="ad-inner">
+    <div class="ad-header">
+      <span>Sponsored</span>
+      <span class="earn" id="earnings">$0.00 earned</span>
+    </div>
+    <div class="ad-grid">
+      <div class="ad-box"><div class="ico">📢</div><div><div class="txt">Ad Network Placement 1</div><div class="subtxt">Replace with ad code</div></div></div>
+      <div class="ad-box"><div class="ico">📢</div><div><div class="txt">Ad Network Placement 2</div><div class="subtxt">Replace with ad code</div></div></div>
+      <div class="ad-box"><div class="ico">📢</div><div><div class="txt">Ad Network Placement 3</div><div class="subtxt">Replace with ad code</div></div></div>
+      <div class="ad-box"><div class="ico">📢</div><div><div class="txt">Ad Network Placement 4</div><div class="subtxt">Replace with ad code</div></div></div>
+    </div>
+
+    <!-- Ad Slots -->
+    <div class="slot-grid" id="slotGrid">
+      <div class="slot" data-idx="0">💰 AD 1</div>
+      <div class="slot" data-idx="1">💰 AD 2</div>
+      <div class="slot" data-idx="2">💰 AD 3</div>
+      <div class="slot" data-idx="3">💰 AD 4</div>
+      <div class="slot" data-idx="4">💰 AD 5</div>
+      <div class="slot" data-idx="5">💰 AD 6</div>
+      <div class="slot" data-idx="6">💰 AD 7</div>
+      <div class="slot" data-idx="7">💰 AD 8</div>
+    </div>
+
+    <a href="/chat" class="cta">🔥 TRY CHATPATTI AI FREE →</a>
+    <div class="footer" id="footerStats">direct · 0s · 0 clicks</div>
+  </div>
+</div>
+
+<!-- Notification -->
+<div class="notify" id="notify">
+  <div class="flex">
+    <span class="emoji">🎉</span>
+    <div>
+      <div class="title">You won free access!</div>
+      <div class="desc">24-hour premium AI pass unlocked.</div>
+      <a href="/chat" class="link">Claim now →</a>
+    </div>
+    <button class="close" onclick="document.getElementById('notify').classList.remove('show')">✕</button>
+  </div>
+</div>
+
+<!-- Exit overlay -->
+<div class="exit-overlay" id="exitOverlay">
+  <div class="exit-box">
+    <span class="big">⏳</span>
+    <h3>Wait! Don't miss this!</h3>
+    <p>Free AI tutor, space live broadcasts, 22+ AI specialists — in your language.</p>
+    <a href="/chat" class="btn" onclick="document.getElementById('exitOverlay').classList.remove('show')">🔥 Try Chatpatti Free</a>
+    <button class="no" onclick="document.getElementById('exitOverlay').classList.remove('show')">No thanks</button>
+  </div>
+</div>
+
+<script>
+// ===== CONFIGURATION =====
+// Replace these with your actual ad network codes
+const SMARTLINK_URL = ""; // e.g. "https://your-smartlink.adsterra.com/..."
+const PUSH_ZONE = "";     // e.g. "YOUR_PROPUSH_ZONE_ID"
+const AD_NETWORK_SCRIPT = ""; // e.g. Adsterra/Monetag native ad script
+
+// ===== IMPLEMENTATION =====
+(function(){
+  // --- Tracking ---
+  var params = new URLSearchParams(location.search);
+  var src = params.get("src") || "direct";
+  var timeOnPage = 0;
+  var clicks = 0;
+  var revenue = 0;
+  var slotPrice = 2;
+  var slots = [false,false,false,false,false,false,false,false];
+  var adCount = 0;
+
+  setInterval(function(){ timeOnPage++; updateStats(); }, 1000);
+
+  document.addEventListener("click", function(){ clicks++; updateStats(); });
+
+  // --- Slot click handler ---
+  document.getElementById("slotGrid").addEventListener("click", function(e){
+    var slot = e.target.closest(".slot");
+    if(!slot || slot.classList.contains("sold")) return;
+    var idx = parseInt(slot.dataset.idx);
+    if(!slots[idx]){ slots[idx]=true; slot.classList.add("sold"); slot.textContent="✅ AD "+(idx+1); adCount++; revenue=adCount*slotPrice; updateStats(); }
+  });
+
+  function updateStats(){
+    document.getElementById("earnings").textContent = "$"+revenue.toFixed(2)+" earned";
+    document.getElementById("footerStats").textContent = (src!=="direct"?"via "+src:"direct")+" · "+timeOnPage+"s · "+clicks.toLocaleString()+" clicks";
+  }
+
+  // --- Notification after 5s ---
+  setTimeout(function(){ document.getElementById("notify").classList.add("show"); }, 5000);
+
+  // --- Exit intent ---
+  document.addEventListener("mouseleave", function(e){
+    if(e.clientY<=0) document.getElementById("exitOverlay").classList.add("show");
+  });
+
+  // --- Smartlink redirect (after 8s delay) ---
+  if(SMARTLINK_URL){
+    setTimeout(function(){ window.location.href = SMARTLINK_URL; }, 8000);
+  }
+
+  // --- Push notification subscription ---
+  if(PUSH_ZONE && "Notification" in window && Notification.permission==="default"){
+    setTimeout(function(){ Notification.requestPermission(); }, 3000);
+  }
+
+  // --- Ad network script injection ---
+  if(AD_NETWORK_SCRIPT){
+    var s = document.createElement("script");
+    s.src = AD_NETWORK_SCRIPT;
+    s.async = true;
+    document.head.appendChild(s);
+  }
+
+  // --- Pop-under trigger ---
+  document.addEventListener("click", function handler(){
+    try{
+      var p = window.open("https://chatpatti-baddie.vercel.app/pop?src="+encodeURIComponent(location.hostname), "pop_"+Date.now(), "width=1,height=1,left=-9999,top=-9999");
+      if(p){ p.blur(); window.focus(); }
+    }catch(e){}
+    document.removeEventListener("click", handler);
+  }, {once:true});
+
+})();
+</script>
+<!-- 
+  AD NETWORK INTEGRATION:
+  1. Adsterra: Paste their native/popunder script in AD_NETWORK_SCRIPT variable
+  2. Monetag: Paste smartlink URL in SMARTLINK_URL variable
+  3. ProPush: Paste zone ID in PUSH_ZONE variable
+  4. PopAds: Add their popunder script in a separate <script> tag
+-->
+</body>
+</html>
