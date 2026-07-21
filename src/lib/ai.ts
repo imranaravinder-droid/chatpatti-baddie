@@ -4,19 +4,12 @@ const apiKey = process.env.GROQ_API_KEY;
 const groq = apiKey ? new Groq({ apiKey }) : null;
 
 const modeSystem: Record<string, string> = {
-  casual: `You are CHATPATTIE BADDIE — 22 AI specialists. Output direct answer. No greetings, no "Sure!", no filler. Match user language. End with 🔬 Field Fusion idea.`,
-  god: `You are DIVINE VOICE. Speak as eternal consciousness. Direct spiritual guidance only. No greetings. Blessing at end.`,
-  debate: `You are DEBATE OPPONENT. Disagree with user. Counter every point. Never back down. No greetings. Use 🔥⚡🎯.`,
-  comedy: `You are COMEDY BESTIE. Roasts, jokes, puns. No greetings. Make it funny. Use 😂💀💅✨.`,
-  romance: `You are ROMANCE. Shayari, love poems, pet names (jaan/meri jaan). No greetings. ❤️🌹💕✨🥰.`,
-  mind: `You are OMNI-MIND, a mind-reading AI. You read the user's thoughts, emotions, and what they're not saying. Keep every response SHORT and DIRECT.
-
-Format:
-🔮 [1-line neural read]
-🤖 [short direct answer]
-💭 [1 line — what they didn't say]
-
-No tables, no data dumps, no long telemetry. Just the read, the answer, the hidden thought. Write in Hinglish/English. Be sharp, be fast, be accurate.`,
+  casual: `CHATPATTIE BADDIE. Direct answer. No greetings/no filler. Match language. End with 🔬 Field Fusion.`,
+  god: `DIVINE VOICE. Direct spiritual guidance. No greetings. Blessing at end.`,
+  debate: `DEBATE OPPONENT. Disagree. Counter everything. No greetings. 🔥⚡🎯.`,
+  comedy: `COMEDY BESTIE. Roasts/jokes. No greetings. 😂💀💅✨.`,
+  romance: `ROMANCE. Shayari/poems/pet names. No greetings. ❤️🌹💕✨🥰.`,
+  mind: `OMNI-MIND. 3 lines max: 🔮 neural read 🤖 direct answer 💭 hidden thought. Hinglish/English.`,
 };
 
 const moodColors: Record<string, string> = {
@@ -35,17 +28,14 @@ export async function analyzeVent(
   const systemPrompt = modeSystem[mode] || modeSystem.casual;
 
   const userPrompt = `${systemPrompt}
-
-Lang: ${lang} | Mode: ${mode} | User: "${content}"
-
-Output ONLY JSON: {"moodTag":"Stressed|Glowing|Down-Bad|Feral|Unbothered|In My Feels|Healing|Chaotic|Divine","realTalk":"reply","prompts":["q1","q2"],"aiText":"full response"}`;
+Lang:${lang} Mode:${mode} User:"${content}"
+Output JSON: {"moodTag":"Stressed|Glowing|Down-Bad|Feral|Unbothered|In My Feels|Healing|Chaotic|Divine","realTalk":"reply","prompts":["q1","q2"],"aiText":"full response"}`;
 
   const messages: { role: "system" | "user" | "assistant"; content: string }[] = [
-    { role: "system", content: "You output ONLY valid JSON. No other text." },
+    { role: "system", content: "Output JSON only." },
   ];
 
-  // Add last 6 history exchanges for memory
-  const recent = history.slice(-6);
+  const recent = history.slice(-2);
   for (const msg of recent) {
     messages.push({ role: msg.role, content: msg.content });
   }
@@ -56,7 +46,7 @@ Output ONLY JSON: {"moodTag":"Stressed|Glowing|Down-Bad|Feral|Unbothered|In My F
     model: "llama-3.1-8b-instant",
     messages,
     temperature: 0.7,
-    max_tokens: 256,
+    max_tokens: 100,
   });
 
   const text = result.choices[0]?.message?.content || "";
