@@ -136,6 +136,7 @@ export default function RootLayout({
           }}
         />
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4486222454241909" crossOrigin="anonymous" />
+        <script async custom-element="amp-ad" src="https://cdn.ampproject.org/v0/amp-ad-0.1.js" />
       </head>
       <body className="min-h-full flex flex-col bg-white">
         <Navbar />
@@ -145,7 +146,7 @@ export default function RootLayout({
           {children}
         </main>
         <div className="w-full max-w-3xl mx-auto px-4 py-2">
-          <ins className="adsbygoogle" style={{ display: "block" }} data-ad-client="ca-pub-4486222454241909" data-ad-slot="YOUR_AD_SLOT_ID" data-ad-format="auto" />
+          <ins className="adsbygoogle" style={{ display: "inline-block", width: "728px", height: "90px" }} data-ad-client="ca-pub-4486222454241909" data-ad-slot="9286475415" />
           <script dangerouslySetInnerHTML={{ __html: "(adsbygoogle = window.adsbygoogle || []).push({});" }} />
         </div>
         <footer className="text-center py-6 px-4 border-t border-gray-100 space-y-3">
