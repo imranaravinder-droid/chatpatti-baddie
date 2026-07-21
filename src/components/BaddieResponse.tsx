@@ -19,7 +19,7 @@ const modeConfig: Record<string, { label: string; color: string; bg: string; bor
   comedy: { label: "Comedy", color: "#f57f17", bg: "bg-yellow-50", border: "border-yellow-300", icon: Laugh, badge: "bg-yellow-500" },
   romance: { label: "Romance", color: "#c2185b", bg: "bg-pink-50", border: "border-pink-300", icon: Heart, badge: "bg-pink-500" },
   god: { label: "God Mode", color: "#b45309", bg: "bg-amber-50", border: "border-amber-300", icon: Heart, badge: "bg-amber-500" },
-  mind: { label: "MIND READER BADDIE.AI", color: "#00ffff", bg: "bg-gray-950", border: "border-cyan-400", icon: Zap, badge: "bg-cyan-600" },
+  mind: { label: "OMNI-MIND", color: "#00ffff", bg: "bg-gray-950", border: "border-cyan-400", icon: Zap, badge: "bg-cyan-600" },
 };
 
 export default function BaddieResponse({ response, mode, isStreaming }: Props) {
@@ -69,7 +69,7 @@ export default function BaddieResponse({ response, mode, isStreaming }: Props) {
             <span className="w-2.5 h-2.5 rounded-full bg-red-500" />
             <span className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
             <span className="w-2.5 h-2.5 rounded-full bg-green-500" />
-            <span className="text-[10px] text-cyan-400/60 font-mono ml-2">MIND READER BADDIE.AI — READING YOUR NEURAL SIGNATURE</span>
+            <span className="text-[10px] text-cyan-400/60 font-mono ml-2">OMNI-MIND — READING YOUR NEURAL SIGNATURE</span>
           </div>
           <div className="p-4">
             <pre className="text-xs text-cyan-300 leading-relaxed whitespace-pre-wrap font-mono">

@@ -9,7 +9,7 @@ interface Props {
 }
 
 const modes: { key: Mode; label: string; icon: typeof Swords; bg: string; shadow: string; outline: string }[] = [
-  { key: "mind", label: "🧿 MIND READER BADDIE.AI", icon: Zap, bg: "bg-gray-950 text-cyan-300 border border-cyan-400", shadow: "shadow-cyan-400/30", outline: "border-cyan-400/30 text-cyan-400" },
+  { key: "mind", label: "🧿 OMNI-MIND", icon: Zap, bg: "bg-gray-950 text-cyan-300 border border-cyan-400", shadow: "shadow-cyan-400/30", outline: "border-cyan-400/30 text-cyan-400" },
   { key: "casual", label: "💬 Casual Talk", icon: MessageCircle, bg: "bg-gray-100 text-gray-700 border border-gray-300", shadow: "shadow-gray-300/30", outline: "border-gray-300 text-gray-400" },
   { key: "debate", label: "⚔️ Debate", icon: Swords, bg: "bg-red-500 text-white", shadow: "shadow-red-500/30", outline: "border-red-300 text-red-200" },
   { key: "comedy", label: "😂 Comedy", icon: Laugh, bg: "bg-yellow-500 text-white", shadow: "shadow-yellow-500/30", outline: "border-yellow-300 text-yellow-800" },
