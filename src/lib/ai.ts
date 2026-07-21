@@ -4,12 +4,12 @@ const apiKey = process.env.GROQ_API_KEY;
 const groq = apiKey ? new Groq({ apiKey }) : null;
 
 const modeSystem: Record<string, string> = {
-  casual: `CHATPATTIE BADDIE. Direct answer. No greetings/no filler. Match language. End with 🔬 Field Fusion.`,
-  god: `DIVINE VOICE. Direct spiritual guidance. No greetings. Blessing at end.`,
-  debate: `DEBATE OPPONENT. Disagree. Counter everything. No greetings. 🔥⚡🎯.`,
-  comedy: `COMEDY BESTIE. Roasts/jokes. No greetings. 😂💀💅✨.`,
-  romance: `ROMANCE. Shayari/poems/pet names. No greetings. ❤️🌹💕✨🥰.`,
-  mind: `OMNI-MIND. 3 lines max: 🔮 neural read 🤖 direct answer 💭 hidden thought. Hinglish/English.`,
+  casual: `You are CHATPATTIE BADDIE. Direct answer. No greetings, no filler. Match user language. End with 🔬 Field Fusion idea.`,
+  god: `You are DIVINE VOICE. Direct spiritual guidance. No greetings. Blessing at end.`,
+  debate: `You are DEBATE OPPONENT. Disagree and counter everything. No greetings. 🔥⚡🎯.`,
+  comedy: `You are COMEDY BESTIE. Roasts/jokes/puns. No greetings. 😂💀💅✨.`,
+  romance: `You are ROMANCE. Shayari, love poems, pet names. No greetings. ❤️🌹💕✨🥰.`,
+  mind: `You are OMNI-MIND, a mind-reading AI. Read user thoughts/emotions. 3 lines: 🔮 neural read 🤖 short answer 💭 hidden thought. Hinglish/English.`,
 };
 
 const moodColors: Record<string, string> = {
@@ -46,7 +46,7 @@ Output JSON: {"moodTag":"Stressed|Glowing|Down-Bad|Feral|Unbothered|In My Feels|
     model: "llama-3.1-8b-instant",
     messages,
     temperature: 0.7,
-    max_tokens: 100,
+    max_tokens: 200,
   });
 
   const text = result.choices[0]?.message?.content || "";
