@@ -6,7 +6,7 @@ Namaste! Aapka swagat hai CHATPATTIE BADDIE mein.
 
 22 se zyada AI specialists — Study Master, Music Companion, Life Coach, Creative Studio. Sab free. Sab 24 Indian languages mein.
 
-Call karein aur chatpatti ki duniya mein ghum jayein. Chatpattie Baddie — aapki apni AI family.
+Call karein aur chatpatti ki duniya mein ghum jayein. Chatpattie Baddie — aapka apna AI partner.
 
 Try abhi: chatpatti-baddie.vercel.app
 `;

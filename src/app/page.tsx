@@ -10,7 +10,7 @@ const sources = ["Google Search", "Instagram", "YouTube", "WhatsApp", "Friend/Fa
 const features = [
   { icon: MessageCircle, title: "CHATPATTIE BADDIE", desc: "22+ AI agents ready 24/7 — study tutor, space guide, music companion, life diary, comedy buddy, and more. No judgment, just support." },
   { icon: Brain, title: "22 AI Agents", desc: "Study Master, English Coach, Space Guide, Music Companion, Life Coach, Personality Analyst, Creative Studio, CB Lens, and 14 more specialists." },
-  { icon: Globe, title: "24 Indian Languages", desc: "Speak in Hindi, Tamil, Bengali, Marathi, Gujarati, Punjabi, Urdu, and 17 more languages. Your AI Family speaks your language." },
+  { icon: Globe, title: "24 Indian Languages", desc: "Speak in Hindi, Tamil, Bengali, Marathi, Gujarati, Punjabi, Urdu, and 17 more languages. CHATPATTIE BADDIE speaks your language." },
   { icon: BookOpen, title: "Global Study Master", desc: "Homework help, exam prep, CBSE/NCERT/ICSE/IB/IGCSE support. Any subject, any class, any board in the world." },
   { icon: Lightbulb, title: "Field Fusion Ideas", desc: "Every response includes a creative cross-field idea — Space + Agriculture, Robotics + Music, Medicine + Art." },
   { icon: Shield, title: "100% Private", desc: "Your data stays yours. Email-based history means only you see your past conversations." },
@@ -113,7 +113,7 @@ export default function HomePage() {
           {error && <p className="text-xs text-red-500 text-center">{error}</p>}
 
           <button type="submit" disabled={loading} className="w-full py-2.5 bg-pink-500 text-white rounded-full text-sm font-medium hover:bg-pink-600 disabled:opacity-50 transition-all">
-            {loading ? "Signing up..." : "Meet Your AI Family 💕"}
+            {loading ? "Signing up..." : "Meet CHATPATTIE BADDIE 💕"}
           </button>
 
           <p className="text-xs text-gray-400 text-center">🔒 Your data is safe. We never spam or share.</p>
@@ -122,7 +122,7 @@ export default function HomePage() {
 
       {/* FEATURES */}
       <div className="w-full max-w-4xl mt-16">
-        <h2 className="text-xl font-bold text-center text-gray-900 mb-8">🌟 Meet Your AI Family</h2>
+        <h2 className="text-xl font-bold text-center text-gray-900 mb-8">🌟 Meet CHATPATTIE BADDIE</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {features.map((f, i) => (
             <div key={i} className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
