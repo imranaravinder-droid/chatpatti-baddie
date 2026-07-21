@@ -50,7 +50,7 @@ export default function AskmPage() {
       </form>
 
       <div className="w-full my-4">
-        <ins className="adsbygoogle" style={{ display: "block" }} data-ad-client="ca-pub-YOUR_PUBLISHER_ID" data-ad-slot="YOUR_AD_SLOT_ID" data-ad-format="auto" />
+        <ins className="adsbygoogle" style={{ display: "block" }} data-ad-client="ca-pub-4486222454241909" data-ad-slot="YOUR_AD_SLOT_ID" data-ad-format="auto" />
       </div>
 
       {imageUrl && (

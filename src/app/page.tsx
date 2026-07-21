@@ -23,6 +23,7 @@ const modes = [
   { emoji: "🔥", label: "Debate Mode", color: "bg-red-50" },
   { emoji: "😂", label: "Comedy Mode", color: "bg-yellow-50" },
   { emoji: "❤️", label: "Romance Mode", color: "bg-pink-50" },
+  { emoji: "🧿", label: "MIND READER BADDIE.AI", color: "bg-gray-950 text-cyan-300 border-2 border-cyan-400 shadow-lg shadow-cyan-400/30" },
 ];
 
 export default function HomePage() {

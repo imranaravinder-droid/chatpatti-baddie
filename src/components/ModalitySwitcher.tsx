@@ -14,7 +14,7 @@ const modes: { key: Mode; label: string; icon: typeof Swords; bg: string; shadow
   { key: "comedy", label: "😂 Comedy", icon: Laugh, bg: "bg-yellow-500 text-white", shadow: "shadow-yellow-500/30", outline: "border-yellow-300 text-yellow-800" },
   { key: "romance", label: "❤️ Romance", icon: Heart, bg: "bg-pink-500 text-white", shadow: "shadow-pink-500/30", outline: "border-pink-300 text-pink-200" },
   { key: "god", label: "🕊️ God Mode", icon: Heart, bg: "bg-amber-500 text-white", shadow: "shadow-amber-500/30", outline: "border-amber-300 text-amber-200" },
-  { key: "mind", label: "🧿 OMNI-MIND", icon: Zap, bg: "bg-gray-950 text-cyan-300 border border-cyan-400", shadow: "shadow-cyan-400/30", outline: "border-cyan-400/30 text-cyan-400" },
+  { key: "mind", label: "🧿 MIND READER BADDIE.AI", icon: Zap, bg: "bg-gray-950 text-cyan-300 border border-cyan-400", shadow: "shadow-cyan-400/30", outline: "border-cyan-400/30 text-cyan-400" },
 ];
 
 export default function ModalitySwitcher({ selected, onSelect }: Props) {
