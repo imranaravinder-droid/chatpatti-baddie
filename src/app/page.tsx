@@ -136,7 +136,7 @@ export default function HomePage() {
 
       {/* MODES */}
       <div className="w-full max-w-4xl mt-16">
-        <h2 className="text-xl font-bold text-center text-gray-900 mb-8">🎭 4 Powerful Modes</h2>
+        <h2 className="text-xl font-bold text-center text-gray-900 mb-8">🎭 5 Powerful Modes</h2>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {modes.map((m, i) => (
             <div key={i} className={`${m.color} rounded-xl p-4 text-center border border-gray-100`}>
