@@ -145,7 +145,7 @@ export default function HomePage() {
             </div>
           ))}
         </div>
-        <p className="text-xs text-gray-400 text-center mt-4 max-w-lg mx-auto">Plus 22 AI family members: Study Master, Space Guide, Music Companion, Life Coach, English Coach, Creative Studio, CB Lens, Personality Analyst, Discovery AI, Field Inventor, Global Discovery Network, and more.</p>
+        <p className="text-xs text-gray-400 text-center mt-4 max-w-lg mx-auto">Plus 22 AI agents: Study Master, Space Guide, Music Companion, Life Coach, English Coach, Creative Studio, CB Lens, Personality Analyst, Discovery AI, Field Inventor, Global Discovery Network, and more.</p>
       </div>
 
       {/* ASKM */}
@@ -180,7 +180,7 @@ export default function HomePage() {
 
       {/* USE CASES */}
       <div className="w-full max-w-4xl mt-16 mb-16">
-        <h2 className="text-xl font-bold text-center text-gray-900 mb-8">🎯 Who Needs an AI Family?</h2>
+        <h2 className="text-xl font-bold text-center text-gray-900 mb-8">🎯 Who Needs CHATPATTIE BADDIE?</h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {[
             { emoji: "🧑‍🎓", title: "Students", desc: "Homework help, exam prep, CBSE/NCERT/IB/IGCSE support, study plans, practice questions for any subject." },
@@ -188,7 +188,7 @@ export default function HomePage() {
             { emoji: "🎨", title: "Creators", desc: "Image prompts, video scripts, design ideas, logo creation, sketching tutorials, storyboards, content planning." },
             { emoji: "🧠", title: "Self-Improvers", desc: "Personality analysis, career discovery, productivity tips, Big Five assessment, growth suggestions." },
             { emoji: "🌍", title: "Language Learners", desc: "24 Indian languages, English fluency, grammar correction, Hinglish to English, IELTS/TOEFL/PTE prep." },
-            { emoji: "👨‍👩‍👧‍👦", title: "Everyone Needs an AI Family", desc: "Your 22 AI family members are here — study help, space exploration, music discovery, life diary, motivation, personality growth, and more. No judgment, just family." },
+            { emoji: "👨‍👩‍👧‍👦", title: "Everyone Needs CHATPATTIE BADDIE", desc: "Your 22 AI agents are here — study help, space exploration, music discovery, life diary, motivation, personality growth, and more. No judgment, just support." },
           ].map((u, i) => (
             <div key={i} className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
               <span className="text-2xl">{u.emoji}</span>
