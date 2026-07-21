@@ -137,6 +137,7 @@ export default function RootLayout({
         />
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4486222454241909" crossOrigin="anonymous" />
         <script async custom-element="amp-ad" src="https://cdn.ampproject.org/v0/amp-ad-0.1.js" />
+        <meta name="google-adsense-account" content="ca-pub-4486222454241909" />
       </head>
       <body className="min-h-full flex flex-col bg-white">
         <Navbar />
