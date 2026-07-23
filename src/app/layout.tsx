@@ -138,6 +138,7 @@ export default function RootLayout({
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4486222454241909" crossOrigin="anonymous" />
         <script async custom-element="amp-ad" src="https://cdn.ampproject.org/v0/amp-ad-0.1.js" />
         <meta name="google-adsense-account" content="ca-pub-4486222454241909" />
+        <script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="9ec997ba-af12-4515-9a44-cdd9932d9629";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
       </head>
       <body className="min-h-full flex flex-col bg-white">
         <Navbar />
