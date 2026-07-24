@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CHATPATTIE BADDIE · Stream Chat</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; max-width: 700px; margin: 40px auto; padding: 0 20px; background: #fdfdfd; color: #222; }
+    #chat-box { height: 450px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; background: #ffffff; }
+    .msg { margin-bottom: 12px; line-height: 1.5; }
+    .user { font-weight: 600; color: #2563eb; }
+    .bot { color: #1e293b; }
+    .input-row { display: flex; gap: 10px; margin-top: 16px; }
+    input { flex: 1; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 16px; outline: none; }
+    button { padding: 12px 24px; background: #2563eb; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+    button:disabled { background: #94a3b8; }
+    h2 { color: #1e293b; }
+    .brand { color: #ec4899; }
+  </style>
+</head>
+<body>
+
+  <h2>💕 <span class="brand">CHATPATTIE BADDIE</span> · Stream</h2>
+  <div id="chat-box"></div>
+
+  <div class="input-row">
+    <input type="text" id="user-input" placeholder="Type a question..." onkeydown="if(event.key==='Enter') sendMessage()" />
+    <button id="send-btn" onclick="sendMessage()">Send</button>
+  </div>
+
+  <script>
+    const history = [];
+
+    async function sendMessage() {
+      const input = document.getElementById('user-input');
+      const text = input.value.trim();
+      if (!text) return;
+
+      input.value = '';
+      const chatBox = document.getElementById('chat-box');
+
+      chatBox.innerHTML += `<div class="msg"><span class="user">You:</span> ${text}</div>`;
+      history.push({ role: 'user', parts: [{ text }] });
+
+      const botMsgDiv = document.createElement('div');
+      botMsgDiv.className = 'msg bot';
+      botMsgDiv.innerHTML = `<strong>AI:</strong> <span class="content"></span>`;
+      chatBox.appendChild(botMsgDiv);
+      const contentSpan = botMsgDiv.querySelector('.content');
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      const response = await fetch('/api/gemini-chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messageHistory: history })
+      });
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let fullResponse = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        const chunk = decoder.decode(value, { stream: true });
+        fullResponse += chunk;
+        contentSpan.innerText = fullResponse;
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }
+
+      history.push({ role: 'model', parts: [{ text: fullResponse }] });
+    }
+  </script>
+</body>
+</html>
