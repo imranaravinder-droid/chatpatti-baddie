@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Sparkles, MessageCircle, Brain, BookOpen, Globe, Lightbulb, Shield, Users, Zap, Heart } from "lucide-react";
 
 const ageRanges = ["Under 18", "18-24", "25-34", "35-44", "45+"];
-const sources = ["Google Search", "Instagram", "YouTube", "WhatsApp", "Friend/Family", "Reddit", "Facebook", "Twitter/X", "Other"];
+const sources = ["Google Search", "Instagram", "YouTube", "Friend/Family", "Reddit", "Facebook", "Twitter/X", "Other"];
 
 const features = [
   { icon: MessageCircle, title: "CHATPATTIE BADDIE", desc: "22+ AI agents ready 24/7 — study tutor, space guide, music companion, life diary, comedy buddy, and more. No judgment, just support." },

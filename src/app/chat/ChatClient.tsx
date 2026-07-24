@@ -114,8 +114,6 @@ export default function ChatPage() {
   const [confirmDelete, setConfirmDelete] = useState(false);
   useEffect(() => { setAiSpeaking(loading); }, [loading]);
 
-  const shareText = encodeURIComponent(`🤖 Chatpattie Baddie says: "${lastReply.substring(0, 100)}"\n\nTry free: ${refLink}`);
-
   if (!authorized) return null;
 
   return (

@@ -30,6 +30,15 @@ export default function Navbar() {
           <Link href="/spotlight" className={`px-3 py-2 rounded-full text-sm font-medium transition-colors ${path === "/spotlight" ? "bg-green-100 text-green-700" : "text-green-600 hover:text-green-700 hover:bg-green-50"}`}>
             🎧 Music
           </Link>
+          <Link href="/spotify" className={`px-3 py-2 rounded-full text-sm font-medium transition-colors ${path === "/spotify" ? "bg-green-100 text-green-700" : "text-green-600 hover:text-green-700 hover:bg-green-50"}`}>
+            🟢 Spotify
+          </Link>
+          <Link href="/pinterest" className={`px-3 py-2 rounded-full text-sm font-medium transition-colors ${path === "/pinterest" ? "bg-red-100 text-red-700" : "text-red-500 hover:text-red-700 hover:bg-red-50"}`}>
+            📌 Pinterest
+          </Link>
+          <Link href="/instagram" className={`px-3 py-2 rounded-full text-sm font-medium transition-colors ${path === "/instagram" ? "bg-pink-100 text-pink-700" : "text-pink-500 hover:text-pink-700 hover:bg-pink-50"}`}>
+            📸 Instagram
+          </Link>
           <Link href="/dashboard" className={`px-3 py-2 rounded-full text-sm font-medium transition-colors ${path === "/dashboard" ? "bg-pink-100 text-pink-700" : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"}`}>
             📊 Log
           </Link>
