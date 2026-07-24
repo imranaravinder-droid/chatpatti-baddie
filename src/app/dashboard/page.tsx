@@ -147,6 +147,23 @@ export default function Dashboard() {
           <DeepDiveModal vent={selectedVent} onClose={() => setSelectedVent(null)} />
         )}
 
+        <div className="mt-8 flex flex-col items-center gap-3">
+          <div className="w-full my-2">
+            <ins className="adsbygoogle" style={{ display: "inline-block", width: "728px", height: "90px" }} data-ad-client="ca-pub-4486222454241909" data-ad-slot="9286475415" />
+          </div>
+          <button
+            onClick={async () => {
+              if (!confirm("Delete all your chat history? This cannot be undone.")) return;
+              const email = localStorage.getItem("baddie_user_email");
+              await fetch("/api/delete-history", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email }) });
+              setVents([]);
+            }}
+            className="text-xs px-4 py-2 bg-red-50 text-red-500 rounded-full border border-red-200 hover:bg-red-100 transition-all"
+          >
+            🗑 Delete My History
+          </button>
+        </div>
+
       </div>
     </div>
   );
