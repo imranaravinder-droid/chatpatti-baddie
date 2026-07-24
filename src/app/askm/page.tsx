@@ -20,13 +20,24 @@ export default function AskmPage() {
 
   if (!authorized) return null;
 
-  const handleGenerate = (e: React.FormEvent) => {
+  const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!prompt.trim()) return;
     setLoading(true);
-    const encoded = encodeURIComponent(prompt.trim());
-    setImageUrl(`https://image.pollinations.ai/prompt/${encoded}?width=1024&height=1024&nologo=true`);
-    setLoading(false);
+    try {
+      const res = await fetch("/api/generate-image", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: prompt.trim() }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      setImageUrl(`data:image/jpeg;base64,${data.image}`);
+    } catch (err: any) {
+      alert(err.message || "Failed to generate image");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
