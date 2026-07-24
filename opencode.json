@@ -1,0 +1,15 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "spotlight": {
+      "type": "local",
+      "command": ["npx", "-y", "@spotlight-ai/mcp-server", "--api-key", "${env:SPOTLIGHT_API_KEY}"],
+      "enabled": false
+    },
+    "my_custom_tool": {
+      "type": "local",
+      "command": ["node", "/path/to/tool-server.js"],
+      "enabled": false
+    }
+  }
+}
