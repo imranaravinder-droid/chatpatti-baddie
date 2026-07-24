@@ -28,6 +28,7 @@ export default function ChatPage() {
   const [responseText, setResponseText] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const [lang, setLang] = useState<Language>("en");
   const [messages, setMessages] = useState<{ role: "user" | "assistant"; content: string }[]>([]);
   const [refCode, setRefCode] = useState("");
@@ -187,6 +188,21 @@ export default function ChatPage() {
         {mode && (
           <div className="flex-1 flex flex-col mt-4">
             <div className="flex-1 overflow-y-auto mb-4 space-y-3">
+              {messages.map((msg, i) => (
+                <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                  <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm whitespace-pre-wrap ${msg.role === "user" ? "bg-pink-500 text-white rounded-tr-sm" : "bg-gray-100 text-gray-800 rounded-tl-sm"}`}>
+                    {msg.content}
+                    <div className="flex gap-2 mt-1.5 justify-end">
+                      <button onClick={() => { navigator.clipboard.writeText(msg.content); setCopiedIndex(i); setTimeout(() => setCopiedIndex(null), 2000); }} className="text-[10px] opacity-60 hover:opacity-100 transition-opacity">
+                        {copiedIndex === i ? "Copied!" : "Copy"}
+                      </button>
+                      <button onClick={() => setMessages(prev => prev.filter((_, idx) => idx !== i))} className="text-[10px] opacity-60 hover:opacity-100 hover:text-red-400 transition-opacity">
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
               {loading && (
                 <div className="flex justify-start">
                   <div className="bg-gray-100 rounded-2xl rounded-tl-sm px-4 py-2.5 text-sm text-gray-500">
