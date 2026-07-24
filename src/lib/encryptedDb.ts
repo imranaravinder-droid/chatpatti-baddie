@@ -1,11 +1,33 @@
-import Dexie from 'dexie';
+import Dexie, { type Table } from 'dexie';
 
-export const encryptedDb = new Dexie('PrivateEncryptedChatDB');
+interface Conversation {
+  id: string;
+  createdAt: Date;
+  title: string;
+}
 
-encryptedDb.version(1).stores({
-  conversations: 'id, createdAt, title',
-  messages: '++id, conversationId, role, encryptedContent, timestamp',
-});
+interface EncryptedMessage {
+  id?: number;
+  conversationId: string;
+  role: string;
+  encryptedContent: string;
+  timestamp: Date;
+}
+
+export class EncryptedChatDB extends Dexie {
+  conversations!: Table<Conversation, string>;
+  messages!: Table<EncryptedMessage, number>;
+
+  constructor() {
+    super('PrivateEncryptedChatDB');
+    this.version(1).stores({
+      conversations: 'id, createdAt, title',
+      messages: '++id, conversationId, role, encryptedContent, timestamp',
+    });
+  }
+}
+
+export const encryptedDb = new EncryptedChatDB();
 
 export async function deleteConversation(conversationId: string) {
   await encryptedDb.transaction('rw', encryptedDb.conversations, encryptedDb.messages, async () => {
