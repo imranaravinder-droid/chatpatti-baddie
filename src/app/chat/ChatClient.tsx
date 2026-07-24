@@ -35,21 +35,19 @@ export default function ChatPage() {
   const [refCount, setRefCount] = useState(0);
   const [showShare, setShowShare] = useState(false);
   const [lastReply, setLastReply] = useState("");
+  const [authorized, setAuthorized] = useState(false);
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.has("owner")) {
-      localStorage.setItem("baddie_user_email", "owner@chatpatti.com");
-      localStorage.setItem("baddie_user_name", "Owner");
-    }
     const email = localStorage.getItem("baddie_user_email");
     if (!email) {
       router.replace("/");
+    } else {
+      setAuthorized(true);
+      const code = localStorage.getItem("baddie_ref_code") || btoa(email).replace(/=/g, "").substring(0, 12);
+      setRefCode(code);
+      const count = parseInt(localStorage.getItem("baddie_ref_count") || "0", 10);
+      setRefCount(count);
     }
-    const code = localStorage.getItem("baddie_ref_code") || btoa(email || "").replace(/=/g, "").substring(0, 12);
-    setRefCode(code);
-    const count = parseInt(localStorage.getItem("baddie_ref_count") || "0", 10);
-    setRefCount(count);
   }, [router]);
 
   const refLink = `https://chatpatti-baddie.vercel.app/?ref=${refCode}`;
@@ -117,6 +115,8 @@ export default function ChatPage() {
   useEffect(() => { setAiSpeaking(loading); }, [loading]);
 
   const shareText = encodeURIComponent(`🤖 Chatpattie Baddie says: "${lastReply.substring(0, 100)}"\n\nTry free: ${refLink}`);
+
+  if (!authorized) return null;
 
   return (
     <div className={`min-h-screen flex flex-col transition-colors duration-300 ${bgClass}`}>

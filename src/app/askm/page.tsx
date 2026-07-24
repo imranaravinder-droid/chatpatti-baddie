@@ -8,12 +8,17 @@ export default function AskmPage() {
   const [prompt, setPrompt] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [loading, setLoading] = useState(false);
+  const [authorized, setAuthorized] = useState(false);
 
   useEffect(() => {
     if (!localStorage.getItem("baddie_user_email")) {
       router.replace("/");
+    } else {
+      setAuthorized(true);
     }
   }, [router]);
+
+  if (!authorized) return null;
 
   const handleGenerate = (e: React.FormEvent) => {
     e.preventDefault();
