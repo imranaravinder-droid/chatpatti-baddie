@@ -133,12 +133,9 @@ export default function ChatPage() {
             </button>
           </div>
           <div className="mt-1.5 flex gap-1.5">
-            <a href={`https://wa.me/?text=${shareText}`} target="_blank" rel="noopener noreferrer" className="flex-1 text-center text-[10px] py-1.5 bg-green-500 text-white rounded-full font-medium hover:bg-green-600 transition-colors">
-              📱 WhatsApp
-            </a>
-            <a href={`https://t.me/share/url?url=${encodeURIComponent(refLink)}&text=${encodeURIComponent("CHATPATTIE BADDIE — 22 AI agents, free!")}`} target="_blank" rel="noopener noreferrer" className="flex-1 text-center text-[10px] py-1.5 bg-blue-500 text-white rounded-full font-medium hover:bg-blue-600 transition-colors">
-              ✈️ Telegram
-            </a>
+            <button onClick={() => { navigator.clipboard.writeText(refLink); alert("Link copied!"); }} className="flex-1 text-center text-[10px] py-1.5 bg-green-500 text-white rounded-full font-medium hover:bg-green-600 transition-colors">
+              📋 Copy Link
+            </button>
           </div>
         </div>
 
@@ -223,11 +220,8 @@ export default function ChatPage() {
               )}
               {showShare && lastReply && (
                 <div className="flex justify-end gap-1.5">
-                  <a href={`https://wa.me/?text=${shareText}`} target="_blank" rel="noopener noreferrer" className="text-[10px] px-2.5 py-1 bg-green-100 text-green-700 rounded-full hover:bg-green-200 transition-colors">
-                    📱 Share
-                  </a>
-                  <button onClick={() => { navigator.clipboard.writeText(refLink); }} className="text-[10px] px-2.5 py-1 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-colors">
-                    📋 Copy
+                  <button onClick={() => { navigator.clipboard.writeText(refLink); alert("Link copied!"); }} className="text-[10px] px-2.5 py-1 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-colors">
+                    📋 Copy Link
                   </button>
                 </div>
               )}
