@@ -1,7 +1,8 @@
 import { ElevenLabsClient } from "@elevenlabs/elevenlabs-js";
 import { NextRequest, NextResponse } from "next/server";
+import { KEYS } from "@/lib/keys";
 
-const API_KEY = process.env.ELEVENLABS_API_KEY;
+const API_KEY = process.env.ELEVENLABS_API_KEY || KEYS.ELEVENLABS_API_KEY;
 const DEFAULT_VOICE_ID = "21m00Tcm4TlvDq8ikWAM";
 
 const client = new ElevenLabsClient({ apiKey: API_KEY || "" });

@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
+import { KEYS } from "@/lib/keys";
 
 async function getSpotifyToken(): Promise<string> {
-  const client_id = process.env.SPOTIFY_CLIENT_ID;
-  const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
+  const client_id = process.env.SPOTIFY_CLIENT_ID || KEYS.SPOTIFY_CLIENT_ID;
+  const client_secret = process.env.SPOTIFY_CLIENT_SECRET || KEYS.SPOTIFY_CLIENT_SECRET;
 
   if (!client_id || !client_secret) {
     throw new Error("SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET must be set");

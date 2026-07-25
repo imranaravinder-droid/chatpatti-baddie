@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { GoogleGenAI } from "@google/genai";
+import { KEYS } from "@/lib/keys";
 
 const MODE_PROMPTS: Record<string, string> = {
   casual: "You are CHATPATTIE BADDIE. Direct answers, no greetings, no filler. Match user language. End with 🔬 Field Fusion idea. Be accurate and helpful. When user asks for dance steps, give 4-8 sassy dance steps with counts and attitude.",
@@ -13,7 +14,7 @@ const MODE_PROMPTS: Record<string, string> = {
 export async function POST(req: NextRequest) {
   try {
     const { messageHistory, mode = "casual" } = await req.json();
-    const apiKey = process.env.GEMINI_API_KEY;
+    const apiKey = process.env.GEMINI_API_KEY || KEYS.GEMINI_API_KEY;
     if (!apiKey) return new Response("API key not configured", { status: 500 });
 
     const systemInstruction = MODE_PROMPTS[mode] || MODE_PROMPTS.casual;

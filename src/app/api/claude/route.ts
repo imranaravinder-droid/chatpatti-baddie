@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
+import { KEYS } from "@/lib/keys";
 
 export async function POST(req: NextRequest) {
   try {
     const { messages } = await req.json();
-    const apiKey = process.env.ANTHROPIC_API_KEY;
+    const apiKey = process.env.ANTHROPIC_API_KEY || KEYS.ANTHROPIC_API_KEY;
     if (!apiKey) return NextResponse.json({ error: "Claude API key not configured" }, { status: 500 });
 
     const response = await fetch("https://api.anthropic.com/v1/messages", {

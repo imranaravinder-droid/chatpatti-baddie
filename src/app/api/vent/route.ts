@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { vents, dailyUsage, subscriptions } from "@/lib/schema";
 import { eq, and } from "drizzle-orm";
 import { analyzeVent } from "@/lib/ai";
+import { KEYS } from "@/lib/keys";
 import { getConversationalResponse, getIntentResponse } from "@/lib/responses";
 import {
   songLyricsByMood,
@@ -156,7 +157,7 @@ export async function POST(request: NextRequest) {
     let prompts: string[];
     let aiText: string = "";
 
-    const hasAI = !!process.env.GROQ_API_KEY || !!process.env.GEMINI_API_KEY;
+    const hasAI = !!(process.env.GROQ_API_KEY || process.env.GEMINI_API_KEY || KEYS?.GROQ_API_KEY || KEYS?.GEMINI_API_KEY);
 
     if (hasAI) {
       try {

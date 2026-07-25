@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { KEYS } from "@/lib/keys";
 
 export async function GET(req: NextRequest) {
   try {
@@ -6,7 +7,7 @@ export async function GET(req: NextRequest) {
     const query = searchParams.get("query");
     const videoId = searchParams.get("video");
 
-    const apiKey = process.env.YOUTUBE_API_KEY;
+    const apiKey = process.env.YOUTUBE_API_KEY || KEYS.YOUTUBE_API_KEY;
     if (!apiKey) return NextResponse.json({ error: "YOUTUBE_API_KEY not configured" }, { status: 500 });
 
     // Single video lookup

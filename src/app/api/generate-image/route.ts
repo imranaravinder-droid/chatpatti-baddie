@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
+import { KEYS } from "@/lib/keys";
 
 const RATIO_MAP: Record<string, string> = {
   "16:9": "16:9",
@@ -14,7 +15,7 @@ export async function POST(req: NextRequest) {
     const { prompt, aspectRatio = "16:9" } = await req.json();
     if (!prompt) return NextResponse.json({ error: "Prompt required" }, { status: 400 });
 
-    const apiKey = process.env.GEMINI_API_KEY;
+    const apiKey = process.env.GEMINI_API_KEY || KEYS.GEMINI_API_KEY;
     if (!apiKey) return NextResponse.json({ error: "Gemini API key not configured" }, { status: 500 });
 
     const ai = new GoogleGenAI({ apiKey });
