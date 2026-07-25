@@ -9,6 +9,11 @@ export default function PinterestPage() {
   const [pins, setPins] = useState<any[]>([]);
   const [connected, setConnected] = useState(false);
   const [username, setUsername] = useState("");
+  const [pinTitle, setPinTitle] = useState("");
+  const [pinDesc, setPinDesc] = useState("");
+  const [pinImageUrl, setPinImageUrl] = useState("");
+  const [boardId, setBoardId] = useState("");
+  const [creating, setCreating] = useState(false);
 
   useEffect(() => {
     if (!localStorage.getItem("baddie_user_email")) {
@@ -20,7 +25,6 @@ export default function PinterestPage() {
       if (stored && token) {
         try { setPins(JSON.parse(stored)); setConnected(true); } catch {}
       }
-      // Try to fetch user info
       const storedUser = localStorage.getItem("pinterest_user");
       if (storedUser) {
         try { const u = JSON.parse(storedUser); setUsername(u.username || u.full_name || ""); } catch {}
@@ -67,6 +71,35 @@ export default function PinterestPage() {
     setPins([]);
     setConnected(false);
     setUsername("");
+  };
+
+  const createPin = async () => {
+    const token = localStorage.getItem("pinterest_token");
+    if (!token) return alert("Not connected");
+    if (!pinImageUrl) return alert("Image URL is required");
+    setCreating(true);
+    try {
+      const res = await fetch("/api/pinterest/pins", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token, title: pinTitle, description: pinDesc, board_id: boardId || undefined, image_url: pinImageUrl }),
+      });
+      const data = await res.json();
+      if (data.id) {
+        alert("Pin created successfully!");
+        setPinTitle(""); setPinDesc(""); setPinImageUrl("");
+        const stored = localStorage.getItem("pinterest_pins");
+        const existing = stored ? JSON.parse(stored) : [];
+        localStorage.setItem("pinterest_pins", JSON.stringify([data, ...existing]));
+        setPins([data, ...pins]);
+      } else {
+        alert("Error: " + (data.error || "Unknown"));
+      }
+    } catch (err) {
+      alert("Failed to create pin");
+    } finally {
+      setCreating(false);
+    }
   };
 
   if (!authorized) return null;
@@ -135,6 +168,25 @@ export default function PinterestPage() {
         </>
       )}
 
+      {connected && (
+        <div style={{ marginTop: "40px", background: "#151c2c", border: "1px solid #1e293b", borderRadius: "16px", padding: "24px" }}>
+          <h3 style={{ margin: "0 0 16px 0", display: "flex", alignItems: "center", gap: "8px" }}>📌 Create Pin</h3>
+          <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+            <input placeholder="Title" value={pinTitle} onChange={e => setPinTitle(e.target.value)}
+              style={{ padding: "10px 14px", borderRadius: "8px", border: "1px solid #1e293b", background: "#0b0f19", color: "#f8fafc", fontSize: "14px" }} />
+            <textarea placeholder="Description" value={pinDesc} onChange={e => setPinDesc(e.target.value)} rows={3}
+              style={{ padding: "10px 14px", borderRadius: "8px", border: "1px solid #1e293b", background: "#0b0f19", color: "#f8fafc", fontSize: "14px", resize: "vertical" }} />
+            <input placeholder="Image URL (required)" value={pinImageUrl} onChange={e => setPinImageUrl(e.target.value)}
+              style={{ padding: "10px 14px", borderRadius: "8px", border: "1px solid #1e293b", background: "#0b0f19", color: "#f8fafc", fontSize: "14px" }} />
+            <input placeholder="Board ID (optional)" value={boardId} onChange={e => setBoardId(e.target.value)}
+              style={{ padding: "10px 14px", borderRadius: "8px", border: "1px solid #1e293b", background: "#0b0f19", color: "#f8fafc", fontSize: "14px" }} />
+            <button onClick={createPin} disabled={creating}
+              style={{ padding: "12px 24px", background: "#e60023", color: "#fff", border: "none", borderRadius: "8px", fontWeight: "bold", cursor: "pointer", opacity: creating ? 0.7 : 1 }}>
+              {creating ? "Creating..." : "📌 Create Pin"}
+            </button>
+          </div>
+        </div>
+      )}
       <div style={{ marginTop: "30px", textAlign: "center" }}>
         <ins className="adsbygoogle" style={{ display: "inline-block", width: "728px", height: "90px" }} data-ad-client="ca-pub-4486222454241909" data-ad-slot="9286475415" />
       </div>
