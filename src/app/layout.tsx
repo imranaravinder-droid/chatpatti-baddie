@@ -69,6 +69,9 @@ export const metadata: Metadata = {
       "CHATPATTIE BADDIE — 22+ AI agents. Free, private, 24 Indian languages.",
     images: ["/og-image.png"],
   },
+  other: {
+    "pinterest-site-verification": "92b166f17948b54f89daa16667a5577f",
+  },
   manifest: "/manifest.json",
   icons: {
     apple: "/icons/icon-192.png",
