@@ -1,7 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+
+const PREVIEW_MAX = 12;
 
 export default function SpotifyPage() {
   const router = useRouter();
@@ -10,6 +12,7 @@ export default function SpotifyPage() {
   const [tracks, setTracks] = useState<any[]>([]);
   const [embedId, setEmbedId] = useState("4cOdK2wGLETKBW3PvgPWqT");
   const [loading, setLoading] = useState(false);
+  const audioRefs = useRef<Map<number, HTMLAudioElement>>(new Map());
 
   useEffect(() => {
     if (!localStorage.getItem("baddie_user_email")) {
@@ -18,6 +21,14 @@ export default function SpotifyPage() {
       setAuthorized(true);
     }
   }, [router]);
+
+  const handleTimeUpdate = (i: number) => {
+    const el = audioRefs.current.get(i);
+    if (el && el.currentTime >= PREVIEW_MAX) {
+      el.pause();
+      el.currentTime = 0;
+    }
+  };
 
   const search = async (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -67,13 +78,24 @@ export default function SpotifyPage() {
         </button>
       </form>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "12px" }}>
-        {tracks.map((t) => (
-          <div key={t.id} onClick={() => setEmbedId(t.id)} style={{ background: "#181818", borderRadius: "8px", padding: "12px", cursor: "pointer", border: embedId === t.id ? "2px solid #1DB954" : "2px solid transparent", transition: "all 0.2s" }}>
-            <img src={t.album?.images[0]?.url} alt={t.name} style={{ width: "100%", aspectRatio: "1", objectFit: "cover", borderRadius: "4px", marginBottom: "8px" }} />
-            <div style={{ fontWeight: "bold", fontSize: "14px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{t.name}</div>
-            <div style={{ fontSize: "12px", color: "#b3b3b3", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{t.artists?.map((a: any) => a.name).join(", ")}</div>
-            {t.preview_url && <audio controls src={t.preview_url} style={{ width: "100%", height: "28px", marginTop: "6px" }} onClick={(e) => e.stopPropagation()} />}
+      <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+        {tracks.map((t, i) => (
+          <div key={t.id} onClick={() => setEmbedId(t.id)} style={{ background: embedId === t.id ? "#1a2a1a" : "#181818", borderRadius: "6px", padding: "8px 12px", cursor: "pointer", display: "flex", alignItems: "center", gap: "10px", border: embedId === t.id ? "1px solid #1DB954" : "1px solid transparent" }}>
+            <span style={{ color: "#1DB954", fontSize: "12px", minWidth: "16px" }}>{i + 1}</span>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontWeight: 600, fontSize: "14px" }}>{t.name}</div>
+              <div style={{ fontSize: "12px", color: "#b3b3b3" }}>{t.artists?.map((a: any) => a.name).join(", ")}</div>
+            </div>
+            {t.preview_url && (
+              <audio
+                controls
+                src={t.preview_url}
+                ref={(el) => { if (el) { audioRefs.current.set(i, el); } }}
+                onTimeUpdate={() => handleTimeUpdate(i)}
+                style={{ width: "120px", height: "28px" }}
+                onClick={(e) => e.stopPropagation()}
+              />
+            )}
           </div>
         ))}
       </div>
