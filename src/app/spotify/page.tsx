@@ -39,7 +39,7 @@ export default function SpotifyPage() {
       const data = await res.json();
       const items = data.tracks?.items || [];
       setTracks(items);
-      setEmbedId("");
+      if (items.length > 0) setEmbedId(items[0].id);
     } catch (err) {
       console.error(err);
     } finally {
