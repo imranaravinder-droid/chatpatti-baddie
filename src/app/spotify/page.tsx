@@ -1,9 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-
-const PREVIEW_MAX = 12;
 
 export default function SpotifyPage() {
   const router = useRouter();
@@ -12,7 +10,6 @@ export default function SpotifyPage() {
   const [tracks, setTracks] = useState<any[]>([]);
   const [embedId, setEmbedId] = useState("");
   const [loading, setLoading] = useState(false);
-  const audioRefs = useRef<Map<number, HTMLAudioElement>>(new Map());
 
   useEffect(() => {
     if (!localStorage.getItem("baddie_user_email")) {
@@ -21,14 +18,6 @@ export default function SpotifyPage() {
       setAuthorized(true);
     }
   }, [router]);
-
-  const handleTimeUpdate = (i: number) => {
-    const el = audioRefs.current.get(i);
-    if (el && el.currentTime >= PREVIEW_MAX) {
-      el.pause();
-      el.currentTime = 0;
-    }
-  };
 
   const search = async (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -88,16 +77,6 @@ export default function SpotifyPage() {
               <div style={{ fontWeight: 600, fontSize: "14px" }}>{t.name}</div>
               <div style={{ fontSize: "12px", color: "#b3b3b3" }}>{t.artists?.map((a: any) => a.name).join(", ")}</div>
             </div>
-            {t.preview_url && (
-              <audio
-                controls
-                src={t.preview_url}
-                ref={(el) => { if (el) { audioRefs.current.set(i, el); } }}
-                onTimeUpdate={() => handleTimeUpdate(i)}
-                style={{ width: "120px", height: "28px" }}
-                onClick={(e) => e.stopPropagation()}
-              />
-            )}
           </div>
         ))}
       </div>
