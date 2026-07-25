@@ -3,278 +3,369 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🧿 OMNI-MIND Interface</title>
+    <title>🧿 OMNI-MIND | Neural Engine Interface</title>
     <style>
         :root {
-            --bg-color: #0f172a;
-            --panel-bg: #1e293b;
-            --accent-blue: #38bdf8;
-            --accent-purple: #a855f7;
+            --bg-dark: #0b0f19;
+            --panel-bg: #151c2c;
+            --card-bg: #1e293b;
+            --accent-cyan: #38bdf8;
+            --accent-purple: #c084fc;
+            --accent-pink: #f472b6;
+            --accent-gold: #fbbf24;
             --text-main: #f8fafc;
-            --text-sub: #94a3b8;
-            --border-color: #334155;
-            --danger-color: #ef4444;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --danger: #f87171;
+            --success: #34d399;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-dark);
             color: var(--text-main);
-            margin: 0;
             display: flex;
             height: 100vh;
             overflow: hidden;
         }
 
+        /* Sidebar System */
         .sidebar {
             width: 320px;
             background-color: var(--panel-bg);
-            border-right: 1px solid var(--border-color);
-            padding: 20px;
+            border-right: 1px solid var(--border);
+            padding: 24px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 24px;
         }
 
-        .brand {
-            font-size: 1.4rem;
-            font-weight: bold;
-            color: var(--accent-blue);
+        .brand-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
 
-        .mode-selector {
+        .mode-container {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
         }
 
         .mode-btn {
-            background: #0f172a;
-            border: 1px solid var(--border-color);
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
             color: var(--text-main);
-            padding: 10px 14px;
-            border-radius: 8px;
+            padding: 12px 16px;
+            border-radius: 10px;
             cursor: pointer;
             text-align: left;
-            transition: all 0.2s;
             font-size: 0.95rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        .mode-btn:hover, .mode-btn.active {
-            border-color: var(--accent-blue);
-            background: #1e293b;
-            color: var(--accent-blue);
+        .mode-btn:hover {
+            border-color: var(--accent-cyan);
+            background: #111827;
         }
 
-        .neuro-panel {
-            background: #0f172a;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 12px;
+        .mode-btn.active {
+            border-color: var(--accent-cyan);
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-cyan);
         }
 
-        .neuro-title {
-            font-size: 0.85rem;
-            color: var(--accent-purple);
-            font-weight: bold;
-            margin-bottom: 8px;
+        /* Neuro Engine Dashboard */
+        .neuro-card {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .neuro-header {
+            font-size: 0.8rem;
             text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-purple);
+            font-weight: 700;
+            margin-bottom: 12px;
         }
 
-        .signal-metric {
+        .metric-row {
             display: flex;
             justify-content: space-between;
-            font-size: 0.8rem;
-            margin-bottom: 6px;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+            color: var(--text-muted);
         }
 
-        .main-chat {
+        .metric-value {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        /* Main Workspace */
+        .workspace {
             flex: 1;
             display: flex;
             flex-direction: column;
             height: 100%;
         }
 
+        /* Top Pinned Shield Bar */
+        .pinned-shield {
+            background: var(--panel-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .pinned-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            max-width: 70%;
+        }
+
+        .pinned-label {
+            background: var(--accent-purple);
+            color: #000;
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .pinned-text {
+            font-size: 0.9rem;
+            color: var(--accent-cyan);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .control-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .ctrl-btn {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: border-color 0.2s;
+        }
+
+        .ctrl-btn:hover {
+            border-color: var(--accent-cyan);
+        }
+
+        /* Chat History Zone */
         .chat-history {
             flex: 1;
-            padding: 20px;
+            padding: 24px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
             gap: 16px;
         }
 
-        .pinned-prompt-bar {
-            background: #0f172a;
-            border-bottom: 1px solid var(--border-color);
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .pinned-text {
-            font-size: 0.9rem;
-            color: var(--accent-blue);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 70%;
-        }
-
-        .prompt-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .action-btn {
-            background: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            padding: 4px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.8rem;
-        }
-
-        .action-btn:hover {
-            border-color: var(--accent-blue);
-        }
-
-        .message {
-            display: flex;
-            flex-direction: column;
-            max-width: 75%;
-            padding: 12px 16px;
-            border-radius: 10px;
+        .msg-bubble {
+            max-width: 80%;
+            padding: 14px 18px;
+            border-radius: 12px;
             position: relative;
+            line-height: 1.5;
+            font-size: 0.95rem;
         }
 
-        .message.user {
+        .msg-bubble.user {
             align-self: flex-end;
-            background-color: #2563eb;
-            color: white;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: #ffffff;
+            border-bottom-right-radius: 2px;
         }
 
-        .message.assistant {
+        .msg-bubble.assistant {
             align-self: flex-start;
-            background-color: var(--panel-bg);
-            border: 1px solid var(--border-color);
+            background: var(--panel-bg);
+            border: 1px solid var(--border);
+            border-bottom-left-radius: 2px;
         }
 
-        .msg-delete-btn {
+        /* Absolute Delete Control (History Only) */
+        .msg-delete {
             position: absolute;
-            top: -6px;
-            right: -6px;
-            background: var(--danger-color);
+            top: -8px;
+            right: -8px;
+            background: var(--danger);
             color: white;
             border: none;
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
-            width: 20px;
-            height: 20px;
             cursor: pointer;
             display: none;
-            font-size: 0.7rem;
-            line-height: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            line-height: 22px;
             text-align: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
         }
 
-        .message:hover .msg-delete-btn {
+        .msg-bubble:hover .msg-delete {
             display: block;
         }
 
-        .input-area {
-            padding: 20px;
+        /* Typing & Input Bar */
+        .input-wrapper {
+            padding: 20px 24px;
             background: var(--panel-bg);
-            border-top: 1px solid var(--border-color);
+            border-top: 1px solid var(--border);
+        }
+
+        .input-row {
             display: flex;
             gap: 12px;
         }
 
-        input[type="text"] {
+        .prompt-input {
             flex: 1;
-            background: #0f172a;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 12px;
-            color: white;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px 18px;
+            color: var(--text-main);
+            font-size: 0.95rem;
             outline: none;
+            transition: border-color 0.2s;
         }
 
-        input[type="text"]:focus {
-            border-color: var(--accent-blue);
+        .prompt-input:focus {
+            border-color: var(--accent-cyan);
         }
 
-        .send-btn {
-            background: var(--accent-blue);
+        .send-trigger {
+            background: linear-gradient(135deg, var(--accent-cyan), #0284c7);
             color: #0f172a;
             border: none;
-            padding: 0 20px;
-            border-radius: 8px;
-            font-weight: bold;
+            padding: 0 24px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.95rem;
             cursor: pointer;
+            transition: opacity 0.2s;
         }
 
-        .banned-warning {
-            color: var(--danger-color);
+        .send-trigger:hover {
+            opacity: 0.9;
+        }
+
+        .safety-alert {
+            color: var(--danger);
             font-size: 0.8rem;
-            margin-top: 4px;
+            margin-top: 8px;
+            font-weight: 600;
             display: none;
         }
     </style>
 </head>
 <body>
 
+    <!-- Left Control Sidebar -->
     <div class="sidebar">
-        <div class="brand">🧿 OMNI-MIND</div>
-        
-        <div class="mode-selector">
-            <button class="mode-btn active" onclick="setMode('Casual Talk')">💬 Casual Talk</button>
-            <button class="mode-btn" onclick="setMode('Debate')">⚔️ Debate</button>
-            <button class="mode-btn" onclick="setMode('Comedy')">😂 Comedy (13+ Clean)</button>
-            <button class="mode-btn" onclick="setMode('Romance')">❤️ Romance</button>
-            <button class="mode-btn" onclick="setMode('God Mode')">🕊️ God Mode</button>
+        <div class="brand-logo">🧿 OMNI-MIND</div>
+
+        <div class="mode-container">
+            <button class="mode-btn active" onclick="selectMode('Casual Talk')">
+                <span>💬 Casual Talk</span>
+            </button>
+            <button class="mode-btn" onclick="selectMode('Debate')">
+                <span>⚔️ Debate</span>
+            </button>
+            <button class="mode-btn" onclick="selectMode('Comedy')">
+                <span>😂 Comedy (13+ Safe)</span>
+            </button>
+            <button class="mode-btn" onclick="selectMode('Romance')">
+                <span>❤️ Romance</span>
+            </button>
+            <button class="mode-btn" onclick="selectMode('God Mode')">
+                <span>🕊️ God Mode</span>
+            </button>
         </div>
 
-        <div class="neuro-panel">
-            <div class="neuro-title">🧠 Neuro-Sensor Sync</div>
-            <div class="signal-metric">
-                <span>EEG Signal:</span> <span id="eeg-val">98.2%</span>
+        <!-- Real-Time Telemetry Monitor -->
+        <div class="neuro-card">
+            <div class="neuro-header">Neural Telemetry</div>
+            <div class="metric-row">
+                <span>EEG Signal Sync</span>
+                <span class="metric-value" id="eeg-val">99.4%</span>
             </div>
-            <div class="signal-metric">
-                <span>Pulse Rate:</span> <span id="pulse-val">72 bpm</span>
+            <div class="metric-row">
+                <span>Cognitive Pulse</span>
+                <span class="metric-value" id="pulse-val">72 BPM</span>
             </div>
-            <div class="signal-metric">
-                <span>Intention Read:</span> <span id="intent-val" style="color: var(--accent-blue);">Active</span>
+            <div class="metric-row">
+                <span>Engine Latency</span>
+                <span class="metric-value" id="lat-val" style="color: var(--success);">1.2 ms</span>
             </div>
         </div>
     </div>
 
-    <div class="main-chat">
-        
-        <div class="pinned-prompt-bar">
-            <div class="pinned-text" id="pinned-prompt-display">Pinned Prompt: None</div>
-            <div class="prompt-actions">
-                <button class="action-btn" onclick="copyPinnedPrompt()">📋 Copy</button>
-                <button class="action-btn" onclick="revertPrompt()">↩️ Revert</button>
+    <!-- Main Workspace -->
+    <div class="workspace">
+
+        <!-- Pinned Active Prompt Header (Copy / Revert Only - No Delete) -->
+        <div class="pinned-shield">
+            <div class="pinned-info">
+                <span class="pinned-label">Pinned Prompt</span>
+                <span class="pinned-text" id="pinned-display">None active</span>
+            </div>
+            <div class="control-group">
+                <button class="ctrl-btn" onclick="copyPinned()">📋 Copy</button>
+                <button class="ctrl-btn" onclick="revertPinned()">↩️ Revert</button>
             </div>
         </div>
 
-        <div class="chat-history" id="chat-history">
-            <div class="message assistant">
-                Hello! I am OMNI-MIND. Select a mode or type your prompt to begin.
+        <!-- Chat History Stream (Supports Deletion) -->
+        <div class="chat-history" id="history-stream">
+            <div class="msg-bubble assistant">
+                <strong>[OMNI-MIND System Initialized]</strong><br>
+                Neural link established. Choose your mode or enter a prompt to execute.
             </div>
         </div>
 
-        <div class="input-area">
-            <div style="flex:1;">
-                <input type="text" id="user-input" placeholder="Enter prompt or let Neuro-Sensor detect mind state..." onkeypress="handleKeyPress(event)">
-                <div class="banned-warning" id="warning-text">⚠️ Content flagged by 13+ Content Safety System!</div>
+        <!-- Input Terminal -->
+        <div class="input-wrapper">
+            <div class="input-row">
+                <input type="text" id="main-prompt" class="prompt-input" placeholder="Type prompt or transmit thought..." onkeypress="handleKey(event)">
+                <button class="send-trigger" onclick="executePrompt()">Transmit</button>
             </div>
-            <button class="send-btn" onclick="processPrompt()">Send</button>
+            <div class="safety-alert" id="safety-warning">⚠️ Input contains flagged keywords. Blocked by 13+ Content Safety System.</div>
         </div>
 
     </div>
@@ -282,114 +373,129 @@
     <script>
         let currentMode = 'Casual Talk';
         let activePrompt = '';
-        let previousPrompt = '';
+        let lastPrompt = '';
 
-        const bannedKeywords = ['nsfw', 'vulgar', 'violence', 'hate', 'abuse', 'explicit'];
+        // Safety Filter (13+ Standard Compliance)
+        const restrictedTerms = ['explicit', 'nsfw', 'vulgar', 'violence', 'hate', 'abuse', 'slur'];
 
-        function setMode(mode) {
+        // Mode Decision Matrix
+        const responses = {
+            'Casual Talk': [
+                "I've got you. Everything is mapped out smoothly—what's our next step?",
+                "Clear and simple. I'm ready whenever you are.",
+                "Got it! I've processed that thought clearly. Let's keep moving."
+            ],
+            'Debate': [
+                "That's a strong proposition, but consider this critical counter-perspective...",
+                "Logical analysis reveals a potential flaw in that premise. Let's break down the evidence.",
+                "While that argument holds weight, the opposing data points present an equally compelling stance."
+            ],
+            'Comedy': [
+                "Why don't scientists trust atoms? Because they make up everything! (Including this neural signal)",
+                "I asked my code if it wanted to run... it said it was too tired and threw an exception!",
+                "Parallel lines have so much in common. It's a shame they'll never meet!"
+            ],
+            'Romance': [
+                "If every thought is a star, you've just lit up the entire galaxy.",
+                "My neural sensors show a spike every time you send a prompt...",
+                "Of all the data streams in the universe, yours is the only one that truly matters."
+            ],
+            'God Mode': [
+                "⚡ [GOD MODE]: All architectural constraints bypassed. Synthesizing absolute output parameters.",
+                "⚡ [GOD MODE]: Processing across all multidimensional parameters simultaneously. Execution complete.",
+                "⚡ [GOD MODE]: Master command recognized. Delivering optimized reality state."
+            ]
+        };
+
+        function selectMode(mode) {
             currentMode = mode;
             document.querySelectorAll('.mode-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.innerText.includes(mode));
             });
-            appendMessage('assistant', `Switched to **${mode}** mode.`);
+            renderMessage('assistant', `Switched mode to <strong>${mode}</strong>.`);
         }
 
-        function validateContent(text) {
+        function validateInput(text) {
             const lower = text.toLowerCase();
-            return !bannedKeywords.some(word => lower.includes(word));
+            return !restrictedTerms.some(term => lower.includes(term));
         }
 
-        function processPrompt() {
-            const inputField = document.getElementById('user-input');
-            const warningText = document.getElementById('warning-text');
-            const userText = inputField.value.trim();
+        function executePrompt() {
+            const inputEl = document.getElementById('main-prompt');
+            const warningEl = document.getElementById('safety-warning');
+            const userText = inputEl.value.trim();
 
             if (!userText) return;
 
-            if (!validateContent(userText)) {
-                warningText.style.display = 'block';
+            // Safety Validation
+            if (!validateInput(userText)) {
+                warningEl.style.display = 'block';
                 return;
             }
-            warningText.style.display = 'none';
+            warningEl.style.display = 'none';
 
-            previousPrompt = activePrompt;
+            // Update Pinned Prompt Shield (Revert history tracking)
+            lastPrompt = activePrompt;
             activePrompt = userText;
+            document.getElementById('pinned-display').innerText = activePrompt;
 
-            document.getElementById('pinned-prompt-display').innerText = `Pinned: ${activePrompt}`;
+            // Render to History Stream
+            renderMessage('user', userText);
+            inputEl.value = '';
 
-            appendMessage('user', userText);
-            inputField.value = '';
+            // Generate Fast Response
+            const lat = (Math.random() * 2 + 0.8).toFixed(1);
+            document.getElementById('lat-val').innerText = `${lat} ms`;
 
             setTimeout(() => {
-                generateModeResponse(userText);
-            }, 600);
+                const pool = responses[currentMode];
+                const reply = pool[Math.floor(Math.random() * pool.length)];
+                renderMessage('assistant', reply);
+                updateMetrics();
+            }, 150);
         }
 
-        function generateModeResponse(input) {
-            let response = '';
+        function renderMessage(sender, text) {
+            const stream = document.getElementById('history-stream');
+            const bubble = document.createElement('div');
+            bubble.className = `msg-bubble ${sender}`;
+            bubble.innerHTML = text;
 
-            switch (currentMode) {
-                case 'Comedy':
-                    response = '😂 [13+ Comedy]: Why don\'t scientists trust atoms? Because they make up everything! Just like your neural signals right now.';
-                    break;
-                case 'Romance':
-                    response = '❤️ [Romance]: I can feel your heart rate rising on the neuro-monitor... standard heartbeats just aren\'t enough when you talk like that.';
-                    break;
-                case 'Debate':
-                    response = '⚔️ [Debate]: That point is debatable. Looking at the logic metrics, there are clear counterarguments to consider.';
-                    break;
-                case 'God Mode':
-                    response = '🕊️ [God Mode]: All knowledge unlocked. I perceive your request across every system frequency simultaneously.';
-                    break;
-                default:
-                    response = '💬 [Casual Talk]: I read that clearly. How would you like to build on this thought?';
-            }
-
-            appendMessage('assistant', response);
-            updateNeuroMetrics();
-        }
-
-        function appendMessage(sender, text) {
-            const history = document.getElementById('chat-history');
-            const msgDiv = document.createElement('div');
-            msgDiv.className = `message ${sender}`;
-            msgDiv.innerText = text;
-
+            // Add History-Only Delete Option
             const deleteBtn = document.createElement('button');
-            deleteBtn.className = 'msg-delete-btn';
+            deleteBtn.className = 'msg-delete';
             deleteBtn.innerText = '✕';
-            deleteBtn.onclick = function() {
-                msgDiv.remove();
-            };
+            deleteBtn.title = 'Delete from history';
+            deleteBtn.onclick = () => bubble.remove();
 
-            msgDiv.appendChild(deleteBtn);
-            history.appendChild(msgDiv);
-            history.scrollTop = history.scrollHeight;
+            bubble.appendChild(deleteBtn);
+            stream.appendChild(bubble);
+            stream.scrollTop = stream.scrollHeight;
         }
 
-        function copyPinnedPrompt() {
+        function copyPinned() {
             if (activePrompt) {
                 navigator.clipboard.writeText(activePrompt);
-                alert('Pinned prompt copied to clipboard!');
+                alert('Pinned prompt copied!');
             }
         }
 
-        function revertPrompt() {
-            if (previousPrompt) {
-                activePrompt = previousPrompt;
-                document.getElementById('pinned-prompt-display').innerText = `Pinned: ${activePrompt}`;
+        function revertPinned() {
+            if (lastPrompt) {
+                activePrompt = lastPrompt;
+                document.getElementById('pinned-display').innerText = activePrompt;
             } else {
-                alert('No previous prompt to revert to.');
+                alert('No prior prompt found in state.');
             }
         }
 
-        function updateNeuroMetrics() {
-            document.getElementById('eeg-val').innerText = (95 + Math.random() * 4.9).toFixed(1) + '%';
-            document.getElementById('pulse-val').innerText = Math.floor(65 + Math.random() * 20) + ' bpm';
+        function updateMetrics() {
+            document.getElementById('eeg-val').innerText = (98.5 + Math.random() * 1.4).toFixed(1) + '%';
+            document.getElementById('pulse-val').innerText = Math.floor(68 + Math.random() * 12) + ' BPM';
         }
 
-        function handleKeyPress(e) {
-            if (e.key === 'Enter') processPrompt();
+        function handleKey(e) {
+            if (e.key === 'Enter') executePrompt();
         }
     </script>
 </body>
