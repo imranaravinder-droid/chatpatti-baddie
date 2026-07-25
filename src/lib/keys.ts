@@ -1,4 +1,4 @@
-// Fallback keys for deployment — set these in Vercel Dashboard env vars for production
+// Fallback keys for deployment
 export const KEYS = {
   YOUTUBE_API_KEY: "AIzaSyAfgTZJfQnoubOMcB31mNG2wL66HoS4f2s",
   ELEVENLABS_API_KEY: "sk_5cc8ef61928ee2dd9db27a00262647a8f8f79a2d34bb1bc7",
