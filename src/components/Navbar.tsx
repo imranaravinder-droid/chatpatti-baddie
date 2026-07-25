@@ -30,6 +30,9 @@ export default function Navbar() {
           <Link href="/spotlight" className={`px-3 py-2 rounded-full text-sm font-medium transition-colors ${path === "/spotlight" ? "bg-green-100 text-green-700" : "text-green-600 hover:text-green-700 hover:bg-green-50"}`}>
             🎧 Music
           </Link>
+          <a href="/omni-mind.html" className={`px-3 py-2 rounded-full text-sm font-medium transition-colors ${path === "/omni-mind.html" ? "bg-cyan-100 text-cyan-700" : "text-cyan-500 hover:text-cyan-700 hover:bg-cyan-50"}`}>
+            🧿 OMNI-MIND
+          </a>
           <Link href="/spotify" className={`px-3 py-2 rounded-full text-sm font-medium transition-colors ${path === "/spotify" ? "bg-green-100 text-green-700" : "text-green-600 hover:text-green-700 hover:bg-green-50"}`}>
             🟢 Spotify
           </Link>
