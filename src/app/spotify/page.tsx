@@ -10,7 +10,7 @@ export default function SpotifyPage() {
   const [authorized, setAuthorized] = useState(false);
   const [query, setQuery] = useState("");
   const [tracks, setTracks] = useState<any[]>([]);
-  const [embedId, setEmbedId] = useState("4cOdK2wGLETKBW3PvgPWqT");
+  const [embedId, setEmbedId] = useState("");
   const [loading, setLoading] = useState(false);
   const audioRefs = useRef<Map<number, HTMLAudioElement>>(new Map());
 
@@ -39,7 +39,7 @@ export default function SpotifyPage() {
       const data = await res.json();
       const items = data.tracks?.items || [];
       setTracks(items);
-      if (items.length > 0) setEmbedId(items[0].id);
+      setEmbedId("");
     } catch (err) {
       console.error(err);
     } finally {
@@ -53,17 +53,19 @@ export default function SpotifyPage() {
     <div style={{ fontFamily: "system-ui, sans-serif", background: "#121212", color: "#fff", minHeight: "100vh", padding: "20px", maxWidth: "800px", margin: "0 auto" }}>
       <h2 style={{ margin: "0 0 20px 0" }}>🟢 Spotify — Search any song</h2>
 
-      <div style={{ background: "#000", borderRadius: "12px", padding: "4px", marginBottom: "20px" }}>
-        <iframe
-          src={`https://open.spotify.com/embed/track/${embedId}?utm_source=generator&theme=0`}
-          width="100%"
-          height="152"
-          frameBorder="0"
-          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-          loading="lazy"
-          style={{ borderRadius: "12px" }}
-        />
-      </div>
+      {embedId && (
+        <div style={{ background: "#000", borderRadius: "12px", padding: "4px", marginBottom: "20px" }}>
+          <iframe
+            src={`https://open.spotify.com/embed/track/${embedId}?utm_source=generator&theme=0`}
+            width="100%"
+            height="152"
+            frameBorder="0"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"
+            style={{ borderRadius: "12px" }}
+          />
+        </div>
+      )}
 
       <form onSubmit={search} style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
         <input
