@@ -67,22 +67,27 @@ export default function YoutubePage() {
         </button>
       </form>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "12px" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
         {videos.map((v) => (
           <div
             key={v.id.videoId}
             onClick={() => setEmbedId(v.id.videoId)}
             style={{
               background: embedId === v.id.videoId ? "#1a1a1a" : "#181818",
-              borderRadius: "8px",
-              padding: "8px",
+              borderRadius: "6px",
+              padding: "10px 14px",
               cursor: "pointer",
-              border: embedId === v.id.videoId ? "2px solid #ff0000" : "2px solid transparent",
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+              border: embedId === v.id.videoId ? "1px solid #ff0000" : "1px solid transparent",
             }}
           >
-            <img src={v.snippet?.thumbnails?.medium?.url} alt={v.snippet?.title} style={{ width: "100%", aspectRatio: "16/9", objectFit: "cover", borderRadius: "4px" }} />
-            <div style={{ fontWeight: 600, fontSize: "13px", marginTop: "6px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{v.snippet?.title}</div>
-            <div style={{ fontSize: "11px", color: "#aaa" }}>{v.snippet?.channelTitle}</div>
+            <span style={{ color: "#ff0000", fontSize: "12px", minWidth: "16px" }}>{videos.indexOf(v) + 1}</span>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontWeight: 600, fontSize: "14px" }}>{v.snippet?.title}</div>
+              <div style={{ fontSize: "12px", color: "#aaa" }}>{v.snippet?.channelTitle}</div>
+            </div>
           </div>
         ))}
       </div>
