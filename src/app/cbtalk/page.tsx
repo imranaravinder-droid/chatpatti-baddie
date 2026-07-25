@@ -15,11 +15,13 @@ export default function CBTalkPage() {
   const [voice, setVoice] = useState(VOICES[0].id);
   const [loading, setLoading] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [charCost, setCharCost] = useState<string | null>(null);
 
   const generate = async () => {
     if (!text.trim()) return;
     setLoading(true);
     setAudioUrl(null);
+    setCharCost(null);
     try {
       const res = await fetch("/api/elevenlabs", {
         method: "POST",
@@ -31,6 +33,7 @@ export default function CBTalkPage() {
         alert(err.error || "Generation failed");
         return;
       }
+      setCharCost(res.headers.get("X-Character-Cost"));
       const blob = await res.blob();
       setAudioUrl(URL.createObjectURL(blob));
     } catch {
@@ -79,7 +82,10 @@ export default function CBTalkPage() {
       {audioUrl && (
         <div style={{ marginTop: "20px", background: "#151c2c", border: "1px solid #1e293b", borderRadius: "12px", padding: "16px" }}>
           <audio controls src={audioUrl} style={{ width: "100%" }} autoPlay />
-          <p style={{ color: "#34d399", fontSize: "13px", marginTop: "8px" }}>✅ Generated — right-click the player to download</p>
+          <div style={{ display: "flex", justifyContent: "space-between", marginTop: "8px" }}>
+            <span style={{ color: "#34d399", fontSize: "13px" }}>✅ Generated</span>
+            {charCost && <span style={{ color: "#94a3b8", fontSize: "12px" }}>⚡ {charCost} chars used</span>}
+          </div>
         </div>
       )}
 

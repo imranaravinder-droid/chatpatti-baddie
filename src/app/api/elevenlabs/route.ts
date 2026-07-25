@@ -1,13 +1,16 @@
+import { ElevenLabsClient } from "@elevenlabs/elevenlabs-js";
 import { NextRequest, NextResponse } from "next/server";
 
-const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
-const DEFAULT_VOICE_ID = "21m00Tcm4TlvDq8ikWAM"; // Rachel
+const API_KEY = process.env.ELEVENLABS_API_KEY;
+const DEFAULT_VOICE_ID = "21m00Tcm4TlvDq8ikWAM";
+
+const client = new ElevenLabsClient({ apiKey: API_KEY || "" });
 
 export async function POST(req: NextRequest) {
   try {
     const { text, voice_id, stability, similarity_boost, style } = await req.json();
 
-    if (!ELEVENLABS_API_KEY) {
+    if (!API_KEY) {
       return NextResponse.json({ error: "ELEVENLABS_API_KEY not configured" }, { status: 500 });
     }
 
@@ -17,41 +20,33 @@ export async function POST(req: NextRequest) {
 
     const voiceId = voice_id || DEFAULT_VOICE_ID;
 
-    const response = await fetch(
-      `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,
-      {
-        method: "POST",
-        headers: {
-          "Accept": "audio/mpeg",
-          "Content-Type": "application/json",
-          "xi-api-key": ELEVENLABS_API_KEY,
+    const { data, rawResponse } = await client.textToSpeech
+      .convert(voiceId, {
+        text,
+        modelId: "eleven_multilingual_v2",
+        outputFormat: "mp3_44100_128",
+        voiceSettings: {
+          stability: stability ?? 0.35,
+          similarityBoost: similarity_boost ?? 0.85,
+          style: style ?? 0.40,
+          useSpeakerBoost: true,
         },
-        body: JSON.stringify({
-          text,
-          model_id: "eleven_multilingual_v2",
-          output_format: "mp3_44100_128",
-          voice_settings: {
-            stability: stability ?? 0.35,
-            similarity_boost: similarity_boost ?? 0.85,
-            style: style ?? 0.40,
-            use_speaker_boost: true,
-          },
-        }),
-      }
-    );
+      })
+      .withRawResponse();
 
-    if (!response.ok) {
-      const err = await response.text();
-      console.error("ElevenLabs API error:", err);
-      return NextResponse.json({ error: "ElevenLabs API error" }, { status: response.status });
-    }
+    const charCost = rawResponse.headers.get("character-cost");
+    const requestId = rawResponse.headers.get("request-id");
+    const traceId = rawResponse.headers.get("x-trace-id");
 
-    const audioBuffer = await response.arrayBuffer();
+    console.log(`[ElevenLabs] char=${charCost} req=${requestId} trace=${traceId}`);
+
+    const audioBuffer = await data.arrayBuffer();
 
     return new NextResponse(audioBuffer, {
       headers: {
         "Content-Type": "audio/mpeg",
         "Content-Disposition": 'attachment; filename="cb_talk.mp3"',
+        "X-Character-Cost": charCost || "",
       },
     });
   } catch (error: any) {
