@@ -17,20 +17,28 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "CHATPATTIE BADDIE - 22+ AI Agents",
+    default: "CHATPATTIE BADDIE - 22+ AI Agents | Free AI Chat, Images & More",
     template: "%s | CHATPATTIE BADDIE",
   },
   description:
-    "CHATPATTIE BADDIE — 22+ AI specialists. Chat, study, create images, get advice. Free, private, 24 Indian languages.",
+    "CHATPATTIE BADDIE — 22+ AI specialists. Chat, study, create images, get advice, browse Spotify, Pinterest & Instagram. Free, private, 24 Indian languages.",
   keywords: [
     "Chatpattie Baddie",
-    "AI chat free",
+    "free AI chat",
     "AI image generator",
     "AI study help",
     "AI Hindi",
     "AI Indian languages",
     "free AI assistant",
     "AI life coach",
+    "AI voice generator",
+    "Spotify music search",
+    "Pinterest pins",
+    "Instagram media",
+    "OMNI-MIND AI",
+    "CB Talk",
+    "online AI free",
+    "generative AI India",
   ],
   authors: [{ name: "Chatpatti Baddie" }],
   creator: "Chatpatti Baddie",
@@ -69,9 +77,6 @@ export const metadata: Metadata = {
       "CHATPATTIE BADDIE — 22+ AI agents. Free, private, 24 Indian languages.",
     images: ["/og-image.png"],
   },
-  other: {
-    "pinterest-site-verification": "92b166f17948b54f89daa16667a5577f",
-  },
   manifest: "/manifest.json",
   icons: {
     apple: "/icons/icon-192.png",
@@ -85,12 +90,6 @@ export const metadata: Metadata = {
         url: "/icons/icon-192.png",
       },
     ],
-  },
-  other: {
-    "mobile-web-app-capable": "yes",
-    "apple-mobile-web-app-capable": "yes",
-    "apple-mobile-web-app-status-bar-style": "default",
-    "apple-mobile-web-app-title": "Baddie",
   },
   category: "wellness",
   metadataBase: new URL("https://chatpatti-baddie.vercel.app"),
@@ -114,6 +113,11 @@ export default function RootLayout({
         <meta httpEquiv="Pragma" content="no-cache" />
         <meta httpEquiv="Expires" content="0" />
         <meta name="google-site-verification" content="UaKQBG922ubp_DUKHcu0q13BgnaSgUR0Mk1o56e04FQ" />
+        <meta name="pinterest-site-verification" content="92b166f17948b54f89daa16667a5577f" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="CHATPATTIE BADDIE" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -163,11 +167,19 @@ export default function RootLayout({
             <span className="text-gray-300">|</span>
             <a href="/chat" className="text-gray-400 hover:text-pink-500">Chat</a>
             <span className="text-gray-300">|</span>
-            <a href="/askm" className="text-gray-400 hover:text-pink-500">AskM 🎨</a>
+            <a href="/askm" className="text-gray-400 hover:text-pink-500">AskM</a>
             <span className="text-gray-300">|</span>
-            <a href="/askm" className="text-gray-400 hover:text-pink-500">AskM 🎨</a>
+            <a href="/cbtalk" className="text-gray-400 hover:text-pink-500">CB Talk</a>
             <span className="text-gray-300">|</span>
-            <a href="/dashboard" className="text-gray-400 hover:text-pink-500">Drama Log</a>
+            <a href="/spotify" className="text-gray-400 hover:text-pink-500">Spotify</a>
+            <span className="text-gray-300">|</span>
+            <a href="/pinterest" className="text-gray-400 hover:text-pink-500">Pinterest</a>
+            <span className="text-gray-300">|</span>
+            <a href="/instagram" className="text-gray-400 hover:text-pink-500">Instagram</a>
+            <span className="text-gray-300">|</span>
+            <a href="/dashboard" className="text-gray-400 hover:text-pink-500">Log</a>
+            <span className="text-gray-300">|</span>
+            <a href="/privacy" className="text-gray-400 hover:text-pink-500">Privacy</a>
           </div>
         </footer>
       </body>
