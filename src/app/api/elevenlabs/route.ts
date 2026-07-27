@@ -41,7 +41,8 @@ export async function POST(req: NextRequest) {
 
     console.log(`[ElevenLabs] char=${charCost} req=${requestId} trace=${traceId}`);
 
-    const audioBuffer = await data.arrayBuffer();
+    const blob = await new Response(data).blob();
+    const audioBuffer = await blob.arrayBuffer();
 
     return new NextResponse(audioBuffer, {
       headers: {
