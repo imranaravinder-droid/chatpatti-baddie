@@ -1,9 +1,13 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useRequireAuth } from "@/lib/useRequireAuth";
 
 export default function PremiumPage() {
+  const authorized = useRequireAuth();
   const router = useRouter();
+
+  if (!authorized) return null;
   return (
     <div className="p-4 max-w-md mx-auto text-center">
       <div className="mb-6">

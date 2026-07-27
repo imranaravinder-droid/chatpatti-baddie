@@ -1,7 +1,10 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
+import { useRequireAuth } from "@/lib/useRequireAuth";
 
 export default function InstantAnonymousChat() {
+  const authorized = useRequireAuth();
+  if (!authorized) return null;
   const [messages, setMessages] = useState<{ role: string; content: string }[]>([]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);

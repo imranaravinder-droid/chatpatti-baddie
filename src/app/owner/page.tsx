@@ -2,9 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { Users, MessageSquare, TrendingUp, UserPlus, Loader2 } from "lucide-react";
+import { useRequireAuth } from "@/lib/useRequireAuth";
 
 export default function OwnerDashboard() {
+  const authorized = useRequireAuth();
   const [stats, setStats] = useState<any>(null);
+
+  if (!authorized) return null;
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

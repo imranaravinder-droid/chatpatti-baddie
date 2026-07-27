@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useRequireAuth } from "@/lib/useRequireAuth";
 
 const script = `
 Namaste! Aapka swagat hai CHATPATTIE BADDIE mein.
@@ -19,7 +20,10 @@ const scripts = [
 ];
 
 export default function CallerTunePage() {
+  const authorized = useRequireAuth();
   const [playing, setPlaying] = useState<string | null>(null);
+
+  if (!authorized) return null;
   const [selected, setSelected] = useState(scripts[0]);
 
   const handlePlay = (text: string) => {

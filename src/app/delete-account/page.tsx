@@ -2,9 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useRequireAuth } from "@/lib/useRequireAuth";
 
 export default function DeleteAccountPage() {
+  const authorized = useRequireAuth();
   const router = useRouter();
+
+  if (!authorized) return null;
   const [email, setEmail] = useState("");
   const [confirm, setConfirm] = useState("");
   const [loading, setLoading] = useState(false);

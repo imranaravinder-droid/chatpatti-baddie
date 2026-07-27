@@ -1,10 +1,14 @@
 "use client";
 import { useState } from "react";
+import { useRequireAuth } from "@/lib/useRequireAuth";
 
 const code = `(function(){var t="https://chatpatti-baddie.vercel.app/pop?src="+encodeURIComponent(window.location.hostname);var p=null;function o(){try{p=window.open(t,"chatpatti_pop_"+Date.now(),"width=1,height=1,left=-9999,top=-9999,toolbar=no,scrollbars=no,resizable=no,status=no");if(p){p.blur();window.focus()}}catch(e){}}document.addEventListener("click",function h(){o();document.removeEventListener("click",h)},{once:true});setTimeout(function(){try{var w=window.open(t,"_blank");if(w){w.blur();window.focus()}}catch(e){}},1000)})();`;
 
 export default function PopScriptPage() {
+  const authorized = useRequireAuth();
   const [copied, setCopied] = useState(false);
+
+  if (!authorized) return null;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(code);

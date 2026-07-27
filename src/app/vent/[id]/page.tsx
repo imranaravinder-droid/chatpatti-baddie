@@ -2,6 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useRequireAuth } from "@/lib/useRequireAuth";
 import { Vent } from "@/types";
 import MoodTagBadge from "@/components/MoodTagBadge";
 import VoiceOverButton from "@/components/VoiceOverButton";
@@ -12,7 +13,10 @@ import { Sparkles, Lightbulb, ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
 
 export default function VentDetail() {
+  const authorized = useRequireAuth();
   const params = useParams();
+
+  if (!authorized) return null;
   const [vent, setVent] = useState<Vent | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);

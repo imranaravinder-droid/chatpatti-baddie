@@ -1,9 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useRequireAuth } from "@/lib/useRequireAuth";
 
 const slotPrice = 2;
 
 export default function PopPage() {
+  const authorized = useRequireAuth();
+  if (!authorized) return null;
   const [source, setSource] = useState("");
   const [timeOnPage, setTimeOnPage] = useState(0);
   const [clicks, setClicks] = useState(0);
