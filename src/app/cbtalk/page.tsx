@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const VOICES = [
   { id: "21m00Tcm4TlvDq8ikWAM", name: "Rachel (Soft)" },
@@ -11,11 +12,21 @@ const VOICES = [
 ];
 
 export default function CBTalkPage() {
+  const router = useRouter();
+  const [authorized, setAuthorized] = useState(false);
   const [text, setText] = useState("");
   const [voice, setVoice] = useState(VOICES[0].id);
   const [loading, setLoading] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [charCost, setCharCost] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!localStorage.getItem("baddie_user_email")) {
+      router.replace("/");
+    } else {
+      setAuthorized(true);
+    }
+  }, [router]);
 
   const generate = async () => {
     if (!text.trim()) return;
@@ -43,10 +54,12 @@ export default function CBTalkPage() {
     }
   };
 
+  if (!authorized) return null;
+
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", background: "#0b0f19", color: "#f8fafc", minHeight: "100vh", padding: "30px", maxWidth: "700px", margin: "0 auto" }}>
       <h2 style={{ margin: "0 0 8px 0", fontSize: "1.6rem" }}>🎙️ CB TALK <span style={{ color: "#38bdf8" }}>FREE</span></h2>
-      <p style={{ color: "#94a3b8", margin: "0 0 24px 0" }}>Type anything — hear it in a lifelike voice. Free, no signup needed.</p>
+      <p style={{ color: "#94a3b8", margin: "0 0 24px 0" }}>Type anything — hear it in a lifelike voice. Free for signed-in users.</p>
 
       <div style={{ display: "flex", flexDirection: "column", gap: "14px", background: "#151c2c", border: "1px solid #1e293b", borderRadius: "16px", padding: "24px" }}>
         <textarea
