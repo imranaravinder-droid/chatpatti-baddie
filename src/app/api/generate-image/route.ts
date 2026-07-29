@@ -36,8 +36,8 @@ export async function POST(req: NextRequest) {
     if (!imageBytes) return NextResponse.json({ error: "No image generated" }, { status: 500 });
 
     return NextResponse.json({ image: imageBytes, aspectRatio: ratio });
-  } catch (err) {
+  } catch (err: any) {
     console.error("Image generation error:", err);
-    return NextResponse.json({ error: "Image generation failed" }, { status: 500 });
+    return NextResponse.json({ error: err.message || "Image generation failed", detail: String(err) }, { status: 500 });
   }
 }

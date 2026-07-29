@@ -9,7 +9,7 @@ async function getSpotifyToken(): Promise<string> {
     throw new Error("Missing Spotify credentials");
   }
 
-  const authHeader = btoa(`${client_id}:${client_secret}`);
+  const authHeader = Buffer.from(`${client_id}:${client_secret}`).toString("base64");
 
   const response = await fetch("https://accounts.spotify.com/api/token", {
     method: "POST",
