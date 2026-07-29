@@ -29,7 +29,7 @@ export async function analyzeVent(
 
   const userPrompt = `${systemPrompt}
 Lang:${lang} Mode:${mode} User:"${content}"
-Output JSON: {"moodTag":"Stressed|Glowing|Down-Bad|Feral|Unbothered|In My Feels|Healing|Chaotic|Divine","realTalk":"reply","prompts":["q1","q2"],"aiText":"full response"}`;
+Output JSON: {"moodTag":"Stressed|Glowing|Down-Bad|Feral|Unbothered|In My Feels|Healing|Chaotic|Divine","realTalk":"reply","aiText":"full response"}`;
 
   const messages: { role: "system" | "user" | "assistant"; content: string }[] = [
     { role: "system", content: "Output JSON only." },
@@ -60,7 +60,7 @@ Output JSON: {"moodTag":"Stressed|Glowing|Down-Bad|Feral|Unbothered|In My Feels|
     moodTag: parsed.moodTag || "Unbothered",
     moodColor: moodColors[parsed.moodTag] || "#6BCB77",
     realTalk: parsed.realTalk || "Thinking...",
-    prompts: parsed.prompts || ["What else is on your mind?"],
+    prompts: parsed.prompts || [],
     aiText: parsed.aiText || "",
   };
 }

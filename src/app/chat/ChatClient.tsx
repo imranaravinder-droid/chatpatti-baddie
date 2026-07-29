@@ -130,11 +130,7 @@ export default function ChatPage() {
               📋 Copy
             </button>
           </div>
-          <div className="mt-1.5 flex gap-1.5">
-            <button onClick={() => { navigator.clipboard.writeText(refLink); alert("Link copied!"); }} className="flex-1 text-center text-[10px] py-1.5 bg-green-500 text-white rounded-full font-medium hover:bg-green-600 transition-colors">
-              📋 Copy Link
-            </button>
-          </div>
+
         </div>
 
         <div className="flex items-center justify-between mb-4">
@@ -216,13 +212,7 @@ export default function ChatPage() {
                    <ins className="adsbygoogle" style={{ display: "inline-block", width: "728px", height: "90px" }} data-ad-client="ca-pub-4486222454241909" data-ad-slot="9286475415" />
                 </div>
               )}
-              {showShare && lastReply && (
-                <div className="flex justify-end gap-1.5">
-                  <button onClick={() => { navigator.clipboard.writeText(refLink); alert("Link copied!"); }} className="text-[10px] px-2.5 py-1 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-colors">
-                    📋 Copy Link
-                  </button>
-                </div>
-              )}
+
               {error && <p className="text-xs text-red-400 text-center">{error}</p>}
             </div>
           </div>
