@@ -6,10 +6,10 @@ async function getSpotifyToken(): Promise<string> {
   const client_secret = process.env.SPOTIFY_CLIENT_SECRET || KEYS.SPOTIFY_CLIENT_SECRET;
 
   if (!client_id || !client_secret) {
-    throw new Error("SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET must be set");
+    throw new Error("Missing Spotify credentials");
   }
 
-  const authHeader = Buffer.from(`${client_id}:${client_secret}`).toString("base64");
+  const authHeader = btoa(`${client_id}:${client_secret}`);
 
   const response = await fetch("https://accounts.spotify.com/api/token", {
     method: "POST",
@@ -21,6 +21,7 @@ async function getSpotifyToken(): Promise<string> {
   });
 
   const data = await response.json();
+  if (!data.access_token) throw new Error(`Spotify token error: ${JSON.stringify(data)}`);
   return data.access_token;
 }
 
