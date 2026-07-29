@@ -2,17 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
 import { KEYS } from "@/lib/keys";
 
-const RATIO_MAP: Record<string, string> = {
-  "16:9": "16:9",
-  "9:16": "9:16",
-  "1:1": "1:1",
-  "3:4": "3:4",
-  "4:3": "4:3",
-};
-
 export async function POST(req: NextRequest) {
   try {
-    const { prompt, aspectRatio = "16:9" } = await req.json();
+    const { prompt } = await req.json();
     if (!prompt) return NextResponse.json({ error: "Prompt required" }, { status: 400 });
 
     const apiKey = process.env.GEMINI_API_KEY || KEYS.GEMINI_API_KEY;
@@ -20,22 +12,18 @@ export async function POST(req: NextRequest) {
 
     const ai = new GoogleGenAI({ apiKey });
 
-    const ratio = RATIO_MAP[aspectRatio] || "16:9";
-
-    const response = await ai.models.generateImages({
-      model: "imagen-3.0-generate-002",
-      prompt,
+    const response = await ai.models.generateContent({
+      model: "gemini-2.0-flash-exp-image-generation",
+      contents: prompt,
       config: {
-        numberOfImages: 1,
-        outputMimeType: "image/jpeg",
-        aspectRatio: ratio,
+        responseModalities: ["Text", "Image"],
       },
     });
 
-    const imageBytes = response.generatedImages?.[0]?.image?.imageBytes;
-    if (!imageBytes) return NextResponse.json({ error: "No image generated" }, { status: 500 });
+    const part = response.candidates?.[0]?.content?.parts?.find((p: any) => p.inlineData);
+    if (!part?.inlineData?.data) return NextResponse.json({ error: "No image generated" }, { status: 500 });
 
-    return NextResponse.json({ image: imageBytes, aspectRatio: ratio });
+    return NextResponse.json({ image: part.inlineData.data, mimeType: part.inlineData.mimeType || "image/png" });
   } catch (err: any) {
     console.error("Image generation error:", err);
     return NextResponse.json({ error: err.message || "Image generation failed", detail: String(err) }, { status: 500 });
