@@ -8,4 +8,7 @@ export const KEYS = {
   SPOTIFY_CLIENT_SECRET: "",
   ANTHROPIC_API_KEY: "",
   DATABASE_URL: "",
+  INSTAGRAM_CLIENT_ID: "1007487085253154",
+  INSTAGRAM_CLIENT_SECRET: "f67b65307cb8dee2d1cd36bf65fe0b2b",
+  INSTAGRAM_REDIRECT_URI: "https://cpbaddie.vercel.app/api/instagram/callback",
 };

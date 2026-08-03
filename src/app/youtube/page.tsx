@@ -1,23 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useRequireAuth } from "@/lib/useRequireAuth";
 
 export default function YoutubePage() {
-  const router = useRouter();
-  const [authorized, setAuthorized] = useState(false);
+  const authorized = useRequireAuth();
   const [query, setQuery] = useState("");
   const [videos, setVideos] = useState<any[]>([]);
   const [embedId, setEmbedId] = useState("");
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (!localStorage.getItem("baddie_user_email")) {
-      router.replace("/");
-    } else {
-      setAuthorized(true);
-    }
-  }, [router]);
 
   const search = async (e?: React.FormEvent) => {
     e?.preventDefault();

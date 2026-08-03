@@ -1,8 +1,8 @@
 import "../globals.css";
 
 export const metadata = {
-  title: "Chatpattie Baddie — Free AI in 24 Languages",
-  description: "22+ AI specialists — Study, Space, Music, Life Coach, CB Lens. Free, private, speaks 24 Indian languages.",
+  title: "CP Baddie ? Free AI in 24 Languages",
+  description: "22+ AI specialists ? Study, Space, Music, Life Coach, CB Lens. Free, private, speaks 24 Indian languages.",
   robots: "index, follow",
 };
 

@@ -1,58 +1,46 @@
-import { ElevenLabsClient } from "@elevenlabs/elevenlabs-js";
 import { NextRequest, NextResponse } from "next/server";
-import { KEYS } from "@/lib/keys";
-
-const API_KEY = process.env.ELEVENLABS_API_KEY || KEYS.ELEVENLABS_API_KEY;
-const DEFAULT_VOICE_ID = "21m00Tcm4TlvDq8ikWAM";
-
-const client = new ElevenLabsClient({ apiKey: API_KEY || "" });
 
 export async function POST(req: NextRequest) {
   try {
     const { text, voice_id, stability, similarity_boost, style } = await req.json();
+    const apiKey = process.env.ELEVENLABS_API_KEY;
+    if (!apiKey) return NextResponse.json({ error: "API key missing" }, { status: 500 });
+    if (!text?.trim()) return NextResponse.json({ error: "Text required" }, { status: 400 });
 
-    if (!API_KEY) {
-      return NextResponse.json({ error: "ELEVENLABS_API_KEY not configured" }, { status: 500 });
-    }
-
-    if (!text || !text.trim()) {
-      return NextResponse.json({ error: "Text is required" }, { status: 400 });
-    }
-
-    const voiceId = voice_id || DEFAULT_VOICE_ID;
-
-    const { data, rawResponse } = await client.textToSpeech
-      .convert(voiceId, {
-        text,
-        modelId: "eleven_multilingual_v2",
-        outputFormat: "mp3_44100_128",
-        voiceSettings: {
-          stability: stability ?? 0.35,
-          similarityBoost: similarity_boost ?? 0.85,
-          style: style ?? 0.40,
-          useSpeakerBoost: true,
+    const res = await fetch(
+      `https://api.elevenlabs.io/v1/text-to-speech/${voice_id || "pNInz6obpgDQGcFmaJgB"}?output_format=mp3_44100_128`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "xi-api-key": apiKey,
         },
-      })
-      .withRawResponse();
+        body: JSON.stringify({
+          model_id: "eleven_multilingual_v2",
+          text,
+          voice_settings: {
+            stability: stability ?? 0.35,
+            similarity_boost: similarity_boost ?? 0.8,
+            style: style ?? 0.25,
+            use_speaker_boost: true,
+          },
+        }),
+      }
+    );
 
-    const charCost = rawResponse.headers.get("character-cost");
-    const requestId = rawResponse.headers.get("request-id");
-    const traceId = rawResponse.headers.get("x-trace-id");
+    if (!res.ok) {
+      const err = await res.text();
+      return NextResponse.json({ error: err }, { status: 502 });
+    }
 
-    console.log(`[ElevenLabs] char=${charCost} req=${requestId} trace=${traceId}`);
-
-    const blob = await new Response(data).blob();
-    const audioBuffer = await blob.arrayBuffer();
-
+    const audioBuffer = await res.arrayBuffer();
     return new NextResponse(audioBuffer, {
       headers: {
         "Content-Type": "audio/mpeg",
-        "Content-Disposition": 'attachment; filename="cb_talk.mp3"',
-        "X-Character-Cost": charCost || "",
+        "Content-Disposition": 'attachment; filename="voice.mp3"',
       },
     });
-  } catch (error: any) {
-    console.error("ElevenLabs route error:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }

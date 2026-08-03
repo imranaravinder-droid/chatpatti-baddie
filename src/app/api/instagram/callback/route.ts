@@ -1,113 +1,62 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { KEYS } from "@/lib/keys";
 
 export async function GET(req: NextRequest) {
+  const clientId = process.env.INSTAGRAM_CLIENT_ID || KEYS.INSTAGRAM_CLIENT_ID;
+  const clientSecret = process.env.INSTAGRAM_CLIENT_SECRET || KEYS.INSTAGRAM_CLIENT_SECRET;
+  const redirectUri = process.env.INSTAGRAM_REDIRECT_URI || KEYS.INSTAGRAM_REDIRECT_URI;
   const { searchParams } = new URL(req.url);
-  const authorizationCode = searchParams.get("code");
+  const code = searchParams.get("code");
+  const state = searchParams.get("state");
   const error = searchParams.get("error");
+  const errorReason = searchParams.get("error_reason");
 
-  if (error) {
-    return new Response(`<html><body><h2>Access Denied</h2><p>You denied the authorization request.</p><a href="/instagram">Try again</a></body></html>`, {
-      headers: { "Content-Type": "text/html" },
-    });
+  if (error || errorReason) {
+    return NextResponse.redirect(
+      `https://cpbaddie.vercel.app/instagram?error=${encodeURIComponent(errorReason || error || "Access denied")}`
+    );
   }
 
-  if (!authorizationCode) {
-    return new Response(`<html><body><h2>Authorization failed</h2><p>No code received from Instagram.</p><a href="/instagram">Try again</a></body></html>`, {
-      headers: { "Content-Type": "text/html" },
-    });
+  const savedState = req.cookies.get("ig_oauth_state")?.value;
+  if (!code || !state || state !== savedState) {
+    return NextResponse.redirect(
+      `https://cpbaddie.vercel.app/instagram?error=${encodeURIComponent("State mismatch. Please try again.")}`
+    );
   }
-
-  const CLIENT_ID = process.env.INSTAGRAM_CLIENT_ID;
-  const CLIENT_SECRET = process.env.INSTAGRAM_CLIENT_SECRET;
-
-  if (!CLIENT_ID || !CLIENT_SECRET) {
-    return new Response(`<html><body><h2>Server config error</h2><p>Instagram credentials not set.</p></body></html>`, {
-      headers: { "Content-Type": "text/html" },
-    });
-  }
-
-  const baseUrl = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : "http://localhost:3000";
-
-  const REDIRECT_URI = `${baseUrl}/api/instagram/callback`;
 
   try {
-    // Step 2: Exchange code for short-lived access token
-    const tokenRes = await fetch("https://api.instagram.com/oauth/access_token", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({
-        client_id: CLIENT_ID,
-        client_secret: CLIENT_SECRET,
-        grant_type: "authorization_code",
-        redirect_uri: REDIRECT_URI,
-        code: authorizationCode,
-      }).toString(),
-    });
-
+    const tokenRes = await fetch(
+      `https://graph.facebook.com/v23.0/oauth/access_token?client_id=${clientId}` +
+        `&client_secret=${clientSecret}` +
+        `&redirect_uri=${encodeURIComponent(redirectUri)}` +
+        `&code=${encodeURIComponent(code)}`
+    );
     const tokenData = await tokenRes.json();
-
-    if (!tokenRes.ok) {
-      throw new Error(tokenData.error_message || tokenData.error || "Token exchange failed");
-    }
-
-    // Response is wrapped in data[0]
-    const shortLivedToken = tokenData.data?.[0]?.access_token || tokenData.access_token;
-    const userId = tokenData.data?.[0]?.user_id || tokenData.user_id;
-
-    if (!shortLivedToken) {
-      throw new Error("No access token received");
-    }
-
-    // Step 3: Exchange short-lived token for long-lived token (60 days)
-    let longLivedToken = shortLivedToken;
-    try {
-      const longTokenRes = await fetch(
-        `https://graph.instagram.com/access_token?grant_type=ig_exchange_token&client_secret=${CLIENT_SECRET}&access_token=${shortLivedToken}`
+    if (!tokenData.access_token) {
+      return NextResponse.redirect(
+        `https://cpbaddie.vercel.app/instagram?error=${encodeURIComponent(tokenData.error?.message || "Token exchange failed")}`
       );
-      const longTokenData = await longTokenRes.json();
-      if (longTokenData.access_token) {
-        longLivedToken = longTokenData.access_token;
-      }
-    } catch {}
+    }
+    const accessToken = tokenData.access_token;
 
-    // Fetch user media with the long-lived token
-    const mediaRes = await fetch(
-      `https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,permalink,timestamp&access_token=${longLivedToken}`
+    const profileRes = await fetch(
+      `https://graph.instagram.com/me?fields=id,username,account_type,media_count&access_token=${accessToken}`
     );
+    const profile = await profileRes.json();
+    if (!profile.id) {
+      return NextResponse.redirect(
+        `https://cpbaddie.vercel.app/instagram?error=${encodeURIComponent("Could not fetch profile. Is the account a public Professional account?")}`
+      );
+    }
 
-    const mediaData = await mediaRes.json();
-
-    return new Response(
-      `<!DOCTYPE html>
-<html><head><title>Instagram Connected</title>
-<style>
-body { font-family: system-ui; background: #0b0f19; color: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-.card { background: #151c2c; border: 1px solid #1e293b; border-radius: 20px; padding: 40px; max-width: 500px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
-h1 { background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.btn { display: inline-block; margin-top: 20px; padding: 12px 32px; background: #6366f1; color: #fff; text-decoration: none; border-radius: 30px; font-weight: bold; font-size: 14px; }
-</style></head>
-<body>
-<div class="card">
-  <h1>✅ Instagram Connected!</h1>
-  <p style="color:#94a3b8">Your Instagram Business account is linked to CHATPATTIE BADDIE.</p>
-  <p>Fetched ${mediaData.data?.length || 0} posts.</p>
-  <a href="/instagram" class="btn">View Posts</a>
-  <script>
-    localStorage.setItem("instagram_token", ${JSON.stringify(longLivedToken)});
-    localStorage.setItem("instagram_user_id", ${JSON.stringify(userId)});
-    localStorage.setItem("instagram_posts", ${JSON.stringify(JSON.stringify(mediaData.data || []))});
-  </script>
-</div>
-</body></html>`,
-      { headers: { "Content-Type": "text/html" } }
-    );
-  } catch (error: any) {
-    console.error("Instagram callback error:", error);
-    return new Response(
-      `<html><body><h2>Error</h2><p>${error.message}</p><a href="/instagram">Try again</a></body></html>`,
-      { headers: { "Content-Type": "text/html" } }
+    const res = NextResponse.redirect(`https://cpbaddie.vercel.app/instagram?connected=1`);
+    res.cookies.set("ig_token", accessToken, { httpOnly: true, sameSite: "lax", maxAge: 60 * 60 * 24 * 60 });
+    res.cookies.set("ig_username", profile.username || "", { httpOnly: true, sameSite: "lax", maxAge: 60 * 60 * 24 * 60 });
+    res.cookies.delete("ig_oauth_state");
+    return res;
+  } catch (err: any) {
+    return NextResponse.redirect(
+      `https://cpbaddie.vercel.app/instagram?error=${encodeURIComponent(err.message || "Unexpected error")}`
     );
   }
 }

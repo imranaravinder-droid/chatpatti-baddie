@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/api/"],
       },
     ],
-    sitemap: "https://chatpatti-baddie.vercel.app/sitemap.xml",
+    sitemap: "https://cpbaddie.vercel.app/sitemap.xml",
   };
 }

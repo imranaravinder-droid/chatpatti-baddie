@@ -9,6 +9,42 @@ export default function InstantAnonymousChat() {
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const speakText = async (text: string) => {
+    try {
+      let ok = false;
+      try {
+        const res = await fetch("/api/edge-tts", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: text.substring(0, 500) }),
+        });
+        if (res.ok) {
+          const blob = await res.blob();
+          if (blob.size > 0) {
+            const url = URL.createObjectURL(blob);
+            if (audioRef.current) { audioRef.current.pause(); audioRef.current = null; }
+            const audio = new Audio(url);
+            audioRef.current = audio;
+            audio.onended = () => URL.revokeObjectURL(url);
+            await audio.play();
+            ok = true;
+          }
+        }
+      } catch { ok = false; }
+      if (!ok) {
+        const synth = (window as any).speechSynthesis;
+        if (synth) {
+          synth.cancel();
+          const u = new SpeechSynthesisUtterance(text.substring(0, 500));
+          u.rate = 1.0;
+          u.pitch = 1.05;
+          synth.speak(u);
+        }
+      }
+    } catch { /* ignore TTS failures */ }
+  };
 
   useEffect(() => {
     let guestId = localStorage.getItem("guest_session_id");
@@ -66,7 +102,7 @@ export default function InstantAnonymousChat() {
   return (
     <div style={{ maxWidth: "750px", margin: "30px auto", height: "88vh", display: "flex", flexDirection: "column", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", border: "1px solid #e2e8f0", borderRadius: "12px", boxShadow: "0 4px 12px rgba(0,0,0,0.05)" }}>
       <header style={{ padding: "16px 20px", borderBottom: "1px solid #e2e8f0", display: "flex", justifyContent: "space-between", alignItems: "center", background: "#ffffff", borderTopLeftRadius: "12px", borderTopRightRadius: "12px" }}>
-        <h2 style={{ margin: 0, color: "#1e293b" }}>💕 CHATPATTIE BADDIE</h2>
+        <h2 style={{ margin: 0, color: "#1e293b" }}>💬 CP Baddie</h2>
         <span style={{ fontSize: "12px", background: "#dcfce7", color: "#15803d", padding: "4px 10px", borderRadius: "20px", fontWeight: "600" }}>Guest Mode</span>
       </header>
 
@@ -81,6 +117,11 @@ export default function InstantAnonymousChat() {
           <div key={index} style={{ display: "flex", marginBottom: "12px", justifyContent: m.role === "user" ? "flex-end" : "flex-start" }}>
             <div style={{ maxWidth: "75%", padding: "12px 16px", borderRadius: "16px", lineHeight: "1.5", fontSize: "15px", whiteSpace: "pre-wrap", background: m.role === "user" ? "#2563eb" : "#f1f5f9", color: m.role === "user" ? "#ffffff" : "#0f172a" }}>
               {m.content || (isTyping && index === messages.length - 1 ? "..." : "")}
+              {m.role !== "user" && m.content && (
+                <button onClick={() => speakText(m.content)} title="Listen to this reply" style={{ display: "block", marginTop: "8px", background: "none", border: "1px solid #cbd5e1", borderRadius: "20px", padding: "4px 12px", fontSize: "12px", cursor: "pointer", color: "#0f172a" }}>
+                  🔉 Listen
+                </button>
+              )}
             </div>
           </div>
         ))}

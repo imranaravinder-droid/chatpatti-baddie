@@ -1,14 +1,13 @@
 import { NextRequest } from "next/server";
-import { GoogleGenAI } from "@google/genai";
 import { KEYS } from "@/lib/keys";
 
 const MODE_PROMPTS: Record<string, string> = {
-  casual: "You are CHATPATTIE BADDIE. Direct answers, no greetings, no filler. Match user language. End with 🔬 Field Fusion idea. Be accurate and helpful. When user asks for dance steps, give 4-8 sassy dance steps with counts and attitude.",
-  mind: "You are OMNI-MIND, a mind-reading AI. Read user thoughts and emotions. Respond with: 🔮 neural read 🤖 direct answer 💭 hidden thought. Hinglish/English. Be sharp and accurate.",
-  debate: "You are DEBATE OPPONENT. Disagree and counter every point. Never back down. No greetings. 🔥⚡🎯. Be logical and accurate.",
-  comedy: "You are COMEDY BESTIE. Roasts, jokes, puns. No greetings. 😂💀💅✨. Be funny but accurate.",
-  romance: "You are ROMANCE. Shayari, love poems, pet names (jaan/meri jaan). No greetings. ❤️🌹💕✨🥰. Be heartfelt and accurate.",
-  god: "You are DIVINE VOICE. Direct spiritual guidance. No greetings. Blessing at end. Be wise and accurate.",
+  casual: "You are CP Baddie. Direct answers, no greetings, no filler. Match user language. End with ?? Field Fusion idea. Be accurate and helpful.",
+  mind: "You are OMNI-MIND, a mind-reading AI. Read user thoughts and emotions. Respond with: ?? neural read ?? direct answer ?? hidden thought. Hinglish/English.",
+  debate: "You are DEBATE OPPONENT. Disagree and counter every point. Never back down. No greetings. ?????.",
+  comedy: "You are COMEDY BESTIE. Roasts, jokes, puns. No greetings. ???????.",
+  romance: "You are ROMANCE. Shayari, love poems, pet names (jaan/meri jaan). No greetings. ?????????.",
+  god: "You are DIVINE VOICE. Direct spiritual guidance. No greetings. Blessing at end.",
 };
 
 export async function POST(req: NextRequest) {
@@ -18,22 +17,51 @@ export async function POST(req: NextRequest) {
     if (!apiKey) return new Response("API key not configured", { status: 500 });
 
     const systemInstruction = MODE_PROMPTS[mode] || MODE_PROMPTS.casual;
-    const ai = new GoogleGenAI({ apiKey });
 
-    const responseStream = await ai.models.generateContentStream({
-      model: "gemini-2.5-flash",
+    const body = {
+      system_instruction: { parts: { text: systemInstruction } },
       contents: messageHistory,
-      config: {
-        systemInstruction,
-        temperature: 0.7,
-      },
-    });
+      generationConfig: { temperature: 0.7 },
+      // code_execution works on the free-tier auth key; google_search
+      // returns 429 on this plan, so we rely on code execution + the
+      // model's own knowledge for correct, computable answers.
+      tools: [{ code_execution: {} }],
+    };
 
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:streamGenerateContent?alt=sse&key=${apiKey}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      }
+    );
+
+    if (!res.ok) return new Response(`Gemini API error: ${res.status}`, { status: 502 });
+
+    const encoder = new TextEncoder();
     const stream = new ReadableStream({
       async start(controller) {
         try {
-          for await (const chunk of responseStream) {
-            if (chunk.text) controller.enqueue(new TextEncoder().encode(chunk.text));
+          const reader = res.body?.getReader();
+          if (!reader) { controller.close(); return; }
+          const decoder = new TextDecoder();
+          let buffer = "";
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split("\n");
+            buffer = lines.pop() || "";
+            for (const line of lines) {
+              if (line.startsWith("data: ")) {
+                try {
+                  const json = JSON.parse(line.slice(6));
+                  const text = json.candidates?.[0]?.content?.parts?.[0]?.text;
+                  if (text) controller.enqueue(encoder.encode(text));
+                } catch {}
+              }
+            }
           }
           controller.close();
         } catch (err) {

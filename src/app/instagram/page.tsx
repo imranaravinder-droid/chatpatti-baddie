@@ -1,111 +1,97 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
+import { useRequireAuth } from "@/lib/useRequireAuth";
+import { useSearchParams } from "next/navigation";
 
-export default function InstagramPage() {
-  const router = useRouter();
-  const [authorized, setAuthorized] = useState(false);
-  const [posts, setPosts] = useState<any[]>([]);
-  const [connected, setConnected] = useState(false);
+function InstagramInner() {
+  const authorized = useRequireAuth();
+  const searchParams = useSearchParams();
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (!localStorage.getItem("baddie_user_email")) {
-      router.replace("/");
-    } else {
-      setAuthorized(true);
-      const stored = localStorage.getItem("instagram_posts");
-      const token = localStorage.getItem("instagram_token");
-      if (stored && token) {
-        try { setPosts(JSON.parse(stored)); setConnected(true); } catch {}
-      }
-    }
-  }, [router]);
-
-  const loginWithInstagram = async () => {
+  const load = async () => {
+    setLoading(true);
     try {
-      const res = await fetch("/api/instagram/login");
-      const data = await res.json();
-      if (data.url) window.location.href = data.url;
-    } catch (err) {
-      console.error("Failed to get Instagram login URL");
-    }
+      const res = await fetch("/api/instagram/profile");
+      setData(await res.json());
+    } catch {}
+    finally { setLoading(false); }
   };
 
-  const disconnect = () => {
-    localStorage.removeItem("instagram_token");
-    localStorage.removeItem("instagram_user_id");
-    localStorage.removeItem("instagram_posts");
-    setPosts([]);
-    setConnected(false);
-  };
+  useEffect(() => { load(); }, []);
+
+  const error = searchParams.get("error");
+  const connected = searchParams.get("connected");
 
   if (!authorized) return null;
 
-  return (
-    <div style={{ fontFamily: "system-ui, sans-serif", backgroundColor: "#0b0f19", color: "#f8fafc", minHeight: "100vh", padding: "30px", maxWidth: "900px", margin: "0 auto" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
-        <h2 style={{ margin: 0, display: "flex", alignItems: "center", gap: "8px" }}>
-          <span style={{ background: "linear-gradient(135deg, #f58529, #dd2a7b, #8134af)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>📸</span> CHATPATTIE BADDIE Instagram
-        </h2>
-        {connected && (
-          <button onClick={disconnect} style={{ padding: "8px 16px", background: "#333", color: "#fff", border: "none", borderRadius: "8px", cursor: "pointer", fontSize: "13px" }}>
-            Disconnect
-          </button>
-        )}
-      </div>
+  const media = data?.media || [];
 
-      {!connected ? (
-        <div style={{ textAlign: "center", background: "#151c2c", border: "1px solid #1e293b", borderRadius: "20px", padding: "60px 40px" }}>
-          <div style={{ fontSize: "48px", marginBottom: "16px" }}>📸</div>
-          <h3 style={{ margin: "0 0 8px 0" }}>Connect Your Instagram</h3>
-          <p style={{ color: "#94a3b8", margin: "0 0 24px 0", maxWidth: "400px", marginLeft: "auto", marginRight: "auto" }}>
-            Link your Instagram to browse your posts and media directly in the app.
+  return (
+    <div style={{ fontFamily: "system-ui, sans-serif", minHeight: "100vh", background: "linear-gradient(135deg, #f9fafb 0%, #fdf2f8 100%)", color: "#111827" }}>
+      <div style={{ maxWidth: "640px", margin: "0 auto", padding: "24px 16px" }}>
+
+        {(error || connected) && (
+          <div style={{ padding: "12px 16px", borderRadius: "12px", marginBottom: "16px", fontSize: "0.9rem", fontWeight: 600, background: error ? "#fee2e2" : "#dcfce7", color: error ? "#991b1b" : "#166534" }}>
+            {error ? `⚠️ ${error}` : "✅ Instagram connected!"}
+          </div>
+        )}
+
+        <div style={{ background: "#fff", borderRadius: "20px", padding: "24px", boxShadow: "0 4px 24px rgba(0,0,0,0.06)", marginBottom: "16px", textAlign: "center" }}>
+          <div style={{ fontSize: "3rem", marginBottom: "8px" }}>📸</div>
+          <h1 style={{ fontSize: "1.3rem", fontWeight: 800, margin: "0 0 4px" }}>Prisha Insta</h1>
+          <p style={{ fontSize: "0.85rem", color: "#6b7280", margin: "0 0 16px" }}>
+            Link Prisha's Instagram account to view the profile and recent posts right here.
           </p>
-          <button onClick={loginWithInstagram} style={{ padding: "14px 36px", background: "linear-gradient(135deg, #f58529, #dd2a7b, #8134af)", color: "#fff", border: "none", borderRadius: "30px", fontWeight: "bold", fontSize: "16px", cursor: "pointer", boxShadow: "0 4px 16px rgba(221,42,123,0.3)" }}>
-            🔗 Connect Instagram
-          </button>
-          <p style={{ color: "#64748b", fontSize: "12px", marginTop: "16px" }}>
-            Set INSTAGRAM_CLIENT_ID and INSTAGRAM_CLIENT_SECRET in .env.local
-          </p>
-        </div>
-      ) : (
-        <>
-          <p style={{ color: "#94a3b8", marginBottom: "20px" }}>{posts.length} posts loaded.</p>
-          {posts.length === 0 ? (
-            <div style={{ textAlign: "center", background: "#151c2c", border: "1px solid #1e293b", borderRadius: "16px", padding: "40px" }}>
-              <p style={{ color: "#94a3b8" }}>No posts found on your account.</p>
-            </div>
-          ) : (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))", gap: "16px" }}>
-              {posts.map((post: any, i: number) => (
-                <div key={post.id || i} style={{ background: "#151c2c", borderRadius: "12px", border: "1px solid #1e293b", overflow: "hidden" }}>
-                  {post.media_type === "VIDEO" ? (
-                    <video src={post.media_url} controls style={{ width: "100%", aspectRatio: "1", objectFit: "cover" }} />
-                  ) : (
-                    <img src={post.media_url} alt={post.caption || "Post"} style={{ width: "100%", aspectRatio: "1", objectFit: "cover" }} />
-                  )}
-                  <div style={{ padding: "10px 12px" }}>
-                    <div style={{ fontSize: "13px", color: "#cbd5e1", marginBottom: "6px", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
-                      {post.caption || "No caption"}
-                    </div>
-                    <div style={{ fontSize: "11px", color: "#64748b" }}>{new Date(post.timestamp).toLocaleDateString()}</div>
-                    {post.permalink && (
-                      <a href={post.permalink} target="_blank" rel="noreferrer" style={{ fontSize: "11px", color: "#6366f1", display: "block", marginTop: "6px", textDecoration: "none" }}>
-                        🔗 Open in Instagram
-                      </a>
-                    )}
+
+          {loading ? (
+            <p style={{ color: "#9ca3af", fontSize: "0.9rem" }}>Checking...</p>
+          ) : data?.connected ? (
+            <>
+              <div style={{ display: "flex", alignItems: "center", gap: "12px", justifyContent: "center", marginBottom: "12px" }}>
+                {data.profile?.profile_picture_url && (
+                  <img src={data.profile.profile_picture_url} alt="" style={{ width: "56px", height: "56px", borderRadius: "50%", objectFit: "cover" }} />
+                )}
+                <div style={{ textAlign: "left" }}>
+                  <div style={{ fontWeight: 700 }}>@{data.profile?.username}</div>
+                  <div style={{ fontSize: "0.8rem", color: "#6b7280" }}>
+                    {data.profile?.account_type?.toLowerCase()} · {data.profile?.media_count} posts
                   </div>
                 </div>
+              </div>
+              <button onClick={async () => { await fetch("/api/instagram/disconnect", { method: "POST" }); window.location.href = "/instagram"; }} style={{ padding: "10px 20px", borderRadius: "25px", border: "1px solid #fecaca", background: "#fff", color: "#dc2626", fontWeight: 600, cursor: "pointer" }}>
+                Disconnect
+              </button>
+            </>
+          ) : (
+            <a href="/api/instagram/auth" style={{ display: "inline-block", padding: "12px 28px", borderRadius: "25px", background: "linear-gradient(135deg, #f59e0b, #ec4899)", color: "#fff", fontWeight: 700, textDecoration: "none" }}>
+              Connect Prisha's Instagram
+            </a>
+          )}
+        </div>
+
+        {data?.connected && media.length > 0 && (
+          <div style={{ background: "#fff", borderRadius: "20px", padding: "20px", boxShadow: "0 4px 24px rgba(0,0,0,0.06)" }}>
+            <h2 style={{ fontSize: "1.05rem", fontWeight: 800, margin: "0 0 12px" }}>Recent Posts</h2>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "6px" }}>
+              {media.map((m: any) => (
+                <a key={m.id} href={m.permalink} target="_blank" style={{ display: "block", aspectRatio: "1", borderRadius: "10px", overflow: "hidden", background: "#f3f4f6" }}>
+                  <img src={m.media_type === "VIDEO" ? m.thumbnail_url : m.media_url} alt={m.caption || ""} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                </a>
               ))}
             </div>
-          )}
-        </>
-      )}
-
-      <div style={{ marginTop: "30px", textAlign: "center" }}>
-        <ins className="adsbygoogle" style={{ display: "inline-block", width: "728px", height: "90px" }} data-ad-client="ca-pub-4486222454241909" data-ad-slot="9286475415" />
+          </div>
+        )}
       </div>
     </div>
+  );
+}
+
+export default function InstagramPage() {
+  return (
+    <Suspense fallback={null}>
+      <InstagramInner />
+    </Suspense>
   );
 }

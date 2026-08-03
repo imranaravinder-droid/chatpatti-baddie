@@ -5,21 +5,20 @@ import { useRouter } from "next/navigation";
 import { Sparkles, MessageCircle, Brain, BookOpen, Globe, Lightbulb, Shield, Users, Zap, Heart } from "lucide-react";
 
 const ageRanges = ["Under 18", "18-24", "25-34", "35-44", "45+"];
-const sources = ["Google Search", "Instagram", "YouTube", "Friend/Family", "Reddit", "Facebook", "Twitter/X", "Other"];
+const sources = ["Google Search", "YouTube", "Friend/Family", "Reddit", "Facebook", "Twitter/X", "Other"];
 
 const features = [
-  { icon: MessageCircle, title: "CHATPATTIE BADDIE", desc: "22+ AI agents ready 24/7 — study tutor, space guide, music companion, life diary, comedy buddy, and more. No judgment, just support." },
+  { icon: MessageCircle, title: "CP Baddie", desc: "22+ AI agents ready 24/7 ? study tutor, space guide, music companion, life diary, comedy buddy, and more. No judgment, just support." },
   { icon: Brain, title: "22 AI Agents", desc: "Study Master, English Coach, Space Guide, Music Companion, Life Coach, Personality Analyst, Creative Studio, CB Lens, and 14 more specialists." },
-  { icon: Globe, title: "24 Indian Languages", desc: "Speak in Hindi, Tamil, Bengali, Marathi, Gujarati, Punjabi, Urdu, and 17 more languages. CHATPATTIE BADDIE speaks your language." },
+  { icon: Globe, title: "24 Indian Languages", desc: "Speak in Hindi, Tamil, Bengali, Marathi, Gujarati, Punjabi, Urdu, and 17 more languages. CP Baddie speaks your language." },
   { icon: BookOpen, title: "Global Study Master", desc: "Homework help, exam prep, CBSE/NCERT/ICSE/IB/IGCSE support. Any subject, any class, any board in the world." },
-  { icon: Lightbulb, title: "Field Fusion Ideas", desc: "Every response includes a creative cross-field idea — Space + Agriculture, Robotics + Music, Medicine + Art." },
+  { icon: Lightbulb, title: "Field Fusion Ideas", desc: "Every response includes a creative cross-field idea ? Space + Agriculture, Robotics + Music, Medicine + Art." },
   { icon: Shield, title: "100% Private", desc: "Your data stays yours. Email-based history means only you see your past conversations." },
-  { icon: Users, title: "Join CHATPATTIE BADDIE", desc: "Thousands already use CHATPATTIE BADDIE daily to learn, grow, discover music, explore space, and improve themselves." },
+  { icon: Users, title: "Join CP Baddie", desc: "Thousands already use CP Baddie daily to learn, grow, discover music, explore space, and improve themselves." },
   { icon: Zap, title: "Instant AI Responses", desc: "Powered by Groq AI (llama-3.3-70b). No rate limits, no waiting. Real-time responses in any language." },
 ];
 
 const modes = [
-  { emoji: "🧿", label: "OMNI-MIND", color: "bg-gray-950 text-cyan-300 border-2 border-cyan-400 shadow-lg shadow-cyan-400/30" },
   { emoji: "💬", label: "Casual Talk", color: "bg-gray-100" },
   { emoji: "🔥", label: "Debate Mode", color: "bg-red-50" },
   { emoji: "😂", label: "Comedy Mode", color: "bg-yellow-50" },
@@ -72,14 +71,14 @@ export default function HomePage() {
       {/* HERO */}
       <div className="text-center mb-8 max-w-2xl">
         <Sparkles className="w-12 h-12 text-pink-500 mx-auto mb-4" />
-        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 rainbow-shower leading-tight">💕 CHATPATTIE BADDIE</h1>
-        <p className="text-base text-gray-500 mt-3 max-w-md mx-auto">22+ AI agents — chat, create images, study, get advice. All in one. Free, private, speaks your language.</p>
+        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 rainbow-shower leading-tight">💖 CP Baddie</h1>
+        <p className="text-base text-gray-500 mt-3 max-w-md mx-auto">22+ AI agents ✨ chat, create images, study, get advice. All in one. Free, private, speaks your language.</p>
       </div>
 
       {/* SIGNUP */}
       <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 w-full max-w-md" id="signup">
         <div className="text-center mb-6">
-          <h2 className="text-xl font-bold text-gray-900">✨ Join CHATPATTIE BADDIE</h2>
+          <h2 className="text-xl font-bold text-gray-900">💜 Join CP Baddie</h2>
           <p className="text-xs text-gray-400 mt-1">Sign up free. 22+ AI agents in 10 seconds.</p>
         </div>
 
@@ -113,7 +112,7 @@ export default function HomePage() {
           {error && <p className="text-xs text-red-500 text-center">{error}</p>}
 
           <button type="submit" disabled={loading} className="w-full py-2.5 bg-pink-500 text-white rounded-full text-sm font-medium hover:bg-pink-600 disabled:opacity-50 transition-all">
-            {loading ? "Signing up..." : "Meet CHATPATTIE BADDIE 💕"}
+            {loading ? "Signing up..." : "Meet CP Baddie ✨"}
           </button>
 
           <p className="text-xs text-gray-400 text-center">🔒 Your data is safe. We never spam or share.</p>
@@ -122,7 +121,7 @@ export default function HomePage() {
 
       {/* FEATURES */}
       <div className="w-full max-w-4xl mt-16">
-        <h2 className="text-xl font-bold text-center text-gray-900 mb-8">🌟 Meet CHATPATTIE BADDIE</h2>
+        <h2 className="text-xl font-bold text-center text-gray-900 mb-8">🎀 Meet CP Baddie</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {features.map((f, i) => (
             <div key={i} className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
@@ -148,14 +147,14 @@ export default function HomePage() {
         <p className="text-xs text-gray-400 text-center mt-4 max-w-lg mx-auto">Plus 22 AI agents: Study Master, Space Guide, Music Companion, Life Coach, English Coach, Creative Studio, CB Lens, Personality Analyst, Discovery AI, Field Inventor, Global Discovery Network, and more.</p>
       </div>
 
-      {/* ASKM */}
+      {/* IMAGE GENERATION */}
       <div className="w-full max-w-4xl mt-16">
         <div className="grid grid-cols-1 gap-4">
-          <a href="/askm" className="bg-gradient-to-br from-blue-600 to-purple-700 rounded-2xl p-6 text-white shadow-lg hover:shadow-xl transition-shadow">
+          <a href="/chat" className="bg-gradient-to-br from-blue-600 to-purple-700 rounded-2xl p-6 text-white shadow-lg hover:shadow-xl transition-shadow">
             <span className="text-3xl">🎨</span>
-            <h3 className="font-bold text-lg mt-2">AskM — AI Image Generator</h3>
-            <p className="text-sm text-blue-200 mt-1">Type anything, AI creates an image instantly. Free, no limits.</p>
-            <span className="inline-block mt-3 text-xs font-medium text-yellow-300">Create Now →</span>
+            <h3 className="font-bold text-lg mt-2">AI Image Generation 🎨 in Chat</h3>
+            <p className="text-sm text-blue-200 mt-1">Just type "generate image of..." in chat and AI creates it instantly.</p>
+            <span className="inline-block mt-3 text-xs font-medium text-yellow-300">Try in Chat 🚀</span>
           </a>
         </div>
       </div>
@@ -180,15 +179,15 @@ export default function HomePage() {
 
       {/* USE CASES */}
       <div className="w-full max-w-4xl mt-16 mb-16">
-        <h2 className="text-xl font-bold text-center text-gray-900 mb-8">🎯 Who Needs CHATPATTIE BADDIE?</h2>
+        <h2 className="text-xl font-bold text-center text-gray-900 mb-8">🌈 Who Needs CP Baddie?</h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {[
-            { emoji: "🧑‍🎓", title: "Students", desc: "Homework help, exam prep, CBSE/NCERT/IB/IGCSE support, study plans, practice questions for any subject." },
+            { emoji: "📚", title: "Students", desc: "Homework help, exam prep, CBSE/NCERT/IB/IGCSE support, study plans, practice questions for any subject." },
             { emoji: "💼", title: "Professionals", desc: "English communication coach, interview prep, public speaking practice, business email writing, career guidance." },
             { emoji: "🎨", title: "Creators", desc: "Image prompts, video scripts, design ideas, logo creation, sketching tutorials, storyboards, content planning." },
             { emoji: "🧠", title: "Self-Improvers", desc: "Personality analysis, career discovery, productivity tips, Big Five assessment, growth suggestions." },
             { emoji: "🌍", title: "Language Learners", desc: "24 Indian languages, English fluency, grammar correction, Hinglish to English, IELTS/TOEFL/PTE prep." },
-            { emoji: "👨‍👩‍👧‍👦", title: "Everyone Needs CHATPATTIE BADDIE", desc: "Your 22 AI agents are here — study help, space exploration, music discovery, life diary, motivation, personality growth, and more. No judgment, just support." },
+            { emoji: "🌟", title: "Everyone Needs CP Baddie", desc: "Your 22 AI agents are here ✨ study help, space exploration, music discovery, life diary, motivation, personality growth, and more. No judgment, just support." },
           ].map((u, i) => (
             <div key={i} className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
               <span className="text-2xl">{u.emoji}</span>

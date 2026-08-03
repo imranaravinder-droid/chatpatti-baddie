@@ -28,7 +28,7 @@ export default function PopPage() {
   }, []);
 
   const refLink = typeof window !== "undefined"
-    ? `https://chatpatti-baddie.vercel.app/chat?ref=${source}`
+    ? `https://cpbaddie.vercel.app/chat?ref=${source}`
     : "/chat";
 
   return (
@@ -41,9 +41,9 @@ export default function PopPage() {
             <div>
               <p className="text-[11px] text-green-400 font-bold">You won free access!</p>
               <p className="text-[9px] text-zinc-400">24-hour premium AI pass unlocked. Tap to claim.</p>
-              <a href={refLink} className="text-[9px] text-blue-400 underline mt-1 inline-block">Claim now →</a>
+              <a href={refLink} className="text-[9px] text-blue-400 underline mt-1 inline-block">Claim now ?</a>
             </div>
-            <button onClick={() => setShowNotify(false)} className="text-zinc-500 text-xs ml-1">✕</button>
+            <button onClick={() => setShowNotify(false)} className="text-zinc-500 text-xs ml-1">?</button>
           </div>
         </div>
       )}
@@ -52,9 +52,9 @@ export default function PopPage() {
       {showExit && (
         <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4" onClick={() => setShowExit(false)}>
           <div className="bg-zinc-900 border border-yellow-500/30 rounded-2xl p-6 max-w-sm text-center" onClick={e => e.stopPropagation()}>
-            <span className="text-4xl block mb-2">⏳</span>
+            <span className="text-4xl block mb-2">?</span>
             <h3 className="text-white font-bold text-sm mb-1">Wait! Don&apos;t miss this!</h3>
-            <p className="text-zinc-400 text-xs mb-4">Free AI tutor, music companion, and 22+ AI specialists — all in your language.</p>
+            <p className="text-zinc-400 text-xs mb-4">Free AI tutor, music companion, and 22+ AI specialists ? all in your language.</p>
             <a href={refLink}
               className="block w-full py-2.5 rounded-lg bg-gradient-to-r from-yellow-500 to-orange-600 text-white text-sm font-bold text-center hover:scale-105 transition-transform">
               🔥 Try Chatpatti Free
@@ -70,14 +70,14 @@ export default function PopPage() {
       <div className="flex-1 flex flex-col items-center justify-center px-4 py-8 text-center bg-gradient-to-b from-gray-900 via-black to-gray-950">
         <div className="animate-pulse text-4xl mb-3">🤖🧠🚀</div>
         <h1 className="text-2xl sm:text-3xl font-bold mb-1 leading-tight">
-          CHATPATTIE BADDIE
+          CP Baddie
         </h1>
         <p className="text-gray-400 text-xs mb-5 max-w-md">
-          22 AI Specialists · 24 Languages · Study Master · Music Companion · CB Lens
+          22 AI Specialists ? 24 Languages ? Study Master ? Music Companion ? CB Lens
         </p>
         <a href={refLink}
           className="px-8 py-3 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 text-white text-sm font-bold hover:scale-105 transition-transform shadow-lg shadow-pink-500/30 mb-3">
-          🗣️ Chat Now — Free
+          💬 Chat Now ✨ Free
         </a>
         <div className="flex gap-2 flex-wrap justify-center">
           <a href="/try" className="px-4 py-1.5 rounded-full border border-white/15 text-white text-[10px] hover:bg-white/5 transition-colors">🚀 Try Free</a>
@@ -116,16 +116,16 @@ export default function PopPage() {
                 className={`py-1.5 rounded text-[9px] font-bold transition-all ${sold
                   ? "bg-green-600/20 text-green-400 border border-green-500/20"
                   : "bg-zinc-900 text-zinc-500 border border-zinc-700/50 hover:bg-zinc-800 hover:text-white"}`}>
-                {sold ? `✅ AD ${i+1}` : `💰 AD ${i+1}`}
+                {sold ? `✔️ AD ${i+1}` : `📢 AD ${i+1}`}
               </button>
             ))}
           </div>
           <a href={refLink}
             className="block w-full py-2.5 rounded-lg bg-gradient-to-r from-pink-500 to-purple-600 text-white text-xs font-bold text-center hover:opacity-90 transition-opacity">
-            🔥 TRY Chatpattie Baddie FREE →
+            ✨ TRY CP Baddie FREE 🚀
           </a>
           <p className="text-[8px] text-zinc-600 text-center mt-1">
-            {source !== "direct" ? `via ${source}` : "direct"} · {timeOnPage}s · {clicks.toLocaleString()} clicks
+            {source !== "direct" ? `via ${source}` : "direct"} ? {timeOnPage}s ? {clicks.toLocaleString()} clicks
           </p>
         </div>
       </div>

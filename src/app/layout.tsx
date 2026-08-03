@@ -17,13 +17,13 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "CHATPATTIE BADDIE - 22+ AI Agents | Free AI Chat, Images & More",
-    template: "%s | CHATPATTIE BADDIE",
+    default: "CP Baddie - 22+ AI Agents | Free AI Chat, Images & More",
+    template: "%s | CP Baddie",
   },
   description:
-    "CHATPATTIE BADDIE — 22+ AI specialists. Chat, study, create images, get advice, browse Spotify, Pinterest & Instagram. Free, private, 24 Indian languages.",
+    "CP Baddie ? 22+ AI specialists. Chat, study, create images, get advice, browse YouTube. Free, private, 24 Indian languages.",
   keywords: [
-    "Chatpattie Baddie",
+    "CP Baddie",
     "free AI chat",
     "AI image generator",
     "AI study help",
@@ -32,17 +32,16 @@ export const metadata: Metadata = {
     "free AI assistant",
     "AI life coach",
     "AI voice generator",
-    "Spotify music search",
     "Pinterest pins",
-    "Instagram media",
-    "OMNI-MIND AI",
-    "CB Talk",
+    "AI media",
+    "Voice AI",
+    "AI Talk",
     "online AI free",
     "generative AI India",
   ],
-  authors: [{ name: "Chatpatti Baddie" }],
-  creator: "Chatpatti Baddie",
-  publisher: "Chatpatti Baddie",
+  authors: [{ name: "CP Baddie Chat" }],
+  creator: "CP Baddie Chat",
+  publisher: "CP Baddie Chat",
   robots: {
     index: true,
     follow: true,
@@ -57,24 +56,24 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    siteName: "CHATPATTIE BADDIE",
-    title: "CHATPATTIE BADDIE - 22+ AI Agents, Free",
+    siteName: "CP Baddie",
+    title: "CP Baddie - 22+ AI Agents, Free",
     description:
-      "CHATPATTIE BADDIE — 22+ AI agents. Chat, create images, study, get advice. Free, private, 24 languages.",
+      "CP Baddie ? 22+ AI agents. Chat, create images, study, get advice. Free, private, 24 languages.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "CHATPATTIE BADDIE",
+        alt: "CP Baddie",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "CHATPATTIE BADDIE - 22+ AI Agents",
+    title: "CP Baddie - 22+ AI Agents",
     description:
-      "CHATPATTIE BADDIE — 22+ AI agents. Free, private, 24 Indian languages.",
+      "CP Baddie ? 22+ AI agents. Free, private, 24 Indian languages.",
     images: ["/og-image.png"],
   },
   manifest: "/manifest.json",
@@ -92,7 +91,7 @@ export const metadata: Metadata = {
     ],
   },
   category: "wellness",
-  metadataBase: new URL("https://chatpatti-baddie.vercel.app"),
+  metadataBase: new URL("https://cpbaddie.vercel.app"),
   alternates: {
     canonical: "/",
   },
@@ -109,30 +108,27 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <head>
-        <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-        <meta httpEquiv="Pragma" content="no-cache" />
-        <meta httpEquiv="Expires" content="0" />
         <meta name="google-site-verification" content="UaKQBG922ubp_DUKHcu0q13BgnaSgUR0Mk1o56e04FQ" />
         <meta name="pinterest-site-verification" content="92b166f17948b54f89daa16667a5577f" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="CHATPATTIE BADDIE" />
+        <meta name="apple-mobile-web-app-title" content="CP Baddie" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebApplication",
-              name: "CHATPATTIE BADDIE",
+              name: "CP Baddie",
               description:
-                "CHATPATTIE BADDIE — 22+ AI agents for chat, images, study, and life advice. Free, private, 24 Indian languages.",
-              url: "https://chatpatti-baddie.vercel.app",
+                "CP Baddie ? 22+ AI agents for chat, images, study, and life advice. Free, private, 24 Indian languages.",
+              url: "https://cpbaddie.vercel.app",
               applicationCategory: "WellnessApplication",
               operatingSystem: "Web",
               author: {
                 "@type": "Organization",
-                name: "Chatpatti Baddie",
+                name: "CP Baddie Chat",
               },
               offers: {
                 "@type": "Offer",
@@ -162,24 +158,18 @@ export default function RootLayout({
         </div>
         <footer className="text-center py-6 px-4 border-t border-gray-100 space-y-3">
           <p className="text-xs text-gray-400">
-            💕 CHATPATTIE BADDIE &middot; 22+ AI agents — free
+            💖 CP Baddie &middot; 22+ AI agents ✨ free
           </p>
           <div className="flex items-center justify-center gap-4 text-xs flex-wrap">
-            <a href="https://chatpatti-baddie.vercel.app" className="text-gray-400 hover:text-pink-500">Home</a>
+            <a href="https://cpbaddie.vercel.app" className="text-gray-400 hover:text-pink-500">Home</a>
             <span className="text-gray-300">|</span>
             <a href="/chat" className="text-gray-400 hover:text-pink-500">Chat</a>
             <span className="text-gray-300">|</span>
-            <a href="/askm" className="text-gray-400 hover:text-pink-500">AskM</a>
-            <span className="text-gray-300">|</span>
             <a href="/cbtalk" className="text-gray-400 hover:text-pink-500">CB Talk</a>
             <span className="text-gray-300">|</span>
-            <a href="/spotify" className="text-gray-400 hover:text-pink-500">Spotify</a>
+            <a href="/instagram" className="text-gray-400 hover:text-pink-500">Prisha Insta</a>
             <span className="text-gray-300">|</span>
-            <a href="/pinterest" className="text-gray-400 hover:text-pink-500">Pinterest</a>
-            <span className="text-gray-300">|</span>
-            <a href="/instagram" className="text-gray-400 hover:text-pink-500">Instagram</a>
-            <span className="text-gray-300">|</span>
-            <a href="/dashboard" className="text-gray-400 hover:text-pink-500">Log</a>
+            <a href="/dashboard" className="text-gray-400 hover:text-pink-500">My History</a>
             <span className="text-gray-300">|</span>
             <a href="/privacy" className="text-gray-400 hover:text-pink-500">Privacy</a>
           </div>
