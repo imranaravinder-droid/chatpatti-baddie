@@ -789,15 +789,15 @@ export default function CBVideoCallPage() {
   const fetchUtterance = async (text: string) => {
     const clean = text.replace(/[#*_~`\[\]()]/g, "").trim();
     if (!clean) return null;
-    // Voice chain (each a different model):
-    //   1) Gemini TTS  (free tier, male "kore")
-    //   2) ElevenLabs  (premium male/female voice — needs a working key)
-    //   3) edge-tts   (free Microsoft neural male)
-    //   4) browser    (always works as last resort)
     const female = avatar === "cute";
+    // Voice chain (PRIMARY = ElevenLabs):
+    //   1) ElevenLabs  (premium: male "Antoni" / female "Rachel" — needs a working key)
+    //   2) Gemini TTS  (free tier, male "kore")
+    //   3) edge-tts   (free Microsoft neural: AndrewNeural / SwaraNeural)
+    //   4) browser    (always works as last resort)
     const attempts = female
-      ? ["/api/tts-female", "/api/gemini-tts", "/api/elevenlabs", "/api/edge-tts"]
-      : ["/api/gemini-tts", "/api/elevenlabs", "/api/edge-tts", "/api/tts-female"];
+      ? ["/api/tts-female", "/api/elevenlabs", "/api/gemini-tts", "/api/edge-tts"]
+      : ["/api/elevenlabs", "/api/gemini-tts", "/api/edge-tts", "/api/tts-female"];
     for (const route of attempts) {
       try {
         const res = await fetch(route, {
@@ -806,7 +806,7 @@ export default function CBVideoCallPage() {
           body: JSON.stringify({
             text: clean,
             ...(route === "/api/elevenlabs"
-              ? { voice_id: female ? "21m00Tcm2ahkPI2O7RjSn" : "pNInz6obpgDQGcFmaJgB", gender: female ? "female" : "male" }
+              ? { gender: female ? "female" : "male", use_speaker_boost: true }
               : {}),
           }),
         });
@@ -815,7 +815,6 @@ export default function CBVideoCallPage() {
         if (blob.size > 0) return URL.createObjectURL(blob);
       } catch {}
     }
-    // Whole chain failed → caller falls back to browser speech.
     return null;
   };
 
@@ -964,12 +963,13 @@ export default function CBVideoCallPage() {
       }
 
       const finalReply = (reply + (buffer.trim() ? " " + buffer.trim() : "")).trim() || "Hmm, kuch samajh nahi aaya — ek baar aur bolo na?";
+      // Always speak the trailing remnant so no part of the reply is dropped,
+      // then flush. Speech completes fully before the next user turn ("good manner").
+      if (buffer.trim()) speakText(buffer.trim(), modeRef.current);
       const aiMsg: CallMessage = { role: "ai", text: finalReply, time: Date.now() };
       setMessages(prev => [...prev, aiMsg]);
       setStreamingText("");
       setExpression("happy");
-      // Speech is streamed sentence-by-sentence above for an instant voice.
-      // Make sure a freshly enqueued tail gets drained.
       drainTtsQueue();
     } catch {
       const fallback: CallMessage = { role: "ai", text: "Arre, connection thoda shaky hai! Bol, main sun rahi hoon — baat continue karein? 💫", time: Date.now() };
