@@ -6,34 +6,26 @@ import path from "path";
 
 export const maxDuration = 30;
 
-function pickVoice(text: string, voice: string | null) {
+// Verified FEMALE voices (sweet + natural). Falls back to Gemini if edge-tts fails,
+// so the user has two DIFFERENT female voice models: edge-tts Aria/Swara, Gemini alnilam.
+function pickFemale(text: string, voice: string | null) {
   if (voice) return voice;
-  const female = false;
-  // Male voices (Haneul): AndrewNeural / MadhurNeural
-  // Female voices: AriaNeural / JennyNeural (en) / SwaraNeural (hi)
-  return /[\u0900-\u097F]/.test(text) ? "hi-IN-MadhurNeural" : "en-US-AndrewNeural";
-}
-
-function pickFemaleVoice(text: string, voice: string | null) {
-  if (voice) return voice;
-  // Verified female voices (sweet, natural).
   return /[\u0900-\u097F]/.test(text) ? "hi-IN-SwaraNeural" : "en-US-AriaNeural";
 }
 
 export async function POST(req: NextRequest) {
   try {
-    const { text, voice, gender } = await req.json();
+    const { text, voice } = await req.json();
     if (!text?.trim()) return NextResponse.json({ error: "Text required" }, { status: 400 });
 
     const clean = text.replace(/[#*_~`\[\]()]/g, "").trim().substring(0, 500);
     if (!clean) return NextResponse.json({ error: "Text required" }, { status: 400 });
 
-    const voiceName = gender === "female" ? pickFemaleVoice(clean, voice) : pickVoice(clean, voice);
+    // 1) edge-tts female voice (free, sweet, verified female)
+    const voiceName = pickFemale(clean, voice);
     const dir = await (async () => {
-      try {
-        await rm(path.join(os.tmpdir(), "cpb-tts"), { recursive: true, force: true });
-      } catch {}
-      const d = path.join(os.tmpdir(), "cpb-tts");
+      try { await rm(path.join(os.tmpdir(), "cpb-tts-f"), { recursive: true, force: true }); } catch {}
+      const d = path.join(os.tmpdir(), "cpb-tts-f");
       await mkdir(d, { recursive: true });
       return d;
     })();

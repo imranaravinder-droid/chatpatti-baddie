@@ -9,61 +9,75 @@ const EXPRESSION_FACE: Record<AvatarExpression, string> = {
   sad: "sad",
   surprised: "surprised",
   angry: "angry",
-  speaking: "happy",
+  speaking: "happy", // mouth NEVER animates — no lipsync
 };
 
+// Cute FEMALE avatar: big sparkling eyes, soft face, long hair + bow.
+// Eyes change with expression, but the mouth is fixed/neutral — she does NOT move
+// her mouth when speaking (the voice is heard, not lip-synced).
 export default function AvatarCute({ expression, size = 280 }: { expression?: AvatarExpression; size?: number }) {
   const face = EXPRESSION_FACE[expression || "neutral"];
   const scale = size / 240;
 
-  const eyes: Record<string, string> = {
-    happy: "M-18,-8 C-10,-6 -2,-7 0,0 C2,-7 10,-6 18,-8",
-    neutral: "M-18 -10 C-9 -8 -2 -7 0 0 C2 -7 9 -8 18 -10",
-    thinking: "M-18 -10 C-9 -9 -2 -8 0 0 C2 -8 9 -9 18 -10",
-    sad: "M-18 -4 C-10 -3 0 -2 0 0 C0 -2 10 -3 18 -4",
-    surprised: "M-16 0 A6 6 0 1 1-14 0 A6 6 0 1 1-16 0 M2 0 a6 6 0 1 1-2 0 a6 6 0 1 1 2 0",
-    angry: "M-18 -6 L-2 0 L-18 -2 Z M2 0 L18 -2 L2 -6 Z",
+  const eyeStyle: Record<string, string> = {
+    neutral: "M-16,-2 C-9,-1 9,-1 16,-2",
+    happy: "M-16,-4 C-10,-2 0,0 0,0 C0,0 10,-2 16,-4",
+    thinking: "M-16,-3 C-9,-2 9,-2 16,-3",
+    sad: "M-16 0 C-8 -1 8 -1 16 0",
+    surprised: "M-16 -6 A6 6 0 1 1 16 -6 A6 6 0 1 1 -16 -6",
+    angry: "M-16,-1 L0,-3 L16,-1 Z M-16 1 L0 -1 L16 1 Z",
   };
-
-  const mouth: Record<string, string> = {
-    neutral: "M-18,20 Q0,30 18,20",
-    happy: "M-20,18 C-10,28 10,28 20,18",
-    thinking: "M-18,22 Q0,30 18,22",
-    sad: "M-20,28 Q0,26 20,28",
-    surprised: "M0,18 a10,10 0 1,0 0.1,0 z",
-    angry: "M-20,26 L0,16 L20,26 Z",
-  };
+  const eye = eyeStyle[face] || eyeStyle.neutral;
 
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 240 240"
-      style={{ display: "block" }}
-      aria-label={`avatar ${face}`}
-    >
-      {/* Face glow */}
-      <radialGradient id="faceGlow" cx="50%" cy="35%" r="70%">
-        <stop offset="0%" stopColor="#ffe0b2" />
-        <stop offset="100%" stopColor="#f9c5a1" />
-      </radialGradient>
-      <ellipse cx="120" cy="120" rx="90" ry="100" fill="url(#faceGlow)" />
+    <svg width={size} height={size} viewBox="0 0 240 240" style={{ display: "block" }} aria-label={`avatar ${face}`}>
+      <defs>
+        <radialGradient id="cuteFaceGlow" cx="50%" cy="40%" r="65%">
+          <stop offset="0%" stopColor="#ffd8c2" />
+          <stop offset="100%" stopColor="#ffbaa8" />
+        </radialGradient>
+        <linearGradient id="cuteHair" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#ffbad5" />
+          <stop offset="100%" stopColor="#e8a3b8" />
+        </linearGradient>
+      </defs>
+
+      {/* Head */}
+      <ellipse cx="120" cy="120" rx="85" ry="92" fill="url(#cuteFaceGlow)" />
+
       {/* Ears */}
-      <circle cx="40" cy="120" r="10" fill="#f9c5a1" />
-      <circle cx="200" cy="120" r="10" fill="#f9c5a1" />
-      {/* Eyes (fixed — never moves the mouth, but eyes express) */}
-      <g transform="translate(120,140)">
-        <path d={eyes[face]} stroke="#1a1a2e" strokeWidth={Math.max(2, 6 * scale)} fill="none" strokeLinecap="round" />
+      <circle cx="48" cy="118" r="10" fill="#ffd8c2" />
+      <circle cx="192" cy="118" r="10" fill="#ffd8c2" />
+
+      {/* Eyes — expressive sparkle, change with mood */}
+      <g transform="translate(120,120)">
+        <path d={eye} stroke="#152238" strokeWidth={Math.max(2.5, 7 * scale)} fill="none" strokeLinecap="round" />
+        {/* sparkle highlight that moves slightly per mood */}
+        <circle cx={face === "surprised" ? -4 : -6} cy={face === "surprised" ? -5 : -6} r={Math.max(1, 2.2 * scale)} fill="#4f8cff" />
+        <circle cx={face === "surprised" ? 4 : 6} cy={face === "surprised" ? -5 : -6} r={Math.max(1, 2.2 * scale)} fill="#4f8cff" />
       </g>
-      {/* Mouth — only for expression, never animated to "speaking" */}
+
+      {/* Fixed neutral smile — always present, NEVER animates on "speaking" (no lipsync) */}
+      <path d="M-16,0 C-8,6 8,6 16,0 C8,6 0,6 0,0 C0,6 -8,6 -16,0" transform="translate(120,180)" stroke="#b0414b" strokeWidth={Math.max(2.5, 7 * scale)} fill="none" strokeLinecap="round" strokeLinejoin="round" />
+
+      {/* Blush cheeks */}
+      <ellipse cx="82" cy="138" rx={Math.max(10, 16 * scale)} ry={Math.max(5, 8 * scale)} fill="#ff9aa2" opacity="0.5" />
+      <ellipse cx="158" cy="138" rx={Math.max(10, 16 * scale)} ry={Math.max(5, 8 * scale)} fill="#ff9aa2" opacity="0.5" />
+
+      {/* Tiny cute nose — always visible, never moves */}
+      <path d="M0,-2 L2,0 C3,1 3,3 2,4 C1,5 0,5 -1,4 C-2,4 -2,2 -1,1 Z" transform="translate(120,152)" fill="#d99a8c" opacity="0.7" />
+
+      {/* Long hair + ribbon (feminine) */}
       <path
-        d={mouth[face]}
-        transform="translate(120,165)"
-        stroke="#b0414b"
-        strokeWidth={Math.max(2, 6 * scale)}
-        fill="none"
-        strokeLinecap="round"
+        d="M120,30 C80,30 55,75 55,120 C55,165 70,205 105,220 C110,222 120,224 120,224 C120,224 130,222 135,220 C170,205 185,165 185,120 C185,75 160,30 120,30 Z"
+        fill="url(#cuteHair)"
       />
+      {/* Ribbon on left */}
+      <path d="M62,95 C55,100 55,112 62,117 C60,111 58,106 56,100 C58,106 60,112 62,117 Z" fill="#ff759a" />
+      <path d="M178,95 C185,100 185,112 178,117 C180,111 182,106 184,100 C182,106 180,112 178,117 Z" fill="#ff759a" />
+      <rect x="95" y="28" width="50" height="18" rx="9" fill="#ff759a" />
+      <circle cx="100" cy="38" r={Math.max(4, 7 * scale)} fill="#fff" />
+      <circle cx="140" cy="38" r={Math.max(4, 7 * scale)} fill="#fff" />
     </svg>
   );
 }

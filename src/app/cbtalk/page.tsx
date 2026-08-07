@@ -785,29 +785,38 @@ export default function CBVideoCallPage() {
   const ttsPlayingRef = useRef(false);
 
   // Concurrently fetch TTS for a sentence, then enqueue it.
+  // Uses the FEMALE voice route when the cute female avatar is selected.
   const fetchUtterance = async (text: string) => {
-    try {
-      const clean = text.replace(/[#*_~`\[\]()]/g, "").trim();
-      if (!clean) return null;
-      let res = await fetch("/api/gemini-tts", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: clean }),
-      });
-      if (!res.ok) {
-        res = await fetch("/api/edge-tts", {
+    const clean = text.replace(/[#*_~`\[\]()]/g, "").trim();
+    if (!clean) return null;
+    // Voice chain (each a different model):
+    //   1) Gemini TTS  (free tier, male "kore")
+    //   2) ElevenLabs  (premium male/female voice — needs a working key)
+    //   3) edge-tts   (free Microsoft neural male)
+    //   4) browser    (always works as last resort)
+    const female = avatar === "cute";
+    const attempts = female
+      ? ["/api/tts-female", "/api/gemini-tts", "/api/elevenlabs", "/api/edge-tts"]
+      : ["/api/gemini-tts", "/api/elevenlabs", "/api/edge-tts", "/api/tts-female"];
+    for (const route of attempts) {
+      try {
+        const res = await fetch(route, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ text: clean }),
+          body: JSON.stringify({
+            text: clean,
+            ...(route === "/api/elevenlabs"
+              ? { voice_id: female ? "21m00Tcm2ahkPI2O7RjSn" : "pNInz6obpgDQGcFmaJgB", gender: female ? "female" : "male" }
+              : {}),
+          }),
         });
-      }
-      if (!res.ok) return null;
-      const blob = await res.blob();
-      if (blob.size === 0) return null;
-      return URL.createObjectURL(blob);
-    } catch {
-      return null;
+        if (!res.ok) continue;
+        const blob = await res.blob();
+        if (blob.size > 0) return URL.createObjectURL(blob);
+      } catch {}
     }
+    // Whole chain failed → caller falls back to browser speech.
+    return null;
   };
 
   const enqueueUtterance = (text: string) => {
