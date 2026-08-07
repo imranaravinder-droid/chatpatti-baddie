@@ -9,14 +9,14 @@ Namaste! Aapka swagat hai CP Baddie mein.
 
 Call karein aur chatpatti ki duniya mein ghum jayein. CP Baddie ? aapka apna AI partner.
 
-Try abhi: cpbaddie.vercel.app
+Try abhi: cpbaddie.com
 `;
 
 const scripts = [
-  { name: "Hindi 1", text: "Namaste! FREE AI jo aapki 24 bhashaon mein baat kare. Study, Space, Music, Life Coach ? sab free. CP Baddie abhi try karein. cpbaddie.vercel.app" },
-  { name: "Hindi 2", text: "CP Baddie ? 22 AI agents, bilkul FREE. Homework help, music, life coach, sab kuch. Call karte rahein aur CP Baddie aapka intezaar kar raha hai. cpbaddie.vercel.app" },
-  { name: "Short & Catchy", text: "FREE AI ? 24 Indian languages. CP Baddie. 22 specialists. Abhi try karo. cpbaddie.vercel.app" },
-  { name: "English", text: "CP Baddie. 22 AI specialists ? 24 Indian languages. Study, Space, Music, Life Coach ? all free. Try now at cpbaddie.vercel.app" },
+  { name: "Hindi 1", text: "Namaste! FREE AI jo aapki 24 bhashaon mein baat kare. Study, Space, Music, Life Coach ? sab free. CP Baddie abhi try karein. cpbaddie.com" },
+  { name: "Hindi 2", text: "CP Baddie ? 22 AI agents, bilkul FREE. Homework help, music, life coach, sab kuch. Call karte rahein aur CP Baddie aapka intezaar kar raha hai. cpbaddie.com" },
+  { name: "Short & Catchy", text: "FREE AI ? 24 Indian languages. CP Baddie. 22 specialists. Abhi try karo. cpbaddie.com" },
+  { name: "English", text: "CP Baddie. 22 AI specialists ? 24 Indian languages. Study, Space, Music, Life Coach ? all free. Try now at cpbaddie.com" },
 ];
 
 export default function CallerTunePage() {

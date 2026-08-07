@@ -15,11 +15,18 @@ export default function InstantAnonymousChat() {
     try {
       let ok = false;
       try {
-        const res = await fetch("/api/edge-tts", {
+        let res = await fetch("/api/gemini-tts", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ text: text.substring(0, 500) }),
         });
+        if (!res.ok) {
+          res = await fetch("/api/edge-tts", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text: text.substring(0, 500) }),
+          });
+        }
         if (res.ok) {
           const blob = await res.blob();
           if (blob.size > 0) {

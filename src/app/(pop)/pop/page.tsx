@@ -28,7 +28,7 @@ export default function PopPage() {
   }, []);
 
   const refLink = typeof window !== "undefined"
-    ? `https://cpbaddie.vercel.app/chat?ref=${source}`
+    ? `https://cpbaddie.com/chat?ref=${source}`
     : "/chat";
 
   return (

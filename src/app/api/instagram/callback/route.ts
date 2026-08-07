@@ -13,14 +13,14 @@ export async function GET(req: NextRequest) {
 
   if (error || errorReason) {
     return NextResponse.redirect(
-      `https://cpbaddie.vercel.app/instagram?error=${encodeURIComponent(errorReason || error || "Access denied")}`
+      `https://cpbaddie.com/instagram?error=${encodeURIComponent(errorReason || error || "Access denied")}`
     );
   }
 
   const savedState = req.cookies.get("ig_oauth_state")?.value;
   if (!code || !state || state !== savedState) {
     return NextResponse.redirect(
-      `https://cpbaddie.vercel.app/instagram?error=${encodeURIComponent("State mismatch. Please try again.")}`
+      `https://cpbaddie.com/instagram?error=${encodeURIComponent("State mismatch. Please try again.")}`
     );
   }
 
@@ -34,7 +34,7 @@ export async function GET(req: NextRequest) {
     const tokenData = await tokenRes.json();
     if (!tokenData.access_token) {
       return NextResponse.redirect(
-        `https://cpbaddie.vercel.app/instagram?error=${encodeURIComponent(tokenData.error?.message || "Token exchange failed")}`
+        `https://cpbaddie.com/instagram?error=${encodeURIComponent(tokenData.error?.message || "Token exchange failed")}`
       );
     }
     const accessToken = tokenData.access_token;
@@ -45,18 +45,18 @@ export async function GET(req: NextRequest) {
     const profile = await profileRes.json();
     if (!profile.id) {
       return NextResponse.redirect(
-        `https://cpbaddie.vercel.app/instagram?error=${encodeURIComponent("Could not fetch profile. Is the account a public Professional account?")}`
+        `https://cpbaddie.com/instagram?error=${encodeURIComponent("Could not fetch profile. Is the account a public Professional account?")}`
       );
     }
 
-    const res = NextResponse.redirect(`https://cpbaddie.vercel.app/instagram?connected=1`);
+    const res = NextResponse.redirect(`https://cpbaddie.com/instagram?connected=1`);
     res.cookies.set("ig_token", accessToken, { httpOnly: true, sameSite: "lax", maxAge: 60 * 60 * 24 * 60 });
     res.cookies.set("ig_username", profile.username || "", { httpOnly: true, sameSite: "lax", maxAge: 60 * 60 * 24 * 60 });
     res.cookies.delete("ig_oauth_state");
     return res;
   } catch (err: any) {
     return NextResponse.redirect(
-      `https://cpbaddie.vercel.app/instagram?error=${encodeURIComponent(err.message || "Unexpected error")}`
+      `https://cpbaddie.com/instagram?error=${encodeURIComponent(err.message || "Unexpected error")}`
     );
   }
 }

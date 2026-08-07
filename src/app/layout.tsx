@@ -91,7 +91,7 @@ export const metadata: Metadata = {
     ],
   },
   category: "wellness",
-  metadataBase: new URL("https://cpbaddie.vercel.app"),
+  metadataBase: new URL("https://cpbaddie.com"),
   alternates: {
     canonical: "/",
   },
@@ -123,7 +123,7 @@ export default function RootLayout({
               name: "CP Baddie",
               description:
                 "CP Baddie ? 22+ AI agents for chat, images, study, and life advice. Free, private, 24 Indian languages.",
-              url: "https://cpbaddie.vercel.app",
+              url: "https://cpbaddie.com",
               applicationCategory: "WellnessApplication",
               operatingSystem: "Web",
               author: {
@@ -161,7 +161,7 @@ export default function RootLayout({
             💖 CP Baddie &middot; 22+ AI agents ✨ free
           </p>
           <div className="flex items-center justify-center gap-4 text-xs flex-wrap">
-            <a href="https://cpbaddie.vercel.app" className="text-gray-400 hover:text-pink-500">Home</a>
+            <a href="https://cpbaddie.com" className="text-gray-400 hover:text-pink-500">Home</a>
             <span className="text-gray-300">|</span>
             <a href="/chat" className="text-gray-400 hover:text-pink-500">Chat</a>
             <span className="text-gray-300">|</span>

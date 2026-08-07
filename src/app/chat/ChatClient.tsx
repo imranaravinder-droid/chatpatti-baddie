@@ -35,7 +35,7 @@ export default function ChatPage() {
     setRefCount(count);
   }, [authorized]);
 
-  const refLink = `https://cpbaddie.vercel.app/?ref=${refCode}`;
+  const refLink = `https://cpbaddie.com/?ref=${refCode}`;
 
   const bgClass = mode === "debate" ? "bg-red-600" : mode === "comedy" ? "bg-yellow-400" : mode === "romance" ? "bg-pink-500" : mode === "god" ? "bg-amber-600" : mode === "mind" ? "bg-gray-950" : "bg-white";
   const textClass = mode === "casual" || mode === "god" ? "text-gray-900" : "text-white";
@@ -219,11 +219,19 @@ export default function ChatPage() {
       if (!clean) return;
       let ok = false;
       try {
-        const res = await fetch("/api/edge-tts", {
+        let res = await fetch("/api/gemini-tts", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ text: clean.substring(0, 500) }),
         });
+        if (!res.ok) {
+          // Fallback to edge-tts (Microsoft neural male voices).
+          res = await fetch("/api/edge-tts", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text: clean.substring(0, 500) }),
+          });
+        }
         if (res.ok) {
           const blob = await res.blob();
           if (blob.size > 0) {

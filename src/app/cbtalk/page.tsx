@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRequireAuth } from "@/lib/useRequireAuth";
 import Avatar3D from "@/components/Avatar3D";
+import AvatarCute from "@/components/AvatarCute";
 import type { AvatarExpression } from "@/components/Avatar3D";
 import { Language, languages, detectLanguage, getLangName } from "@/lib/lang";
 
@@ -117,7 +118,8 @@ export default function CBVideoCallPage() {
   const [micLevel, setMicLevel] = useState(0);
   const [aiSpeaking, setAiSpeaking] = useState(false);
   const [transcript, setTranscript] = useState("");
-  const [expression, setExpression] = useState<AvatarExpression>("neutral");
+   const [expression, setExpression] = useState<AvatarExpression>("neutral");
+   const [avatar, setAvatar] = useState<"3d" | "cute">("3d"); // 3D Haneul or static cute
   const [streamingText, setStreamingText] = useState("");
   const [callActive, setCallActive] = useState(false);
   const [callTimer, setCallTimer] = useState(0);
@@ -769,46 +771,114 @@ export default function CBVideoCallPage() {
   };
 
   const speakText = async (text: string, callMode: CallMode) => {
+    // Backwards-compatible helper: enqueue a full utterance to be spoken
+    // immediately if the player is idle, or right after current speech ends.
     if (callMode === "casual") { /* fine */ }
-    setAiSpeaking(true);
-    setExpression("speaking");
-    let ok = false;
+    enqueueUtterance(text);
+  };
+
+  // ================= INSTANT VOICE QUEUE =================
+  // Each streamed sentence is TTS-fetched concurrently and played back
+  // sequentially — speech starts on the FIRST sentence (instant feel) and
+  // NEVER cuts an utterance in the middle.
+  const ttsQueueRef = useRef<{ text: string; url: string | null; audio: HTMLAudioElement | null; fetched: boolean }[]>([]);
+  const ttsPlayingRef = useRef(false);
+
+  // Concurrently fetch TTS for a sentence, then enqueue it.
+  const fetchUtterance = async (text: string) => {
     try {
-      const clean = text.replace(/[#*_~`\[\]()]/g, "").trim().substring(0, 500);
-      const res = await fetch("/api/edge-tts", {
+      const clean = text.replace(/[#*_~`\[\]()]/g, "").trim();
+      if (!clean) return null;
+      let res = await fetch("/api/gemini-tts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: clean }),
       });
-      if (!res.ok) throw new Error("tts-failed");
+      if (!res.ok) {
+        res = await fetch("/api/edge-tts", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: clean }),
+        });
+      }
+      if (!res.ok) return null;
       const blob = await res.blob();
-      if (blob.size === 0) throw new Error("empty-audio");
-      const url = URL.createObjectURL(blob);
-      if (audioRef.current) { audioRef.current.pause(); audioRef.current = null; }
-      audioRef.current = new Audio(url);
-      audioRef.current.onended = () => {
+      if (blob.size === 0) return null;
+      return URL.createObjectURL(blob);
+    } catch {
+      return null;
+    }
+  };
+
+  const enqueueUtterance = (text: string) => {
+    const clean = text.replace(/[#*_~`\[\]()]/g, "").trim();
+    if (!clean) return;
+    ttsQueueRef.current.push({ text: clean, url: null, audio: null, fetched: false });
+    setAiSpeaking(true);
+    setExpression("speaking");
+    fetchUtterance(clean).then((url) => {
+      const entry = ttsQueueRef.current[ttsQueueRef.current.length - 1];
+      if (entry) { entry.url = url; entry.fetched = true; }
+      drainTtsQueue();
+    });
+  };
+
+  const drainTtsQueue = async () => {
+    if (ttsPlayingRef.current) return;
+    const entry = ttsQueueRef.current.find(e => e.fetched);
+    if (!entry) {
+      // Nothing fetched yet but still speaking? Keep AI speaking flag honest.
+      if (!ttsQueueRef.current.length) {
+        // idle — AI speech done
         setAiSpeaking(false);
         setExpression("neutral");
-        URL.revokeObjectURL(url);
-        processQueue(); // send queued user words now
-      };
-      await audioRef.current.play();
-      ok = true;
-    } catch {
-      ok = false;
+        processQueue(); // send any queued user words now
+      }
+      return;
     }
-    if (!ok) {
-      // ElevenLabs unavailable — speak with the FREE browser engine.
-      await speakWithBrowser(text);
+    ttsPlayingRef.current = true;
+    const idx = ttsQueueRef.current.indexOf(entry);
+    ttsQueueRef.current.splice(idx, 1);
+    const audio = entry.url ? new Audio(entry.url) : null;
+    entry.audio = audio;
+    if (audio) {
+      audio.onended = () => {
+        URL.revokeObjectURL(entry.url!);
+        ttsPlayingRef.current = false;
+        entry.fetched = false;
+        setAiSpeaking(false);
+        setExpression("neutral");
+        processQueue();
+        drainTtsQueue();
+      };
+      // If we have a fallback when both models failed, use browser speech.
+      try {
+        await audio.play();
+        // keep AI-speaking true while playing
+        setAiSpeaking(true);
+        setExpression("speaking");
+      } catch {
+        ttsPlayingRef.current = false;
+        drainTtsQueue();
+      }
+    } else {
+      // fetch failed for this sentence → fall back to browser speech
+      await speakWithBrowser(entry.text);
+      ttsPlayingRef.current = false;
       setAiSpeaking(false);
       setExpression("neutral");
       processQueue();
+      drainTtsQueue();
     }
   };
 
   // User presses Stop — silence AI now (only user can stop it)
   const stopSpeaking = () => {
     if (audioRef.current) { audioRef.current.pause(); audioRef.current = null; }
+    ttsPlayingRef.current = false;
+    // Clear the pending TTS queue so no speech cuts in later.
+    ttsQueueRef.current.forEach(e => { if (e.url) URL.revokeObjectURL(e.url); });
+    ttsQueueRef.current = [];
     stopBrowserSpeech();
     setAiSpeaking(false);
     setExpression("neutral");
@@ -850,7 +920,11 @@ export default function CBVideoCallPage() {
       if (!reader) throw new Error("No stream");
 
       const decoder = new TextDecoder();
-      let reply = "";
+    let reply = "";
+    let buffer = ""; // incomplete tail awaiting a sentence boundary
+
+    // Split on sentence ends for Hindi/Devanagari (।), Latin (!?.), or newlines.
+    const sentenceSplit = /(?<=[।.!?])\s+/g;
 
       while (true) {
         const { done, value } = await reader.read();
@@ -863,7 +937,16 @@ export default function CBVideoCallPage() {
               const parsed = JSON.parse(line.slice(6));
               if (parsed.text) {
                 reply += parsed.text;
+                buffer += parsed.text;
                 setStreamingText(reply);
+                setExpression("speaking");
+                setAiSpeaking(true);
+                // Speak complete sentences immediately for an instant voice.
+                const parts = buffer.split(sentenceSplit);
+                buffer = parts.pop() || "";
+                for (const part of parts) {
+                  if (part.trim()) speakText(part.trim(), modeRef.current);
+                }
               }
               if (parsed.error) throw new Error(parsed.error);
             } catch {}
@@ -871,12 +954,14 @@ export default function CBVideoCallPage() {
         }
       }
 
-      const finalReply = reply.trim() || "Hmm, kuch samajh nahi aaya — ek baar aur bolo na?";
+      const finalReply = (reply + (buffer.trim() ? " " + buffer.trim() : "")).trim() || "Hmm, kuch samajh nahi aaya — ek baar aur bolo na?";
       const aiMsg: CallMessage = { role: "ai", text: finalReply, time: Date.now() };
       setMessages(prev => [...prev, aiMsg]);
       setStreamingText("");
       setExpression("happy");
-      if (autoSpeakRef.current) await speakText(finalReply, modeRef.current);
+      // Speech is streamed sentence-by-sentence above for an instant voice.
+      // Make sure a freshly enqueued tail gets drained.
+      drainTtsQueue();
     } catch {
       const fallback: CallMessage = { role: "ai", text: "Arre, connection thoda shaky hai! Bol, main sun rahi hoon — baat continue karein? 💫", time: Date.now() };
       setMessages(prev => [...prev, fallback]);
@@ -896,6 +981,9 @@ export default function CBVideoCallPage() {
     stopBrowserSpeech();
     if (restartTimerRef.current) clearTimeout(restartTimerRef.current);
     if (audioRef.current) { audioRef.current.pause(); audioRef.current = null; }
+    ttsPlayingRef.current = false;
+    ttsQueueRef.current.forEach(e => { if (e.url) URL.revokeObjectURL(e.url); });
+    ttsQueueRef.current = [];
     setCallActive(false);
     setCallTimer(0);
     setStreamingText("");
@@ -921,7 +1009,11 @@ export default function CBVideoCallPage() {
         <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 50% 20%, #1e293b 0%, #0b0f19 65%)" }} />
         <div style={{ position: "relative", textAlign: "center", padding: "24px", maxWidth: "420px", width: "100%" }}>
           <div style={{ width: "140px", height: "140px", borderRadius: "50%", overflow: "hidden", margin: "0 auto 18px", border: `2px solid ${activeMode.color}44`, boxShadow: `0 0 60px ${activeMode.color}33`, background: "#151c2c" }}>
-            <Avatar3D expression="happy" size={140} />
+            {avatar === "3d" ? <Avatar3D expression="happy" size={140} /> : <AvatarCute expression="happy" size={140} />}
+          </div>
+          <div style={{ display: "flex", gap: "6px", justifyContent: "center", marginBottom: "12px" }}>
+            <button onClick={() => setAvatar("3d")} style={{ fontSize: "11px", padding: "4px 10px", borderRadius: "999px", border: avatar === "3d" ? "2px solid #38bdf8" : "1px solid #475569", background: avatar === "3d" ? "#0f172a" : "#1e293b", color: "#fff", cursor: "pointer" }}>Haneul 3D</button>
+            <button onClick={() => setAvatar("cute")} style={{ fontSize: "11px", padding: "4px 10px", borderRadius: "999px", border: avatar === "cute" ? "2px solid #f472b6" : "1px solid #475569", background: avatar === "cute" ? "#0f172a" : "#1e293b", color: "#fff", cursor: "pointer" }}>Cute (no mouth)</button>
           </div>
           <h1 style={{ fontSize: "1.6rem", fontWeight: 800, margin: "0 0 4px" }}>
             HANEUL <span style={{ fontSize: "1.1rem" }}>{activeMode.emoji}</span>
@@ -1034,7 +1126,7 @@ export default function CBVideoCallPage() {
               boxShadow: aiSpeaking ? `0 0 90px ${activeMode.color}55` : expression === "thinking" ? "0 0 90px rgba(56,189,248,0.35)" : "0 0 60px rgba(255,255,255,0.08)",
               border: `2px solid ${activeMode.color}44`, background: "#151c2c",
             }}>
-              <Avatar3D expression={expression} size={240} />
+              {avatar === "3d" ? <Avatar3D expression={expression} size={240} /> : <AvatarCute expression={expression} size={240} />}
             </div>
             <div style={{ fontWeight: 700, fontSize: "1.05rem", marginTop: "12px" }}>
               HANEUL <span style={{ fontSize: "0.8rem" }}>{activeMode.emoji}</span>
